@@ -61,7 +61,7 @@ export function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
                     </div>
 
                     {/* Navigation */}
-                    <nav className="flex flex-col gap-1 mt-4">
+                    <nav className="flex flex-col gap-1.5 mt-4">
                         {navLinks.map((link) => {
                             const isActive = link.href === "/dashboard"
                                 ? pathname === "/dashboard"
@@ -72,19 +72,22 @@ export function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
                                     href={link.href}
                                     onClick={onClose}
                                     className={cn(
-                                        "flex items-center gap-3 px-4 py-3 rounded-r-lg group transition-all",
+                                        "flex items-center gap-3 px-4 py-3 rounded-xl group transition-all duration-200",
                                         isActive
-                                            ? "bg-primary/10 border-l-2 border-primary text-foreground"
-                                            : "text-text-muted hover:text-foreground hover:bg-surface-highlight/30"
+                                            ? "bg-primary/20 border-l-[3px] border-primary text-foreground shadow-sm"
+                                            : "text-foreground/70 hover:text-foreground hover:bg-surface-highlight/50 border-l-[3px] border-transparent"
                                     )}
                                 >
                                     <span className={cn(
-                                        "material-symbols-outlined text-[20px]",
-                                        isActive ? "text-primary" : "group-hover:text-foreground transition-colors"
+                                        "material-symbols-outlined text-[22px]",
+                                        isActive ? "text-primary" : "text-foreground/60 group-hover:text-foreground transition-colors"
                                     )} style={{ fontVariationSettings: isActive ? "'FILL' 1" : "'FILL' 0" }}>
                                         {link.icon}
                                     </span>
-                                    <span className="text-sm font-medium font-heading tracking-wide">{link.name}</span>
+                                    <span className={cn(
+                                        "text-sm font-heading tracking-wide",
+                                        isActive ? "font-bold" : "font-semibold"
+                                    )}>{link.name}</span>
                                 </Link>
                             )
                         })}
