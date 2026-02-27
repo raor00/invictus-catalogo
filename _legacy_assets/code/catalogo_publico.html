@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Invictus Phone | Catálogo Mayorista</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;500;700&amp;family=Space+Grotesk:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Theme Configuration -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#CCFF00", // Neon Lime
+                        "secondary": "#0066CC", // Refined Blue for light mode
+                        "background-dark": "#F5F5F7", // Light Grey/White
+                        "surface": "#FFFFFF", // Pure White
+                        "surface-highlight": "#E5E5E5", // Light Grey
+                        "text-main": "#1D1D1F", // Apple Black
+                        "text-muted": "#86868B", // Silver Grey
+                        "critical": "#FF3B30", // Signal Red
+                    },
+                    fontFamily: {
+                        "heading": ["Space Grotesk", "sans-serif"],
+                        "body": ["Inter Tight", "sans-serif"],
+                        "mono": ["JetBrains Mono", "monospace"],
+                    },
+                    boxShadow: {
+                        'neon': '0 4px 14px 0 rgba(204, 255, 0, 0.39)',
+                        'glass': '0 4px 30px rgba(0, 0, 0, 0.05)',
+                        'card': '0 2px 8px rgba(0, 0, 0, 0.04)',
+                    },
+                    backgroundImage: {
+                        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        /* Custom Scrollbar for light theme */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #F5F5F7; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #D2D2D7; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #86868B; 
+        }
+
+        /* Ticker Animation */
+        @keyframes ticker {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+        .animate-ticker {
+            animation: ticker 20s linear infinite;
+        }
+        
+        /* Glassmorphism Utilities */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        /* Card Hover Effect */
+        .product-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+        }
+        .product-card:hover {
+            transform: translateY(-4px);
+            border-color: #D2D2D7;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+        }
+    </style>
+</head>
+<body class="bg-background-dark text-text-main font-body min-h-screen flex flex-col antialiased selection:bg-primary selection:text-black">
+<!-- Sticky Header with Glassmorphism -->
+<header class="fixed top-0 left-0 right-0 z-50 glass-panel">
+<div class="max-w-[1440px] mx-auto">
+<!-- Top Bar -->
+<div class="flex items-center justify-between px-6 py-4 border-b border-[#E5E5E5]">
+<!-- Logo -->
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 bg-primary rounded flex items-center justify-center text-black">
+<span class="material-symbols-outlined text-[20px]">bolt</span>
+</div>
+<div class="flex flex-col leading-none">
+<h1 class="font-heading font-bold text-xl tracking-wide text-text-main">INVICTUS</h1>
+<span class="font-mono text-[10px] text-primary tracking-[0.2em] uppercase">Mayorista</span>
+</div>
+</div>
+<!-- Ticker (Hidden on mobile) -->
+<div class="hidden md:flex flex-1 mx-12 overflow-hidden relative h-6 bg-surface-highlight/50 rounded border border-[#E5E5E5] items-center">
+<div class="whitespace-nowrap animate-ticker font-mono text-xs text-text-muted">
+                        PRECIOS SUJETOS A CAMBIO // ACTUALIZADO HOY 09:00 AM // USD TASA DEL DÍA: 36.5 // NUEVO STOCK DE IPHONE 13 PRO MAX // ENVIOS A TODO EL PAÍS
+                    </div>
+</div>
+<!-- Header Actions -->
+<div class="flex items-center gap-4">
+<button class="flex items-center gap-2 text-sm font-medium text-text-muted hover:text-white transition-colors">
+<span class="material-symbols-outlined text-[20px]">account_circle</span>
+<span class="hidden sm:inline">Ingresar</span>
+</button>
+<button class="relative p-2 text-text-muted hover:text-primary transition-colors">
+<span class="material-symbols-outlined">shopping_bag</span>
+<span class="absolute top-1 right-1 w-2 h-2 bg-primary rounded-full animate-pulse"></span>
+</button>
+</div>
+</div>
+<!-- Mega Tabs -->
+<div class="flex w-full border-b border-[#E5E5E5]">
+<button class="flex-1 py-4 text-center font-heading font-bold text-lg text-text-main border-b-2 border-primary bg-primary/10 hover:bg-primary/20 transition-colors">
+                    IPHONE AL MAYOR
+                </button>
+<button class="flex-1 py-4 text-center font-heading font-bold text-lg text-text-muted border-b-2 border-transparent hover:text-text-main hover:border-secondary hover:bg-secondary/5 transition-colors">
+                    REPUESTOS &amp; PARTES
+                </button>
+</div>
+</div>
+</header>
+<!-- Main Content Wrapper -->
+<main class="flex-grow pt-[145px] pb-20 px-4 sm:px-6 lg:px-8 max-w-[1440px] mx-auto w-full">
+<!-- Filter Bar -->
+<div class="sticky top-[144px] z-40 py-4 mb-8 bg-background-dark/95 backdrop-blur border-b border-[#E5E5E5] -mx-4 px-4 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
+<div class="flex flex-col lg:flex-row gap-4 items-center justify-between">
+<!-- Search -->
+<div class="relative w-full lg:w-96 group">
+<span class="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted group-focus-within:text-primary transition-colors">
+<span class="material-symbols-outlined">search</span>
+</span>
+<input class="w-full bg-surface border border-[#E5E5E5] rounded-lg py-2.5 pl-10 pr-4 text-sm text-text-main placeholder-text-muted focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all font-body" placeholder="Buscar modelo, SKU o capacidad..." type="text"/>
+</div>
+<!-- Filters Group -->
+<div class="flex flex-wrap items-center gap-3 w-full lg:w-auto">
+<!-- Dropdown 1 -->
+<div class="relative">
+<select class="appearance-none bg-surface border border-[#E5E5E5] text-text-main text-sm rounded-lg py-2.5 pl-4 pr-10 focus:border-primary focus:outline-none cursor-pointer hover:border-text-muted transition-colors font-medium min-w-[140px]">
+<option>Modelo: Todos</option>
+<option>iPhone 15 Series</option>
+<option>iPhone 14 Series</option>
+<option>iPhone 13 Series</option>
+</select>
+<span class="absolute right-3 top-1/2 -translate-y-1/2 text-text-muted pointer-events-none">
+<span class="material-symbols-outlined text-[20px]">expand_more</span>
+</span>
+</div>
+<!-- Dropdown 2 -->
+<div class="relative">
+<select class="appearance-none bg-surface border border-[#E5E5E5] text-text-main text-sm rounded-lg py-2.5 pl-4 pr-10 focus:border-primary focus:outline-none cursor-pointer hover:border-text-muted transition-colors font-medium min-w-[140px]">
+<option>Condición: Grado A</option>
+<option>Grado B</option>
+<option>New Open Box</option>
+</select>
+<span class="absolute right-3 top-1/2 -translate-y-1/2 text-text-muted pointer-events-none">
+<span class="material-symbols-outlined text-[20px]">expand_more</span>
+</span>
+</div>
+<!-- Toggle Switch -->
+<label class="flex items-center gap-3 cursor-pointer group ml-auto lg:ml-4 bg-surface px-4 py-2.5 rounded-lg border border-[#E5E5E5] hover:border-text-muted transition-colors">
+<div class="relative">
+<input class="sr-only peer" type="checkbox"/>
+<div class="w-9 h-5 bg-[#D2D2D7] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary"></div>
+</div>
+<span class="text-sm font-medium text-text-muted group-hover:text-white transition-colors">Ocultar Agotados</span>
+</label>
+</div>
+</div>
+</div>
+<!-- Product Grid -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+<!-- Card 1: Available -->
+<article class="product-card bg-surface rounded-xl border border-[#E5E5E5] overflow-hidden flex flex-col h-full relative group">
+<!-- Badge -->
+<div class="absolute top-3 right-3 z-10">
+<span class="inline-flex items-center px-2.5 py-1 rounded bg-background-dark/80 border border-primary text-primary text-[10px] font-bold tracking-wider uppercase backdrop-blur-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-primary mr-2 animate-pulse"></span>
+                        Disponible
+                    </span>
+</div>
+<!-- Image Area -->
+<div class="h-[240px] bg-gradient-to-b from-[#F2F2F7] to-surface flex items-center justify-center p-6 relative">
+<img alt="Back view of iPhone 15 Pro Max in titanium finish" class="h-full w-full object-contain drop-shadow-2xl group-hover:scale-105 transition-transform duration-500" data-alt="Sleek smartphone back view floating in dark space" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDbNDBIEyos7MLY1KGUUacqAWL8K45YfWPkMwkeYlKYHxo_9cHfXPDOLYLPmKKfSJl574We01MQGUcLhWRpwg7F6_YnwNYvddTaGYnWL4mA2VmphwzObwsa17HF6PjdUmk3Qf-FiFYQqWWkpogsuv3ATiMmvy4fJFHTv7sRRp3JmL_FXOTP44R5foZOkXh1Z1FDogsD6ZlnYtULJLdstFZcgJFwKWfsPUiTZo-S8SghIYWmMI83vnYwinPM2_tm_Iye0dbrCG1H4laB"/>
+</div>
+<!-- Content -->
+<div class="p-5 flex flex-col flex-grow">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-heading font-bold text-lg text-white leading-tight">iPhone 15 Pro Max</h3>
+</div>
+<div class="flex flex-wrap gap-2 mb-4">
+<span class="px-2 py-1 bg-[#F5F5F7] rounded text-xs text-text-muted font-mono border border-[#E5E5E5]">256GB</span>
+<span class="px-2 py-1 bg-[#F5F5F7] rounded text-xs text-text-muted font-mono border border-[#E5E5E5]">Natural Titanium</span>
+<span class="px-2 py-1 bg-[#F5F5F7] rounded text-xs text-text-muted font-mono border border-[#E5E5E5]">Grado A+</span>
+</div>
+<div class="mt-auto pt-4 border-t border-[#E5E5E5] flex flex-col gap-3">
+<div class="flex items-baseline justify-between">
+<span class="text-xs text-text-muted uppercase tracking-wider font-bold">Precio Mayorista</span>
+<span class="font-mono text-2xl text-text-main font-bold tracking-tight">$1,050.00</span>
+</div>
+<a class="w-full group/btn relative flex items-center justify-center gap-2 py-2.5 rounded bg-primary text-black font-bold text-sm uppercase tracking-wide overflow-hidden transition-all hover:shadow-neon" href="https://wa.me/1234567890?text=Hola%20Invictus,%20me%20interesa:%20iPhone%2015%20Pro%20Max%20-%20256GB" target="_blank">
+<span class="material-symbols-outlined text-[18px]">chat</span>
+<span>Consultar</span>
+</a>
+</div>
+</div>
+</article>
+<!-- Card 2: Low Stock Warning -->
+<article class="product-card bg-surface rounded-xl border border-[#E5E5E5] overflow-hidden flex flex-col h-full relative group">
+<div class="absolute top-3 right-3 z-10">
+<span class="inline-flex items-center px-2.5 py-1 rounded bg-background-dark/80 border border-orange-500 text-orange-500 text-[10px] font-bold tracking-wider uppercase backdrop-blur-sm">
+                        Pocas Unidades
+                    </span>
+</div>
+<div class="h-[240px] bg-gradient-to-b from-[#F2F2F7] to-surface flex items-center justify-center p-6 relative">
+<img alt="iPhone 13 Pro in Sierra Blue color" class="h-full w-full object-contain drop-shadow-2xl group-hover:scale-105 transition-transform duration-500" data-alt="Blue smartphone angled view with dark background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBiHWGRnoDKnh1m075wGPj2S0BxE1bvlwpO4vC6lMTkN_fTlwII3ObpD7zdbDcTzgW1mXBgKqDXCL1rZvqfoTfWHHsVLInPPKYybHY-Zl9d-pI5h98ytQkTzWlRKxiZxwZgQEaA8-u2wpcdorn79-k7dJ3eJVM2BkO9big7oFGu36q_oJ99Hqx-hhloTIEj52gclJ_zuewvuhQN5AQceuZWGscnYUTr31GXZUH72GMkwmmYwGSLfAjv6n6BDxTXO1IxYf2MdW_BbU5y"/>
+</div>
+<div class="p-5 flex flex-col flex-grow">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-heading font-bold text-lg text-white leading-tight">iPhone 13 Pro</h3>
+</div>
+<div class="flex flex-wrap gap-2 mb-4">
+<span class="px-2 py-1 bg-[#F5F5F7] rounded text-xs text-text-muted font-mono border border-[#E5E5E5]">128GB</span>
+<span class="px-2 py-1 bg-[#F5F5F7] rounded text-xs text-text-muted font-mono border border-[#E5E5E5]">Sierra Blue</span>
+<span class="px-2 py-1 bg-[#F5F5F7] rounded text-xs text-text-muted font-mono border border-[#E5E5E5]">Grado A</span>
+</div>
+<div class="mt-auto pt-4 border-t border-[#E5E5E5] flex flex-col gap-3">
+<div class="flex items-baseline justify-between">
+<span class="text-xs text-text-muted uppercase tracking-wider font-bold">Precio Mayorista</span>
+<span class="font-mono text-2xl text-text-main font-bold tracking-tight">$680.00</span>
+</div>
+<a class="w-full group/btn relative flex items-center justify-center gap-2 py-2.5 rounded bg-transparent border border-primary text-primary font-bold text-sm uppercase tracking-wide overflow-hidden transition-all hover:bg-primary hover:text-black hover:shadow-neon" href="#">
+<span class="material-symbols-outlined text-[18px]">chat</span>
+<span>Consultar</span>
+</a>
+</div>
+</div>
+</article>
+<!-- Card 3: Out of Stock -->
+<article class="product-card bg-surface rounded-xl border border-[#E5E5E5] overflow-hidden flex flex-col h-full relative group">
+<div class="absolute top-3 right-3 z-10">
+<span class="inline-flex items-center px-2.5 py-1 rounded bg-critical text-black text-[10px] font-bold tracking-wider uppercase backdrop-blur-sm shadow-md">
+                        Agotado
+                    </span>
+</div>
+<div class="h-[240px] bg-gradient-to-b from-[#F2F2F7] to-surface flex items-center justify-center p-6 relative">
+<img alt="iPhone 11 Pro Midnight Green" class="h-full w-full object-contain drop-shadow-2xl opacity-60" data-alt="Dark green phone back view subtle lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBBwDwhGdPQaBZ6hjN8SDhZBafEPKE2ITk7Ftbly8WTPhFqn1lQc_KIpYnW35bHye3a6SK3CyL-bRsJymNXj2mHClMagUz3tYAaO00Mj9xfEa_5t1KxXXVWef3u-lBiGLFQoGBLfp1r76Dc-u4mZwEsqgHPWhvcGydnOmevZwKyy-Y4pj2FyVZYkKfZ1ZsA3z5MmgokDlXxkR7QL0wpXBRaohCqpAZcoV6qD_WBdFYrrnJH_Sn_6Lvc7y00oimB8zcB6_SCnwUIFpaq"/>
+</div>
+<div class="p-5 flex flex-col flex-grow">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-heading font-bold text-lg text-text-muted leading-tight">iPhone 11 Pro</h3>
+</div>
+<div class="flex flex-wrap gap-2 mb-4">
+<span class="px-2 py-1 bg-[#F5F5F7] rounded text-xs text-text-muted font-mono border border-[#E5E5E5]">64GB</span>
+<span class="px-2 py-1 bg-[#F5F5F7] rounded text-xs text-text-muted font-mono border border-[#E5E5E5]">Midnight Green</span>
+</div>
+<div class="mt-auto pt-4 border-t border-[#E5E5E5] flex flex-col gap-3">
+<div class="flex items-baseline justify-between">
+<span class="text-xs text-text-muted uppercase tracking-wider font-bold">Precio Mayorista</span>
+<span class="font-mono text-2xl text-text-muted font-bold tracking-tight line-through decoration-critical">$420.00</span>
+</div>
+<button class="w-full relative flex items-center justify-center gap-2 py-2.5 rounded bg-[#222] border border-[#333] text-text-muted font-bold text-sm uppercase tracking-wide cursor-not-allowed" disabled="">
+<span class="material-symbols-outlined text-[18px]">block</span>
+<span>Sin Stock</span>
+</button>
+</div>
+</div>
+</article>
+<!-- Card 4 -->
+<article class="product-card bg-surface rounded-xl border border-[#E5E5E5] overflow-hidden flex flex-col h-full relative group">
+<div class="absolute top-3 right-3 z-10">
+<span class="inline-flex items-center px-2.5 py-1 rounded bg-background-dark/80 border border-primary text-primary text-[10px] font-bold tracking-wider uppercase backdrop-blur-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-primary mr-2 animate-pulse"></span>
+                        Disponible
+                    </span>
+</div>
+<div class="h-[240px] bg-gradient-to-b from-[#F2F2F7] to-surface flex items-center justify-center p-6 relative">
+<img alt="iPhone 12 Purple" class="h-full w-full object-contain drop-shadow-2xl group-hover:scale-105 transition-transform duration-500" data-alt="Purple phone vibrant color studio shot" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDvMLfB2YGOJHaYloU8CzEhF43lvFjvunymysw5wdFeod7oYjoTAmeOGwsMM0mjJGwey_2aHZImKFI7dvONuQlZjbOfnwBsnGBcr70E5TA3uoRCvY5MH5Td_QvWZnQUbnRBY6ik7bHu5FOSk1NkfSR5arkbk2Ci4e8Le33RTZN2Pswepg-1_CQxJ7WTcp_hrCm8MNVWpGTPknLdDUVHuI9W7z81m9cWT2u9ofLUbZE_TXS2AhXjmxdHxJ35IUqq2qmzK-ZJ3dv6z7uD"/>
+</div>
+<div class="p-5 flex flex-col flex-grow">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-heading font-bold text-lg text-white leading-tight">iPhone 12</h3>
+</div>
+<div class="flex flex-wrap gap-2 mb-4">
+<span class="px-2 py-1 bg-[#F5F5F7] rounded text-xs text-text-muted font-mono border border-[#E5E5E5]">128GB</span>
+<span class="px-2 py-1 bg-[#F5F5F7] rounded text-xs text-text-muted font-mono border border-[#E5E5E5]">Purple</span>
+<span class="px-2 py-1 bg-[#F5F5F7] rounded text-xs text-text-muted font-mono border border-[#E5E5E5]">Grado A-</span>
+</div>
+<div class="mt-auto pt-4 border-t border-[#E5E5E5] flex flex-col gap-3">
+<div class="flex items-baseline justify-between">
+<span class="text-xs text-text-muted uppercase tracking-wider font-bold">Precio Mayorista</span>
+<span class="font-mono text-2xl text-text-main font-bold tracking-tight">$450.00</span>
+</div>
+<a class="w-full group/btn relative flex items-center justify-center gap-2 py-2.5 rounded bg-transparent border border-primary text-primary font-bold text-sm uppercase tracking-wide overflow-hidden transition-all hover:bg-primary hover:text-black hover:shadow-neon" href="#">
+<span class="material-symbols-outlined text-[18px]">chat</span>
+<span>Consultar</span>
+</a>
+</div>
+</div>
+</article>
+<!-- Card 5 -->
+<article class="product-card bg-surface rounded-xl border border-[#E5E5E5] overflow-hidden flex flex-col h-full relative group">
+<div class="absolute top-3 right-3 z-10">
+<span class="inline-flex items-center px-2.5 py-1 rounded bg-background-dark/80 border border-primary text-primary text-[10px] font-bold tracking-wider uppercase backdrop-blur-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-primary mr-2 animate-pulse"></span>
+                        Disponible
+                    </span>
+</div>
+<div class="h-[240px] bg-gradient-to-b from-[#F2F2F7] to-surface flex items-center justify-center p-6 relative">
+<img alt="iPhone 12 Pro Max Pacific Blue" class="h-full w-full object-contain drop-shadow-2xl group-hover:scale-105 transition-transform duration-500" data-alt="Blue large phone back view premium look" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCOP1nxkeA605KzI-ESscKxObKQLypOpYqLPRmAxPaqwo7IDMoIvL9MgrnQpzE1zGf7nGB3yuMZq3o5MCogOnQwkrbHI5OOZL8IM0pIpwti0P-rhxgYXVwTIbuLOASTnhqK9OGNoZPZkGGsE1W04Jh2FJLutqy90PnRncUy7HL-4l9OfTtnH3Mw4BSU60S5bTVjEKie_S_v1Ai9CC1a8D7RlXlqh_R3ZLE-vqFx4YBbJoTWMlx9nt5YruIDuSWeRCxrPYQpwRX9EKjP"/>
+</div>
+<div class="p-5 flex flex-col flex-grow">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-heading font-bold text-lg text-white leading-tight">iPhone 12 Pro Max</h3>
+</div>
+<div class="flex flex-wrap gap-2 mb-4">
+<span class="px-2 py-1 bg-[#F5F5F7] rounded text-xs text-text-muted font-mono border border-[#E5E5E5]">256GB</span>
+<span class="px-2 py-1 bg-[#F5F5F7] rounded text-xs text-text-muted font-mono border border-[#E5E5E5]">Pacific Blue</span>
+<span class="px-2 py-1 bg-[#F5F5F7] rounded text-xs text-text-muted font-mono border border-[#E5E5E5]">Grado A</span>
+</div>
+<div class="mt-auto pt-4 border-t border-[#E5E5E5] flex flex-col gap-3">
+<div class="flex items-baseline justify-between">
+<span class="text-xs text-text-muted uppercase tracking-wider font-bold">Precio Mayorista</span>
+<span class="font-mono text-2xl text-text-main font-bold tracking-tight">$590.00</span>
+</div>
+<a class="w-full group/btn relative flex items-center justify-center gap-2 py-2.5 rounded bg-transparent border border-primary text-primary font-bold text-sm uppercase tracking-wide overflow-hidden transition-all hover:bg-primary hover:text-black hover:shadow-neon" href="#">
+<span class="material-symbols-outlined text-[18px]">chat</span>
+<span>Consultar</span>
+</a>
+</div>
+</div>
+</article>
+<!-- Card 6 -->
+<article class="product-card bg-surface rounded-xl border border-[#E5E5E5] overflow-hidden flex flex-col h-full relative group">
+<div class="absolute top-3 right-3 z-10">
+<span class="inline-flex items-center px-2.5 py-1 rounded bg-background-dark/80 border border-primary text-primary text-[10px] font-bold tracking-wider uppercase backdrop-blur-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-primary mr-2 animate-pulse"></span>
+                        Disponible
+                    </span>
+</div>
+<div class="h-[240px] bg-gradient-to-b from-[#F2F2F7] to-surface flex items-center justify-center p-6 relative">
+<img alt="iPhone X Silver" class="h-full w-full object-contain drop-shadow-2xl group-hover:scale-105 transition-transform duration-500" data-alt="Silver phone front and back view" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCOHO0hLoj0e2Sf0hHIItk6x0ioePRBOB0T9NAAB1ty-aFBcp9YW8c36Kkqx6g8gpjdyYEgp_M_9r62faGf4KeY-7sYYt95q6q0gtEZjG4hl_ugu4nyaCEq1bSTYwRkYw8WAmZA5LKFcRGSmpybkUpWB-ey0UUN5U-tkpuPXHSt554XnWPIOxI3lFHAsF9aJAQupdPvaFGE3DgcQe_INlxp5i4yj3xGlxJ5RCMn8PO8DvvLiIu0C2gJggAmBRABtDx38ZJ8LRiyufgO"/>
+</div>
+<div class="p-5 flex flex-col flex-grow">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-heading font-bold text-lg text-white leading-tight">iPhone X</h3>
+</div>
+<div class="flex flex-wrap gap-2 mb-4">
+<span class="px-2 py-1 bg-[#F5F5F7] rounded text-xs text-text-muted font-mono border border-[#E5E5E5]">64GB</span>
+<span class="px-2 py-1 bg-[#F5F5F7] rounded text-xs text-text-muted font-mono border border-[#E5E5E5]">Silver</span>
+<span class="px-2 py-1 bg-[#F5F5F7] rounded text-xs text-text-muted font-mono border border-[#E5E5E5]">Grado B</span>
+</div>
+<div class="mt-auto pt-4 border-t border-[#E5E5E5] flex flex-col gap-3">
+<div class="flex items-baseline justify-between">
+<span class="text-xs text-text-muted uppercase tracking-wider font-bold">Precio Mayorista</span>
+<span class="font-mono text-2xl text-text-main font-bold tracking-tight">$220.00</span>
+</div>
+<a class="w-full group/btn relative flex items-center justify-center gap-2 py-2.5 rounded bg-transparent border border-primary text-primary font-bold text-sm uppercase tracking-wide overflow-hidden transition-all hover:bg-primary hover:text-black hover:shadow-neon" href="#">
+<span class="material-symbols-outlined text-[18px]">chat</span>
+<span>Consultar</span>
+</a>
+</div>
+</div>
+</article>
+<!-- Card 7 -->
+<article class="product-card bg-surface rounded-xl border border-[#E5E5E5] overflow-hidden flex flex-col h-full relative group">
+<div class="absolute top-3 right-3 z-10">
+<span class="inline-flex items-center px-2.5 py-1 rounded bg-background-dark/80 border border-primary text-primary text-[10px] font-bold tracking-wider uppercase backdrop-blur-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-primary mr-2 animate-pulse"></span>
+                        Disponible
+                    </span>
+</div>
+<div class="h-[240px] bg-gradient-to-b from-[#F2F2F7] to-surface flex items-center justify-center p-6 relative">
+<img alt="iPhone 8 Plus Gold" class="h-full w-full object-contain drop-shadow-2xl group-hover:scale-105 transition-transform duration-500" data-alt="Gold phone classic design back view" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBgUeQhT5Wi4aK-xC_uwh_qqzER_xZxuDVaAtOyEG1ahpsSWus3yVRsxfY5FeLR8_HHia7fLXe_qGcM7WmAGKybae_9s6gSUHVG4dIm2ND6QAx6-7n6dWpfpWU_51k8TQBlbxhnmaWPauzueiSmQ1c12--kEelX4feDLzMJjkfcSMojAQF_oodXjqOnG3wrysOFRmM1NazXLHEknHAFWaPg7Xc7zUCR8cZsu00HhEvfxp6oL7_6AgS1Jvjgb_zxst43EvXqP5wInSkb"/>
+</div>
+<div class="p-5 flex flex-col flex-grow">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-heading font-bold text-lg text-white leading-tight">iPhone 8 Plus</h3>
+</div>
+<div class="flex flex-wrap gap-2 mb-4">
+<span class="px-2 py-1 bg-[#F5F5F7] rounded text-xs text-text-muted font-mono border border-[#E5E5E5]">256GB</span>
+<span class="px-2 py-1 bg-[#F5F5F7] rounded text-xs text-text-muted font-mono border border-[#E5E5E5]">Gold</span>
+<span class="px-2 py-1 bg-[#F5F5F7] rounded text-xs text-text-muted font-mono border border-[#E5E5E5]">Grado A</span>
+</div>
+<div class="mt-auto pt-4 border-t border-[#E5E5E5] flex flex-col gap-3">
+<div class="flex items-baseline justify-between">
+<span class="text-xs text-text-muted uppercase tracking-wider font-bold">Precio Mayorista</span>
+<span class="font-mono text-2xl text-text-main font-bold tracking-tight">$185.00</span>
+</div>
+<a class="w-full group/btn relative flex items-center justify-center gap-2 py-2.5 rounded bg-transparent border border-primary text-primary font-bold text-sm uppercase tracking-wide overflow-hidden transition-all hover:bg-primary hover:text-black hover:shadow-neon" href="#">
+<span class="material-symbols-outlined text-[18px]">chat</span>
+<span>Consultar</span>
+</a>
+</div>
+</div>
+</article>
+<!-- Card 8: Parts Example -->
+<article class="product-card bg-surface rounded-xl border border-[#E5E5E5] overflow-hidden flex flex-col h-full relative group">
+<div class="absolute top-3 right-3 z-10">
+<span class="inline-flex items-center px-2.5 py-1 rounded bg-background-dark/80 border border-secondary text-secondary text-[10px] font-bold tracking-wider uppercase backdrop-blur-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary mr-2 animate-pulse"></span>
+                        Repuesto
+                    </span>
+</div>
+<div class="h-[240px] bg-gradient-to-b from-[#F2F2F7] to-surface flex items-center justify-center p-6 relative">
+<img alt="iPhone replacement screen display" class="h-full w-full object-contain drop-shadow-2xl group-hover:scale-105 transition-transform duration-500" data-alt="Smartphone LCD screen replacement part" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAT9gVMOey4CM3dfzQtnk0L8AS2jyL8mCTzhJf5O9tLnO_PLoZqjmNXySF6ORWEJS9i_T82NUg3iiqf06wizfT7ZnC8-_zGfbRe94WvgpQm3n5hKrlWE3bArZJ1qrv81EElGe45PCXkE47nlqKszEYOu6WGwIUtq5NIBKXaPB1iMy6f4DPNczdD6DGqqwfuxm-phALyfLpoz5OXelZOo1kjKA_eiBWN6kj6pB4WUJGEWV5nwPxVeHd1tV9yH3TZcqrLZxFb-SbglEnv"/>
+</div>
+<div class="p-5 flex flex-col flex-grow">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-heading font-bold text-lg text-white leading-tight">Display iPhone 13 Original</h3>
+</div>
+<div class="flex flex-wrap gap-2 mb-4">
+<span class="px-2 py-1 bg-[#F5F5F7] rounded text-xs text-text-muted font-mono border border-[#E5E5E5]">OLED</span>
+<span class="px-2 py-1 bg-[#F5F5F7] rounded text-xs text-text-muted font-mono border border-[#E5E5E5]">Pull-Original</span>
+</div>
+<div class="mt-auto pt-4 border-t border-[#E5E5E5] flex flex-col gap-3">
+<div class="flex items-baseline justify-between">
+<span class="text-xs text-text-muted uppercase tracking-wider font-bold">Precio Mayorista</span>
+<span class="font-mono text-2xl text-secondary font-bold tracking-tight">$180.00</span>
+</div>
+<a class="w-full group/btn relative flex items-center justify-center gap-2 py-2.5 rounded bg-transparent border border-secondary text-secondary font-bold text-sm uppercase tracking-wide overflow-hidden transition-all hover:bg-secondary hover:text-white hover:shadow-lg hover:shadow-blue-500/20" href="#">
+<span class="material-symbols-outlined text-[18px]">chat</span>
+<span>Consultar</span>
+</a>
+</div>
+</div>
+</article>
+</div>
+<!-- Load More / Footer Area -->
+<div class="mt-16 text-center">
+<button class="px-8 py-3 rounded-full border border-[#D2D2D7] text-text-muted hover:text-text-main hover:border-text-main transition-colors text-sm tracking-wide font-medium">
+                Cargar más productos
+            </button>
+<p class="mt-8 text-xs text-text-muted font-mono">
+                INVICTUS MAYORISTA © 2024. STOCK ACTUALIZADO EN TIEMPO REAL.
+            </p>
+</div>
+</main>
+<!-- Floating Action Button -->
+<a class="fixed bottom-8 right-8 z-50 group" href="https://wa.me/1234567890" target="_blank">
+<span class="absolute right-full mr-4 top-1/2 -translate-y-1/2 bg-surface border border-[#E5E5E5] text-text-main text-xs px-3 py-1.5 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-glass">
+            Soporte WhatsApp
+        </span>
+<div class="w-14 h-14 bg-primary rounded-full flex items-center justify-center shadow-neon hover:scale-110 transition-transform cursor-pointer text-black">
+<svg class="w-8 h-8 fill-current" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91C2.13 13.66 2.59 15.36 3.45 16.86L2.05 22L7.3 20.62C8.75 21.41 10.38 21.83 12.04 21.83C17.5 21.83 21.95 17.38 21.95 11.92C21.95 9.27 20.92 6.78 19.05 4.91C17.18 3.03 14.69 2 12.04 2ZM12.05 20.16C10.57 20.16 9.12 19.76 7.85 19.01L7.55 18.83L4.43 19.65L5.26 16.61L4.97 16.15C4.08 14.73 3.61 13.08 3.61 11.42C3.61 6.77 7.4 2.98 12.05 2.98C14.31 2.98 16.43 3.86 18.03 5.46C19.63 7.06 20.51 9.18 20.51 11.44C20.51 16.1 16.72 20.16 12.05 20.16ZM16.39 14.24C16.15 14.12 14.98 13.54 14.76 13.46C14.54 13.38 14.38 13.34 14.22 13.58C14.06 13.82 13.6 14.36 13.46 14.52C13.32 14.68 13.18 14.7 12.94 14.58C12.33 14.28 11.55 13.9 10.74 13.18C10.1 12.61 9.67 11.91 9.43 11.51C9.19 11.11 9.4 10.89 9.52 10.77C9.63 10.66 9.77 10.48 9.89 10.34C10.01 10.2 10.05 10.1 10.13 9.94C10.21 9.78 10.17 9.64 10.11 9.52C10.05 9.4 9.59 8.26 9.4 7.8C9.21 7.34 9.02 7.4 8.88 7.4H8.48C8.34 7.4 8.1 7.46 7.9 7.68C7.7 7.9 7.14 8.42 7.14 9.48C7.14 10.54 7.91 11.56 8.02 11.7C8.13 11.84 9.53 14 11.67 14.93C13.15 15.57 13.73 15.53 14.47 15.42C15.29 15.3 16.15 14.84 16.33 14.34C16.51 13.84 16.51 13.42 16.45 13.32C16.39 13.22 16.23 13.18 16.02 13.08H16.39V14.24Z"></path>
+</svg>
+</div>
+</a>
+</body></html>

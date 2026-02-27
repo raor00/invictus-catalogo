@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Invictus Phone | Product Detail</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,100..900;1,100..900&amp;family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&amp;family=Space+Grotesk:wght@300..700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#CCFF00", // Neon Lime
+                        "background-dark": "#F5F5F7", // Light Gray
+                        "surface": "#FFFFFF", // Pure White
+                        "surface-highlight": "#F0F0F2", // Soft Gray
+                        "text-main": "#1D1D1F", // Apple Black
+                        "text-muted": "#86868B", // Secondary Gray
+                        "accent": "#2D5BFF", // Electric Blue
+                        "critical": "#FF3B30", // Signal Red
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"],
+                        "body": ["Inter Tight", "sans-serif"],
+                        "mono": ["JetBrains Mono", "monospace"],
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "1rem",
+                        "xl": "1.5rem",
+                        "card": "12px",
+                    },
+                    boxShadow: {
+                        'neon': '0 0 15px rgba(204, 255, 0, 0.4)',
+                        'premium': '0 10px 30px -10px rgba(0,0,0,0.1)',
+                    }
+                },
+            },
+        }</script>
+<style>/* Custom scrollbar for tech feel */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #F5F5F7; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #D1D1D6; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #AEAEB2; 
+        }
+        
+        .glass-backdrop {
+            backdrop-filter: blur(20px);
+            background-color: rgba(245, 245, 247, 0.7);
+        }</style>
+</head>
+<body class="text-text-main font-body antialiased h-screen w-full overflow-hidden flex items-center justify-center bg-background-dark">
+<!-- 
+      This is the Modal Overlay Wrapper.
+      In a real app, this would be conditionally rendered.
+      Here it is the main view as requested.
+    -->
+<div class="fixed inset-0 z-50 flex items-center justify-center p-4 glass-backdrop">
+<!-- Modal Container -->
+<div class="relative w-full max-w-[800px] bg-surface border border-gray-200 rounded-card shadow-premium overflow-hidden flex flex-col md:flex-row max-h-[90vh] md:max-h-none overflow-y-auto md:overflow-visible animate-fade-in">
+<!-- Close Button (Absolute) -->
+<button aria-label="Close modal" class="absolute top-4 right-4 z-20 p-2 rounded-full text-text-muted hover:text-white hover:bg-surface-highlight transition-colors duration-200 group">
+<span class="material-symbols-outlined text-2xl group-hover:rotate-90 transition-transform">close</span>
+</button>
+<!-- Left: Gallery Section -->
+<div class="w-full md:w-5/12 border-b md:border-b-0 md:border-r p-6 flex flex-col gap-4 bg-gray-50 border-gray-100">
+<!-- Main Image Stage -->
+<div class="relative aspect-[4/5] w-full rounded-lg bg-white border border-gray-200 flex items-center justify-center overflow-hidden group">
+<img alt="iPhone 13 Pro Max" class="w-full h-full object-contain p-4 transition-transform duration-500 group-hover:scale-105" data-alt="Front view of iPhone 13 Pro Max in Graphite against dark background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDmlS28xbnovgFVAECSu1M8Zdh_nIEg5mZFcH8-HQCh6UYpuYN0fkPl8_SEXZ22pe572iXX2-HbqpLBfYU589TMs3_RAmeEeaisQsjqSB5vKr7BOS6IzbZaDeOSCFT4Agwb8BbH7I3CmZL97wNzVdKBoet1eZPMQbDeGY1BbZCR_wcrLIa-WdoWAxArQKvJZ1gs8lMJhb3LU9gQGswc9DXXO3X9XATo-Am2sz0LEvS9x4Q039w_Ps8LRYMs9zP17cZPeL_NbFLRw6DE"/>
+<!-- Floating Badge -->
+<div class="absolute top-3 left-3 border backdrop-blur-md px-2 py-1 rounded text-[10px] font-mono tracking-wider text-text-muted uppercase bg-white/80 border-gray-200">
+                        Refurbished
+                    </div>
+</div>
+<!-- Thumbnails Grid -->
+<div class="grid grid-cols-3 gap-3">
+<button class="relative aspect-square rounded border border-primary overflow-hidden transition-all">
+<img alt="Front view" class="w-full h-full object-cover hover:opacity-100 opacity-90" data-alt="Front view thumbnail" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAfDlFsNdR6vckrH1gr4h2g6x5s14vIiLlMreJ1hb2dTUaEkXb56T5FgErNW5URHFJEDxcQBIcU843yVOy1FtfSNght-Gfy_6VS9Z-j3xFNlgHRvGFgu3M8wkKuq35qAmJhHvYg8UdSGUemr5F25RphO0dNsdgA7s8ytloCljx013rlHdp-g1wCiq42lb5iqMxlkHOD9NlvxjQV3lUzex02z_sDk9aW3VNBjVlwWn6K6wIR-o3mR7heY6_zhBGAyV1T6YQ6-Kcy6g3p"/>
+</button>
+<button class="relative aspect-square rounded border border-gray-200 bg-white overflow-hidden hover:border-gray-400 transition-all">
+<img alt="Back view" class="w-full h-full object-cover hover:opacity-100 opacity-90" data-alt="Back view thumbnail showing camera array" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBnFccEZX56gmxxmFzd-cGnrXt1M8eQcOWayu2v8WT2u6CWDiYozQudqePUGWFouOAMAoUz3SL013tkU4ppYlqmocSKn1sxnnfOlPf9FBn79cWn8HUlwnrAxOci6mxYrfhM9Fw1E5EFX89Vs1XP5na7129RHjq6J-l8_Z3ALwzSJH-wNMpsZY6jRhW7OS2sXphbqW8gBCR3MfCizreCKQjsFwdkNK3PJstx4LgA2JfDCQzduEVuBeNxFzA_92ER3I6lIIg2sOexa5Tp"/>
+</button>
+<button class="relative aspect-square rounded border border-gray-200 bg-white overflow-hidden hover:border-gray-400 transition-all">
+<img alt="Side view" class="w-full h-full object-cover hover:opacity-100 opacity-90" data-alt="Side profile thumbnail showing buttons" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCgydR2VBp6mBGne1Y4288jVzPOJLuN44p2V7_9O6V0ErJx971l23ghMqkojoik8_tJCeQImA2nbHwPd2PA5fWX85fbXKMdBJrHmADrpVDh6cjVF1MJKaa3AD_HNclljDxvQ2KyqsDHmTW7OMReUEkCP99MGBLz362hs6V-2zLHrzfGkk1Jue-efPrx6weeLswCxbJkNev9RCpG0yhkV1UqrCrHWAKBJii8XsdD5MQAzdKzzAn9DMFVWNLyfsw4wop0Yg-xSZt_RWZ4"/>
+</button>
+</div>
+</div>
+<!-- Right: Info Section -->
+<div class="w-full md:w-7/12 p-6 md:p-8 flex flex-col h-full bg-surface relative">
+<!-- Header -->
+<div class="mb-6">
+<div class="flex items-start justify-between gap-4 pr-8">
+<div>
+<h2 class="font-display text-3xl font-bold text-text-main leading-tight mb-1">iPhone 13 Pro Max</h2>
+<p class="font-mono text-xs text-text-muted tracking-wide">REF: INV-IP13-128-BL</p>
+</div>
+</div>
+</div>
+<!-- Price -->
+<div class="mb-8">
+<p class="font-mono text-5xl text-primary tracking-tighter font-medium">$850.00</p>
+<p class="text-text-muted text-sm mt-1">Precio por unidad (Mayorista)</p>
+</div>
+<!-- Specs Table -->
+<div class="flex-grow mb-8">
+<div class="border-t border-gray-100">
+<div class="grid grid-cols-2 py-3 border-b border-gray-50">
+<span class="text-text-muted text-sm font-medium">Condición</span>
+<span class="text-text-main text-sm font-semibold text-right">Grado A (Impecable)</span>
+</div>
+<div class="grid grid-cols-2 py-3 border-b border-gray-50">
+<span class="text-text-muted text-sm font-medium">Almacenamiento</span>
+<span class="text-text-main text-sm font-semibold text-right">128 GB</span>
+</div>
+<div class="grid grid-cols-2 py-3 border-b border-gray-50">
+<span class="text-text-muted text-sm font-medium">Batería</span>
+<span class="text-text-main text-sm font-semibold text-right text-primary">88% (Original)</span>
+</div>
+<div class="grid grid-cols-2 py-3 border-b border-gray-50">
+<span class="text-text-muted text-sm font-medium">Garantía</span>
+<span class="text-text-main text-sm font-semibold text-right">30 Días Directa</span>
+</div>
+<div class="grid grid-cols-2 py-3 border-b border-gray-50">
+<span class="text-text-muted text-sm font-medium">Color</span>
+<span class="text-text-main text-sm font-semibold text-right">Graphite</span>
+</div>
+</div>
+</div>
+<!-- Stock Indicator -->
+<div class="flex items-center gap-2 mb-6">
+<span class="relative flex h-3 w-3">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+<span class="relative inline-flex rounded-full h-3 w-3 bg-primary"></span>
+</span>
+<span class="text-primary text-sm font-medium tracking-wide">12 UNIDADES DISPONIBLES</span>
+</div>
+<!-- Actions -->
+<div class="mt-auto">
+<button class="w-full h-[60px] bg-primary hover:bg-[#bceb05] text-background-dark font-display font-bold text-lg rounded px-6 flex items-center justify-center gap-3 transition-all duration-200 hover:shadow-neon group">
+<span class="material-symbols-outlined text-2xl group-hover:scale-110 transition-transform">chat</span>
+                        SOLICITAR AHORA
+                    </button>
+<p class="text-center text-xs text-text-muted mt-3">
+<span class="material-symbols-outlined text-[10px] align-middle mr-1">lock</span>
+                        Transacción segura vía WhatsApp Business
+                    </p>
+</div>
+</div>
+</div>
+</div>
+</body></html>

@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+
+<html class="" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Invictus Phone | Admin Login</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter+Tight:wght@300;400;500;600&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Configuration -->
+<script id="tailwind-config">tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#000000", // Black for primary actions
+                        "background-light": "#F5F5F7",
+                        "background-dark": "#050505",
+                        "surface": "#FFFFFF",
+                        "surface-highlight": "#FBFBFD",
+                        "text-main": "#1D1D1F",
+                        "muted": "#86868B",
+                        "accent": "#0066CC",
+                        "critical": "#FF3B30",
+                        "border-light": "#E5E5E5"
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"],
+                        "body": ["Inter Tight", "sans-serif"],
+                        "mono": ["JetBrains Mono", "monospace"],
+                    },
+                    backgroundImage: {
+                        'circuit-pattern': "url(\"data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M10 10 L90 10 L90 90 L10 90 Z' fill='none' stroke='%23eee' stroke-width='1'/%3E%3Cpath d='M30 30 L70 30 L70 70 L30 70 Z' fill='none' stroke='%23eee' stroke-width='1'/%3E%3Ccircle cx='50' cy='50' r='5' fill='%23eee'/%3E%3Cpath d='M10 50 L30 50' stroke='%23eee' stroke-width='1'/%3E%3Cpath d='M70 50 L90 50' stroke='%23eee' stroke-width='1'/%3E%3Cpath d='M50 10 L50 30' stroke='%23eee' stroke-width='1'/%3E%3Cpath d='M50 70 L50 90' stroke='%23eee' stroke-width='1'/%3E%3C/svg%3E\")",
+                    }
+                },
+            },
+        }</script>
+<style>
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #F5F5F7; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #D1D1D6; 
+            border-radius: 4px;
+        }
+        
+        /* Input autofill fix */
+        input:-webkit-autofill,
+        input:-webkit-autofill:hover, 
+        input:-webkit-autofill:focus, 
+        input:-webkit-autofill:active{
+            -webkit-box-shadow: 0 0 0 30px #FFFFFF inset !important;
+            -webkit-text-fill-color: #1D1D1F !important;
+        }
+
+        .grid-bg {
+            background-size: 40px 40px;
+            background-image: linear-gradient(to right, rgba(0, 0, 0, 0.05) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
+        }
+    </style>
+</head>
+<body class="bg-background-light text-text-main font-body antialiased min-h-screen flex flex-col">
+<div class="flex flex-1 min-h-screen w-full">
+<!-- LEFT SIDE: Visuals / Branding -->
+<!-- Hidden on mobile, flex on lg screens -->
+<div class="hidden lg:flex lg:w-1/2 relative flex-col justify-between p-12 overflow-hidden border-r border-[#222]">
+<!-- Abstract Background Pattern -->
+<div class="absolute inset-0 z-0 opacity-20">
+<!-- Using a CSS gradient pattern instead of data URI for cleaner code in this context, mimicking a circuit feel -->
+<div class="absolute inset-0 grid-bg opacity-30"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-background-dark via-transparent to-transparent"></div>
+<div class="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-[100px]"></div>
+</div>
+<!-- Top Branding -->
+<div class="relative z-10">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-4xl">bolt</span>
+<div class="flex flex-col">
+<span class="font-display font-bold text-3xl tracking-tight leading-none">INVICTUS</span>
+<span class="font-mono text-primary text-xs tracking-widest">MAYORISTA</span>
+</div>
+</div>
+</div>
+<!-- Central Visual Element -->
+<div class="relative z-10 flex flex-col justify-center h-full max-w-lg">
+<h1 class="font-display font-bold text-5xl md:text-6xl leading-tight mb-6">
+                    SISTEMA <br/>
+<span class="text-black/40">INTERNO</span>
+</h1>
+<div class="h-1.5 w-16 bg-black mb-6"></div>
+<p class="text-muted text-lg font-light leading-relaxed max-w-md">
+                    Acceso exclusivo para gestión de inventario, control de precios y distribución mayorista.
+                </p>
+<div class="mt-12 flex gap-4">
+<div class="flex items-center gap-3 px-4 py-2 border border-[#E5E5E5] rounded bg-white">
+<span class="material-symbols-outlined text-black">inventory_2</span>
+<div class="flex flex-col">
+<span class="text-xs text-muted uppercase tracking-wider">SKUs Activos</span>
+<span class="font-mono text-black font-semibold">2,450+</span>
+</div>
+</div>
+<div class="flex items-center gap-3 px-4 py-2 border border-[#E5E5E5] rounded bg-white">
+<span class="material-symbols-outlined text-black">update</span>
+<div class="flex flex-col">
+<span class="text-xs text-muted uppercase tracking-wider">Último Sync</span>
+<span class="font-mono text-black font-semibold">09:41 AM</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Metadata -->
+<div class="relative z-10 flex justify-between items-end">
+<p class="font-mono text-xs text-muted">v2.0.4 - STABLE BUILD</p>
+<p class="font-mono text-xs text-muted">SERVER: US-EAST-1</p>
+</div>
+</div>
+<!-- RIGHT SIDE: Login Form -->
+<div class="w-full lg:w-1/2 flex flex-col justify-center items-center p-6 sm:p-12 lg:p-24 bg-[#050505] relative">
+<!-- Mobile Logo (Only visible on small screens) -->
+<div class="lg:hidden absolute top-8 left-8 flex items-center gap-2 mb-12">
+<span class="material-symbols-outlined text-black text-3xl">bolt</span>
+<span class="font-display font-bold text-2xl tracking-tight text-black">INVICTUS</span>
+</div>
+<div class="w-full max-w-md flex flex-col gap-8 z-10">
+<div class="flex flex-col gap-2">
+<h2 class="text-4xl font-display font-bold text-black tracking-tight">Bienvenido</h2>
+<p class="text-muted text-base">Ingrese sus credenciales de administrador.</p>
+</div>
+<form class="flex flex-col gap-8 mt-4">
+<!-- Email Input Group -->
+<div class="group relative">
+<input class="peer w-full bg-[#FBFBFD] border-b border-[#E5E5E5] px-4 py-3 text-black placeholder-transparent focus:border-black focus:outline-none focus:ring-0 transition-colors duration-300 font-mono" id="email" name="email" placeholder="Email" required="" type="email"/>
+<label class="absolute left-4 -top-3.5 text-xs text-muted transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-muted peer-placeholder-shown:top-3 peer-focus:-top-3.5 peer-focus:text-black peer-focus:text-xs font-mono uppercase tracking-wide cursor-text" for="email">
+                            Email Corporativo
+                        </label>
+<!-- Focus glow effect -->
+<div class="absolute bottom-0 left-0 h-[2px] w-0 bg-black transition-all duration-500 peer-focus:w-full"></div>
+</div>
+<!-- Password Input Group -->
+<div class="group relative">
+<input class="peer w-full bg-[#FBFBFD] border-b border-[#E5E5E5] px-4 py-3 text-black placeholder-transparent focus:border-black focus:outline-none focus:ring-0 transition-colors duration-300 font-mono" id="password" name="password" placeholder="Password" required="" type="password"/>
+<label class="absolute left-4 -top-3.5 text-xs text-muted transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-muted peer-placeholder-shown:top-3 peer-focus:-top-3.5 peer-focus:text-black peer-focus:text-xs font-mono uppercase tracking-wide cursor-text" for="password">
+                            Contraseña
+                        </label>
+<button class="absolute right-0 top-3 text-muted hover:text-white transition-colors" type="button">
+<span class="material-symbols-outlined text-[20px]">visibility_off</span>
+</button>
+<!-- Focus glow effect -->
+<div class="absolute bottom-0 left-0 h-[2px] w-0 bg-black transition-all duration-500 peer-focus:w-full"></div>
+</div>
+<!-- Actions -->
+<div class="flex items-center justify-between mt-2">
+<div class="flex items-center gap-2">
+<input class="w-4 h-4 rounded border-[#D1D1D6] bg-white text-black focus:ring-0 focus:ring-offset-0 cursor-pointer" id="remember" type="checkbox"/>
+<label class="text-sm text-muted cursor-pointer select-none hover:text-black transition-colors" for="remember">Recordar sesión</label>
+</div>
+<a class="text-sm text-muted hover:text-black transition-colors underline decoration-dotted underline-offset-4" href="#">
+                            ¿Olvidó su contraseña?
+                        </a>
+</div>
+<!-- Submit Button -->
+<button class="mt-6 w-full py-4 bg-black text-white font-display font-bold text-lg tracking-wide hover:bg-black/90 shadow-lg transition-all duration-300 active:scale-[0.98]" type="button">
+                        ACCEDER AL SISTEMA
+                    </button>
+</form>
+<div class="mt-auto pt-12 flex justify-center lg:justify-start">
+<p class="text-xs text-muted/40 font-mono text-center lg:text-left">
+                        © 2024 INVICTUS DISTRIBUCIÓN. TODOS LOS DERECHOS RESERVADOS.
+                        <br/>ACCESO PROTEGIDO POR 2FA.
+                    </p>
+</div>
+</div>
+<!-- Decorative corner accent -->
+<div class="absolute bottom-0 right-0 w-32 h-32 border-b-2 border-r-2 border-[#222] opacity-50 pointer-events-none"></div>
+<div class="absolute top-0 left-0 w-32 h-32 border-t-2 border-l-2 border-[#222] opacity-50 pointer-events-none lg:hidden"></div>
+</div>
+</div>
+</body></html>

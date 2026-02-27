@@ -1,26 +1,89 @@
 @import "tailwindcss";
 
+@theme {
+  --color-primary: #CCFF00; /* Neon Lime */
+  --color-primary-dim: rgba(204, 255, 0, 0.1);
+  --color-secondary: #0066CC; /* Refined Blue */
+  --color-background-light: #F5F5F7; /* Light Grey/White */
+  --color-background-dark: #050505; /* Void Black */
+  --color-surface: #FFFFFF; /* Pure White */
+  --color-surface-dark: #121212; /* Carbon */
+  --color-surface-highlight: #E5E5E5; /* Light Grey */
+  --color-surface-highlight-dark: #1E1E1E; /* Gunmetal */
+  --color-text-main: #1D1D1F; /* Apple Black */
+  --color-text-main-dark: #F5F5F7; /* Titanium White */
+  --color-text-muted: #86868B; /* Silver Grey */
+  --color-critical: #FF3B30; /* Signal Red */
+
+  --font-heading: var(--font-space-grotesk), sans-serif;
+  --font-body: var(--font-inter-tight), sans-serif;
+  --font-mono: var(--font-jetbrains-mono), monospace;
+
+  --shadow-neon: 0 4px 14px 0 rgba(204, 255, 0, 0.39);
+  --shadow-glass: 0 4px 30px rgba(0, 0, 0, 0.05);
+  --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.04);
+  --shadow-glow: 0 0 15px rgba(204, 255, 0, 0.15);
+}
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: var(--color-background-light);
+  --foreground: var(--color-text-main);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+.dark {
+  --background: var(--color-background-dark);
+  --foreground: var(--color-text-main-dark);
 }
 
 body {
-  background: var(--background);
+  background-color: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--background); 
+}
+::-webkit-scrollbar-thumb {
+  background: #D2D2D7; 
+  border-radius: 4px;
+}
+.dark ::-webkit-scrollbar-thumb {
+  background: #333; 
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #86868B; 
+}
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #444; 
+}
+
+/* Ticker Animation */
+@keyframes ticker {
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}
+@utility animate-ticker {
+  animation: ticker 20s linear infinite;
+}
+
+/* Glassmorphism Utilities */
+@utility glass-panel {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+/* Liquid Glass (design-taste-frontend skill rule) */
+@utility liquid-glass {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }

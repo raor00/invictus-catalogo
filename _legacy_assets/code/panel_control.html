@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+
+<html class="" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Invictus Admin Dashboard</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter+Tight:wght@300;400;500;600&amp;family=JetBrains+Mono:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Config -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#c8f906", // Neon Lime
+                        "primary-dim": "rgba(200, 249, 6, 0.1)",
+                        "background-light": "#f8f8f5",
+                        "background-dark": "#050505", // Void Black
+                        "surface": "#121212", // Carbon
+                        "surface-highlight": "#1E1E1E", // Gunmetal
+                        "text-main": "#F5F5F7", // Titanium White
+                        "muted": "#888888", // Steel
+                        "critical": "#FF3B30", // Signal Red
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"],
+                        "body": ["Inter Tight", "sans-serif"],
+                        "mono": ["JetBrains Mono", "monospace"],
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "0.75rem", // 12px
+                        "xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                    boxShadow: {
+                        "glow": "0 0 15px rgba(200, 249, 6, 0.15)",
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        /* Custom scrollbar for dark theme */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #050505; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #333; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #444; 
+        }
+        
+        /* Table row hover effect specific to Midnight Tech */
+        .table-row-hover:hover {
+            background-color: #1E1E1E;
+        }
+    </style>
+</head>
+<body class="bg-white text-[#1D1D1F] font-body overflow-hidden">
+<div class="flex h-screen w-full overflow-hidden bg-white">
+<!-- Sidebar Navigation -->
+<aside class="w-[240px] flex-shrink-0 flex flex-col justify-between bg-[#F5F5F7] border-r border-gray-200 h-full">
+<div class="flex flex-col gap-6 p-6">
+<!-- Brand -->
+<div class="flex gap-3 items-center">
+<div class="bg-gradient-to-br from-primary to-green-600 rounded-full h-10 w-10 flex items-center justify-center text-black font-bold font-display" data-alt="Invictus Logo Abstract">
+                        IV
+                    </div>
+<div class="flex flex-col">
+<h1 class="text-[#1D1D1F] text-lg font-bold font-display leading-tight tracking-wide">INVICTUS</h1>
+<p class="text-primary text-xs font-mono tracking-widest">MAYORISTA</p>
+</div>
+</div>
+<!-- Navigation -->
+<nav class="flex flex-col gap-1 mt-4">
+<!-- Active Item -->
+<a class="flex items-center gap-3 px-4 py-3 bg-primary/10 border-l-2 border-primary rounded-r-lg group" href="#">
+<span class="material-symbols-outlined text-primary">dashboard</span>
+<span class="text-white text-sm font-medium font-display tracking-wide">Dashboard</span>
+</a>
+<!-- Inactive Items -->
+<a class="flex items-center gap-3 px-4 py-3 text-muted hover:text-white hover:bg-surface-highlight rounded-lg transition-colors group" href="#">
+<span class="material-symbols-outlined group-hover:text-white transition-colors">smartphone</span>
+<span class="text-sm font-medium font-display tracking-wide">iPhones</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-muted hover:text-white hover:bg-surface-highlight rounded-lg transition-colors group" href="#">
+<span class="material-symbols-outlined group-hover:text-white transition-colors">build</span>
+<span class="text-sm font-medium font-display tracking-wide">Repuestos</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-muted hover:text-white hover:bg-surface-highlight rounded-lg transition-colors group" href="#">
+<span class="material-symbols-outlined group-hover:text-white transition-colors">inventory_2</span>
+<span class="text-sm font-medium font-display tracking-wide">Inventario</span>
+</a>
+</nav>
+</div>
+<!-- Bottom Settings & User -->
+<div class="p-4 border-t border-gray-200 flex flex-col gap-2">
+<a class="flex items-center gap-3 px-4 py-3 text-muted hover:text-white hover:bg-surface-highlight rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-sm font-medium font-display tracking-wide">Configuración</span>
+</a>
+<div class="flex items-center gap-3 px-4 py-3 mt-2 rounded-lg bg-white border border-gray-200">
+<div class="h-8 w-8 rounded-full bg-gradient-to-tr from-gray-700 to-gray-600 flex items-center justify-center text-xs font-bold font-mono text-white" data-alt="Admin User Avatar">AD</div>
+<div class="flex flex-col">
+<span class="text-[#1D1D1F] text-sm font-medium leading-none">Admin User</span>
+<span class="text-muted text-xs mt-1">Manager</span>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col h-full overflow-hidden bg-white relative">
+<!-- Header Background Pattern -->
+<div class="absolute top-0 left-0 w-full h-64 bg-gradient-to-b from-[#F5F5F7] to-transparent pointer-events-none z-0"></div>
+<!-- Top Header & Stats -->
+<div class="px-8 py-8 z-10 flex flex-col gap-8 flex-shrink-0">
+<div class="flex justify-between items-end">
+<div>
+<h2 class="text-[#1D1D1F] font-display font-bold text-3xl tracking-tight">Panel de Control</h2>
+<p class="text-muted mt-1 text-sm font-body">Visión general del inventario y alertas en tiempo real.</p>
+</div>
+<div class="flex gap-3">
+<button class="flex items-center gap-2 px-4 py-2 rounded-lg bg-white border border-gray-200 text-[#1D1D1F] text-sm hover:border-gray-400 transition-colors">
+<span class="material-symbols-outlined text-sm">download</span>
+                            Exportar Reporte
+                        </button>
+<button class="flex items-center gap-2 px-4 py-2 rounded-lg bg-primary text-black font-bold text-sm hover:bg-[#b4e005] hover:shadow-glow transition-all">
+<span class="material-symbols-outlined text-sm">add</span>
+                            Nuevo Producto
+                        </button>
+</div>
+</div>
+<!-- Metrics Grid -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<!-- Stat Card 1 -->
+<div class="bg-white border border-gray-200 p-5 rounded-lg flex flex-col justify-between h-32 hover:border-gray-300 hover:shadow-sm transition-all group">
+<div class="flex justify-between items-start">
+<span class="text-muted text-sm font-mono uppercase tracking-wider">Total SKUs</span>
+<span class="material-symbols-outlined text-[#333333] group-hover:text-white transition-colors">inventory</span>
+</div>
+<div>
+<span class="text-[#1D1D1F] text-3xl font-display font-bold">1,240</span>
+<span class="text-primary text-xs ml-2 font-mono">+24 esta semana</span>
+</div>
+</div>
+<!-- Stat Card 2 -->
+<div class="bg-white border border-gray-200 p-5 rounded-lg flex flex-col justify-between h-32 hover:border-gray-300 hover:shadow-sm transition-all group">
+<div class="flex justify-between items-start">
+<span class="text-muted text-sm font-mono uppercase tracking-wider">Valor Inventario</span>
+<span class="material-symbols-outlined text-[#333333] group-hover:text-primary transition-colors">payments</span>
+</div>
+<div>
+<span class="text-[#1D1D1F] text-3xl font-display font-bold">1,240</span>
+</div>
+</div>
+<!-- Stat Card 3 -->
+<div class="bg-white border border-gray-200 p-5 rounded-lg flex flex-col justify-between h-32 hover:border-gray-300 hover:shadow-sm transition-all group">
+<div class="flex justify-between items-start">
+<span class="text-muted text-sm font-mono uppercase tracking-wider">Alertas Stock</span>
+<span class="material-symbols-outlined text-[#333333] group-hover:text-critical transition-colors">warning</span>
+</div>
+<div class="flex items-baseline gap-3">
+<span class="text-critical text-3xl font-display font-bold">12</span>
+<span class="text-muted text-xs font-body">Items críticos (&lt; 3 un.)</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Table Container -->
+<div class="flex-1 px-8 pb-8 overflow-hidden flex flex-col z-10">
+<div class="bg-white border border-gray-200 rounded-lg flex flex-col h-full overflow-hidden shadow-sm">
+<!-- Table Toolbar -->
+<div class="p-4 border-b border-gray-100 flex justify-between items-center bg-white">
+<div class="relative w-96">
+<span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted material-symbols-outlined text-lg">search</span>
+<input class="w-full bg-[#F5F5F7] text-[#1D1D1F] pl-10 pr-4 py-2.5 rounded border border-gray-200 focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none placeholder-gray-400 text-sm font-body" placeholder="Buscar por nombre, SKU o categoría..." type="text"/>
+</div>
+<div class="flex gap-3">
+<button class="flex items-center gap-2 px-3 py-2 rounded bg-white border border-gray-200 text-gray-600 text-sm hover:text-[#1D1D1F] hover:border-gray-300 transition-colors">
+<span class="material-symbols-outlined text-lg">filter_list</span>
+                                Filtros
+                            </button>
+<button class="flex items-center gap-2 px-3 py-2 rounded bg-white border border-gray-200 text-gray-600 text-sm hover:text-[#1D1D1F] hover:border-gray-300 transition-colors">
+<span class="material-symbols-outlined text-lg">sort</span>
+                                Ordenar
+                            </button>
+</div>
+</div>
+<!-- Table Header -->
+<div class="grid grid-cols-12 gap-4 px-6 py-3 bg-[#F9F9FB] border-b border-gray-200 text-xs font-mono uppercase tracking-wider text-gray-500 font-medium sticky top-0">
+<div class="col-span-4 pl-2">Producto</div>
+<div class="col-span-2 text-right">Precio</div>
+<div class="col-span-2 text-center">Stock</div>
+<div class="col-span-2 text-center">Estado</div>
+<div class="col-span-2 text-right pr-2">Acciones</div>
+</div>
+<!-- Table Body -->
+<div class="overflow-y-auto flex-1 custom-scrollbar">
+<!-- Row 1 -->
+<div class="grid grid-cols-12 gap-4 px-6 py-4 border-b border-gray-100 items-center hover:bg-gray-50 group transition-all duration-200">
+<div class="col-span-4 flex gap-4 items-center pl-2">
+<div class="h-12 w-12 rounded bg-white border border-gray-200 flex items-center justify-center overflow-hidden flex-shrink-0">
+<img alt="iPhone 15 Pro Titanium" class="h-full w-full object-cover opacity-80 group-hover:opacity-100 transition-opacity" data-alt="iPhone 15 Pro Titanium" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAkKrtIOm6mWzzdDr7Ag8DCSXv9hVqRcArBhZUyywyKecj67nZWY8clnYmK0yPuZG2LV90z8r_Gq1li8OCKZIFO-FN-ikrIDv9mGvxqHBL4MisyxkOPb5TXpl2297Fv5YgNlkFqdiOxfD_Q1X9DdXaM8REDCDyATnS3uJZdzuvOqODpVqSAemLAeMJ7PX5fiC8BFZB9Lmbb8sLKcH0LgiT4544laVHYXjGlAu71fzfFCc2gJLHYqYTrsreuGpZASJ9ZytsIdFoogIlw"/>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="text-[#1D1D1F] font-medium truncate font-body">iPhone 15 Pro Titanium</span>
+<span class="text-muted text-xs font-mono truncate">SKU: INV-15P-256-TI</span>
+</div>
+</div>
+<div class="col-span-2 flex justify-end">
+<div class="flex items-center gap-1 group/input">
+<span class="text-muted text-sm">$</span>
+<input class="bg-transparent text-right text-[#1D1D1F] font-mono text-sm w-24 border-b border-transparent hover:border-gray-200 focus:border-primary focus:outline-none focus:bg-[#F5F5F7] p-1 rounded-sm transition-all" type="text" value="1,150.00"/>
+</div>
+</div>
+<div class="col-span-2 flex justify-center">
+<div class="flex items-center gap-2">
+<button class="text-muted hover:text-white material-symbols-outlined text-base">remove</button>
+<input class="w-full bg-[#F5F5F7] text-[#1D1D1F] pl-10 pr-4 py-2.5 rounded border border-gray-200 focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none placeholder-gray-400 text-sm font-body" type="number" value="15"/>
+<button class="text-muted hover:text-white material-symbols-outlined text-base">add</button>
+</div>
+</div>
+<div class="col-span-2 flex justify-center">
+<button class="px-3 py-1 rounded-full border border-primary/30 bg-primary/10 text-primary text-xs font-bold font-mono uppercase tracking-wide hover:bg-primary hover:text-black transition-all">
+                                    Disponible
+                                </button>
+</div>
+<div class="col-span-2 flex justify-end gap-2 pr-2 opacity-60 group-hover:opacity-100 transition-opacity">
+<button class="p-1.5 rounded hover:bg-gray-100 text-gray-400 hover:text-[#1D1D1F] transition-colors" title="Editar">
+<span class="material-symbols-outlined text-lg">edit</span>
+</button>
+<button class="p-1.5 rounded hover:bg-gray-100 text-gray-400 hover:text-[#1D1D1F] transition-colors" title="Ver en tienda">
+<span class="material-symbols-outlined text-lg">visibility</span>
+</button>
+<button class="p-1.5 rounded hover:bg-critical/20 text-muted hover:text-critical transition-colors" title="Eliminar">
+<span class="material-symbols-outlined text-lg">delete</span>
+</button>
+</div>
+</div>
+<!-- Row 2: Low Stock -->
+<div class="grid grid-cols-12 gap-4 px-6 py-4 border-b border-gray-100 items-center hover:bg-gray-50 group transition-all duration-200">
+<div class="col-span-4 flex gap-4 items-center pl-2">
+<div class="h-12 w-12 rounded bg-white border border-gray-200 flex items-center justify-center overflow-hidden flex-shrink-0">
+<img alt="Display Screen iPhone 11" class="h-full w-full object-cover opacity-80 group-hover:opacity-100 transition-opacity" data-alt="Display Screen iPhone 11" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDjZ7P-kSyhc0Nefz0U47RTvuxrr-HpbAPnqjcCp10YU2VHFqBiT6-OPs8ZuVJjnElzsQYgSrq4qJ0vPCpucxmZUKJXS_OfYjMXNbVV_ppUJWuyMkt_PSIXVMzPLQR5lId3p4BfJo3zXJYcMzASQ-X_uqt0EqY4DRizdzJsgkQCJeJNfxw5w4EZXk-WuUn4j_uWx_oOiIfQbnbTjFAxwNancAqNV4_BOcrwKmYoIrMR50TYIVK2NPujQNfwW0wBIapzHjt9iyGLP-xB"/>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="text-[#1D1D1F] font-medium truncate font-body">Display iPhone 11 - Original</span>
+<span class="text-muted text-xs font-mono truncate">SKU: REP-DIS-IP11-OG</span>
+</div>
+</div>
+<div class="col-span-2 flex justify-end">
+<div class="flex items-center gap-1 group/input">
+<span class="text-muted text-sm">$</span>
+<input class="bg-transparent text-right text-[#1D1D1F] font-mono text-sm w-24 border-b border-transparent hover:border-gray-200 focus:border-primary focus:outline-none focus:bg-[#F5F5F7] p-1 rounded-sm transition-all" type="text" value="45.00"/>
+</div>
+</div>
+<div class="col-span-2 flex justify-center">
+<div class="flex items-center gap-2">
+<button class="text-muted hover:text-white material-symbols-outlined text-base">remove</button>
+<input class="w-full bg-[#F5F5F7] text-[#1D1D1F] pl-10 pr-4 py-2.5 rounded border border-gray-200 focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none placeholder-gray-400 text-sm font-body" type="number" value="2"/>
+<button class="text-muted hover:text-white material-symbols-outlined text-base">add</button>
+</div>
+</div>
+<div class="col-span-2 flex justify-center">
+<button class="px-3 py-1 rounded-full border border-orange-500/30 bg-orange-500/10 text-orange-500 text-xs font-bold font-mono uppercase tracking-wide hover:bg-orange-500 hover:text-black transition-all">
+                                    Pocas Unidades
+                                </button>
+</div>
+<div class="col-span-2 flex justify-end gap-2 pr-2 opacity-60 group-hover:opacity-100 transition-opacity">
+<button class="p-1.5 rounded hover:bg-gray-100 text-gray-400 hover:text-[#1D1D1F] transition-colors">
+<span class="material-symbols-outlined text-lg">edit</span>
+</button>
+<button class="p-1.5 rounded hover:bg-gray-100 text-gray-400 hover:text-[#1D1D1F] transition-colors">
+<span class="material-symbols-outlined text-lg">visibility</span>
+</button>
+<button class="p-1.5 rounded hover:bg-critical/20 text-muted hover:text-critical transition-colors">
+<span class="material-symbols-outlined text-lg">delete</span>
+</button>
+</div>
+</div>
+<!-- Row 3: Out of Stock -->
+<div class="grid grid-cols-12 gap-4 px-6 py-4 border-b border-gray-100 items-center hover:bg-gray-50 group transition-all duration-200">
+<div class="col-span-4 flex gap-4 items-center pl-2">
+<div class="h-12 w-12 rounded bg-white border border-gray-200 flex items-center justify-center overflow-hidden flex-shrink-0">
+<img alt="iPhone 12 Mini Blue" class="h-full w-full object-cover" data-alt="iPhone 12 Mini Blue" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDkkE69ML5OS2q8Nkk-5fFDn0uz-OBrHXf0qUKnvklOB39mJFspC21P7HgG7kmmo1AiaZOFmcfL8DsPrSpFc4FvzhsVFe4r2SOfwMsm8MM2095bmUfGWFbCHMo2kZEIJP4uMifikV1qwxmy5VBPWku65fqMp2yaexL5BhNQgJZBQTwnblUbNMx1T-Ua_PfwuOujmW_vv-PlXmeU6oxAWrf3ESL9D02DIbTiFKDAyZT8uFcoBkUgJNuJbVjov2aOP00KAKH7EXVkvTqj"/>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="text-gray-400 font-medium truncate font-body decoration-slate-500">iPhone 12 Mini - 64GB</span>
+<span class="text-muted text-xs font-mono truncate">SKU: INV-12M-64-BL</span>
+</div>
+</div>
+<div class="col-span-2 flex justify-end">
+<div class="flex items-center gap-1 group/input">
+<span class="text-muted text-sm">$</span>
+<input class="bg-transparent text-right text-gray-400 font-mono text-sm w-24 border-b border-transparent hover:border-[#444] focus:border-primary focus:outline-none focus:bg-[#050505] p-1 rounded-sm transition-all" type="text" value="300.00"/>
+</div>
+</div>
+<div class="col-span-2 flex justify-center">
+<div class="flex items-center gap-2">
+<button class="text-muted hover:text-white material-symbols-outlined text-base">remove</button>
+<input class="w-full bg-[#F5F5F7] text-[#1D1D1F] pl-10 pr-4 py-2.5 rounded border border-gray-200 focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none placeholder-gray-400 text-sm font-body" disabled="" type="number" value="0"/>
+<button class="text-muted hover:text-white material-symbols-outlined text-base">add</button>
+</div>
+</div>
+<div class="col-span-2 flex justify-center">
+<button class="px-3 py-1 rounded-full border border-critical/30 bg-critical/10 text-critical text-xs font-bold font-mono uppercase tracking-wide hover:bg-critical hover:text-white transition-all">
+                                    Agotado
+                                </button>
+</div>
+<div class="col-span-2 flex justify-end gap-2 pr-2">
+<button class="p-1.5 rounded hover:bg-gray-100 text-gray-400 hover:text-[#1D1D1F] transition-colors">
+<span class="material-symbols-outlined text-lg">edit</span>
+</button>
+<button class="p-1.5 rounded hover:bg-gray-100 text-gray-400 hover:text-[#1D1D1F] transition-colors">
+<span class="material-symbols-outlined text-lg">visibility</span>
+</button>
+<button class="p-1.5 rounded hover:bg-critical/20 text-muted hover:text-critical transition-colors">
+<span class="material-symbols-outlined text-lg">delete</span>
+</button>
+</div>
+</div>
+<!-- Row 4 -->
+<div class="grid grid-cols-12 gap-4 px-6 py-4 border-b border-gray-100 items-center hover:bg-gray-50 group transition-all duration-200">
+<div class="col-span-4 flex gap-4 items-center pl-2">
+<div class="h-12 w-12 rounded bg-white border border-gray-200 flex items-center justify-center overflow-hidden flex-shrink-0">
+<img alt="Battery iPhone X" class="h-full w-full object-cover opacity-80 group-hover:opacity-100 transition-opacity" data-alt="Battery iPhone X" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDAnwW7nsLnxzmywK0bWw-BIkmFZW3rG_i4nkCmMKBvF7lRxCn-qa_l-um7CUT81dmJW_0DD3-w5eiB1O8u1j7ZeCCJVhiN0OuB2GIOV2CRbeWSTSdOqJYjMDI5PRhSUkwx4e9EjT1MZKv4hG6NQdEPVLQ28XzFqLCvy61HbCKIiru33FIPvGLPUSz8wkb6nyO_0qmW8sDZL-G__9DXrttVvbPcGQDgx5bqtt3c5uGgFxzu5pZqcLvxCvznjTS5_8l7c0MVySnzDkkE"/>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="text-[#1D1D1F] font-medium truncate font-body">Batería iPhone X - Alta Capacidad</span>
+<span class="text-muted text-xs font-mono truncate">SKU: REP-BAT-IPX-HC</span>
+</div>
+</div>
+<div class="col-span-2 flex justify-end">
+<div class="flex items-center gap-1 group/input">
+<span class="text-muted text-sm">$</span>
+<input class="bg-transparent text-right text-[#1D1D1F] font-mono text-sm w-24 border-b border-transparent hover:border-gray-200 focus:border-primary focus:outline-none focus:bg-[#F5F5F7] p-1 rounded-sm transition-all" type="text" value="22.50"/>
+</div>
+</div>
+<div class="col-span-2 flex justify-center">
+<div class="flex items-center gap-2">
+<button class="text-muted hover:text-white material-symbols-outlined text-base">remove</button>
+<input class="w-full bg-[#F5F5F7] text-[#1D1D1F] pl-10 pr-4 py-2.5 rounded border border-gray-200 focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none placeholder-gray-400 text-sm font-body" type="number" value="48"/>
+<button class="text-muted hover:text-white material-symbols-outlined text-base">add</button>
+</div>
+</div>
+<div class="col-span-2 flex justify-center">
+<button class="px-3 py-1 rounded-full border border-primary/30 bg-primary/10 text-primary text-xs font-bold font-mono uppercase tracking-wide hover:bg-primary hover:text-black transition-all">
+                                    Disponible
+                                </button>
+</div>
+<div class="col-span-2 flex justify-end gap-2 pr-2 opacity-60 group-hover:opacity-100 transition-opacity">
+<button class="p-1.5 rounded hover:bg-gray-100 text-gray-400 hover:text-[#1D1D1F] transition-colors">
+<span class="material-symbols-outlined text-lg">edit</span>
+</button>
+<button class="p-1.5 rounded hover:bg-gray-100 text-gray-400 hover:text-[#1D1D1F] transition-colors">
+<span class="material-symbols-outlined text-lg">visibility</span>
+</button>
+<button class="p-1.5 rounded hover:bg-critical/20 text-muted hover:text-critical transition-colors">
+<span class="material-symbols-outlined text-lg">delete</span>
+</button>
+</div>
+</div>
+<!-- Row 5 -->
+<div class="grid grid-cols-12 gap-4 px-6 py-4 border-b border-gray-100 items-center hover:bg-gray-50 group transition-all duration-200">
+<div class="col-span-4 flex gap-4 items-center pl-2">
+<div class="h-12 w-12 rounded bg-white border border-gray-200 flex items-center justify-center overflow-hidden flex-shrink-0">
+<img alt="iPhone 13 Green" class="h-full w-full object-cover opacity-80 group-hover:opacity-100 transition-opacity" data-alt="iPhone 13 Green" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD8oAYufnu5h39A15HSqeSmce5Q7UNjRySCxtYIzLxlvoXGKdRjsnu4nkGnEKZUBg7YvSDFX8ZgzSGhXXB5m9vvXdm7EXSDyh_s6_9KjklT8BCuhaKbjTOgRhT0vMPbxzLgi3S4rj05AI0wJHVbWm_78QBsz-QsbB3r9nAt82XXXt8xwLjaIP-Pu0kwvy8NoJ74TZ_NOnZH0ndxHkIyUMJv3ceY79F3_9Ai0qigsNRbbFY3HFHPbmrRuhLy1oB0p_vnhIytIoC1tyic"/>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="text-[#1D1D1F] font-medium truncate font-body">iPhone 13 - 128GB - Green</span>
+<span class="text-muted text-xs font-mono truncate">SKU: INV-13-128-GN</span>
+</div>
+</div>
+<div class="col-span-2 flex justify-end">
+<div class="flex items-center gap-1 group/input">
+<span class="text-muted text-sm">$</span>
+<input class="bg-transparent text-right text-[#1D1D1F] font-mono text-sm w-24 border-b border-transparent hover:border-gray-200 focus:border-primary focus:outline-none focus:bg-[#F5F5F7] p-1 rounded-sm transition-all" type="text" value="620.00"/>
+</div>
+</div>
+<div class="col-span-2 flex justify-center">
+<div class="flex items-center gap-2">
+<button class="text-muted hover:text-white material-symbols-outlined text-base">remove</button>
+<input class="w-full bg-[#F5F5F7] text-[#1D1D1F] pl-10 pr-4 py-2.5 rounded border border-gray-200 focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none placeholder-gray-400 text-sm font-body" type="number" value="8"/>
+<button class="text-muted hover:text-white material-symbols-outlined text-base">add</button>
+</div>
+</div>
+<div class="col-span-2 flex justify-center">
+<button class="px-3 py-1 rounded-full border border-primary/30 bg-primary/10 text-primary text-xs font-bold font-mono uppercase tracking-wide hover:bg-primary hover:text-black transition-all">
+                                    Disponible
+                                </button>
+</div>
+<div class="col-span-2 flex justify-end gap-2 pr-2 opacity-60 group-hover:opacity-100 transition-opacity">
+<button class="p-1.5 rounded hover:bg-gray-100 text-gray-400 hover:text-[#1D1D1F] transition-colors">
+<span class="material-symbols-outlined text-lg">edit</span>
+</button>
+<button class="p-1.5 rounded hover:bg-gray-100 text-gray-400 hover:text-[#1D1D1F] transition-colors">
+<span class="material-symbols-outlined text-lg">visibility</span>
+</button>
+<button class="p-1.5 rounded hover:bg-critical/20 text-muted hover:text-critical transition-colors">
+<span class="material-symbols-outlined text-lg">delete</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>
