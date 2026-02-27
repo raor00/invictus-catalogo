@@ -77,15 +77,15 @@ export default function LoginPage() {
             {/* RIGHT SIDE: Login Form */}
             <div className="w-full lg:w-1/2 flex flex-col justify-center items-center p-6 sm:p-12 lg:p-24 bg-[#000000] relative">
                 {/* Mobile Logo */}
-                <div className="lg:hidden absolute top-8 left-8 flex items-center gap-2 mb-12">
+                <div className="lg:hidden flex items-center gap-2 mb-8 self-start">
                     <span className="material-symbols-outlined text-white text-3xl">bolt</span>
                     <span className="font-heading font-bold text-2xl tracking-tight text-white">INVICTUS</span>
                 </div>
 
                 <div className="w-full max-w-md flex flex-col gap-10 z-10">
                     <div className="flex flex-col gap-3">
-                        <h2 className="text-[44px] font-heading font-bold text-white tracking-tight leading-none">Bienvenido</h2>
-                        <p className="text-[#666] text-lg">Ingrese sus credenciales de administrador.</p>
+                        <h2 className="text-[36px] sm:text-[44px] font-heading font-bold text-white tracking-tight leading-none">Bienvenido</h2>
+                        <p className="text-[#666] text-base sm:text-lg">Ingrese sus credenciales de administrador.</p>
                     </div>
 
                     <form className="flex flex-col gap-6 mt-6" onSubmit={handleLogin}>
