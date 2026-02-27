@@ -24,19 +24,19 @@ export default function AdminDashboardPage() {
         <div className="flex-1 flex flex-col h-full z-10 w-full">
             {/* Top Header & Stats */}
             <div className="px-4 sm:px-8 py-6 sm:py-8 z-10 flex flex-col gap-8 flex-shrink-0">
-                <div className="flex justify-between items-end">
+                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-end gap-4">
                     <div>
-                        <h2 className="text-foreground font-heading font-bold text-3xl tracking-tight">Panel de Control</h2>
+                        <h2 className="text-foreground font-heading font-bold text-2xl sm:text-3xl tracking-tight">Panel de Control</h2>
                         <p className="text-text-muted mt-1 text-sm font-body">Visión general del inventario y alertas en tiempo real.</p>
                     </div>
-                    <div className="flex gap-3">
-                        <Button variant="outline" className="gap-2">
+                    <div className="flex gap-2 sm:gap-3 flex-shrink-0">
+                        <Button variant="outline" className="gap-2 text-xs sm:text-sm">
                             <Download size={16} weight="bold" />
-                            Exportar Reporte
+                            <span className="hidden sm:inline">Exportar</span>
                         </Button>
-                        <Button className="gap-2" onClick={() => window.dispatchEvent(new CustomEvent('open-product-modal'))}>
+                        <Button className="gap-2 text-xs sm:text-sm" onClick={() => window.dispatchEvent(new CustomEvent('open-product-modal'))}>
                             <Plus size={16} weight="bold" />
-                            Nuevo Producto
+                            Nuevo
                         </Button>
                     </div>
                 </div>
@@ -84,20 +84,20 @@ export default function AdminDashboardPage() {
                 <div className="bg-surface border border-surface-highlight rounded-2xl flex flex-col h-full overflow-hidden shadow-glass">
 
                     {/* Table Toolbar */}
-                    <div className="p-4 border-b border-surface-highlight flex justify-between items-center bg-surface">
-                        <div className="w-96">
+                    <div className="p-3 sm:p-4 border-b border-surface-highlight flex flex-col sm:flex-row sm:justify-between sm:items-center bg-surface gap-3">
+                        <div className="w-full sm:w-96">
                             <Input
-                                placeholder="Buscar por nombre, SKU o categoría..."
+                                placeholder="Buscar por nombre, SKU..."
                                 icon={<MagnifyingGlass size={18} weight="bold" />}
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
                             />
                         </div>
-                        <div className="flex gap-3">
-                            <Button variant="outline" className="gap-2">
+                        <div className="flex gap-2 sm:gap-3">
+                            <Button variant="outline" className="gap-2 text-xs sm:text-sm">
                                 <Faders size={16} weight="bold" /> Filtros
                             </Button>
-                            <Button variant="outline" className="gap-2">
+                            <Button variant="outline" className="gap-2 text-xs sm:text-sm">
                                 <SortAscending size={16} weight="bold" /> Ordenar
                             </Button>
                         </div>

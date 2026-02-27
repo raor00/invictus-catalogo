@@ -70,6 +70,7 @@ export function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
                                 <Link
                                     key={link.name}
                                     href={link.href}
+                                    onClick={onClose}
                                     className={cn(
                                         "flex items-center gap-3 px-4 py-3 rounded-r-lg group transition-all",
                                         isActive

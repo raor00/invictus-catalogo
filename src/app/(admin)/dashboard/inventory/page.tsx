@@ -22,19 +22,19 @@ export default function InventoryDashboardPage() {
         <div className="flex-1 flex flex-col h-full z-10 w-full">
             {/* Top Header */}
             <div className="px-4 sm:px-8 py-6 sm:py-8 z-10 flex flex-col gap-8 flex-shrink-0">
-                <div className="flex justify-between items-end">
+                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-end gap-4">
                     <div>
-                        <h2 className="text-foreground font-heading font-bold text-3xl tracking-tight">Inventario Global</h2>
+                        <h2 className="text-foreground font-heading font-bold text-2xl sm:text-3xl tracking-tight">Inventario Global</h2>
                         <p className="text-text-muted mt-1 text-sm font-body">Catálogo completo de todos los productos y variaciones.</p>
                     </div>
-                    <div className="flex gap-3">
-                        <Button variant="outline" className="gap-2">
+                    <div className="flex gap-2 sm:gap-3 flex-shrink-0">
+                        <Button variant="outline" className="gap-2 text-xs sm:text-sm">
                             <Download size={16} weight="bold" />
-                            Exportar Todo
+                            <span className="hidden sm:inline">Exportar</span>
                         </Button>
-                        <Button className="gap-2" onClick={() => window.dispatchEvent(new CustomEvent('open-product-modal'))}>
+                        <Button className="gap-2 text-xs sm:text-sm" onClick={() => window.dispatchEvent(new CustomEvent('open-product-modal'))}>
                             <Plus size={16} weight="bold" />
-                            Añadir a Inventario
+                            Añadir
                         </Button>
                     </div>
                 </div>
@@ -45,8 +45,8 @@ export default function InventoryDashboardPage() {
                 <div className="bg-surface border border-surface-highlight rounded-2xl flex flex-col h-full overflow-hidden shadow-glass">
 
                     {/* Table Toolbar */}
-                    <div className="p-4 border-b border-surface-highlight flex justify-between items-center bg-surface gap-4 flex-wrap">
-                        <div className="w-96 flex-grow max-w-md">
+                    <div className="p-3 sm:p-4 border-b border-surface-highlight flex flex-col sm:flex-row sm:justify-between sm:items-center bg-surface gap-3 flex-wrap">
+                        <div className="w-full sm:w-96 sm:flex-grow sm:max-w-md">
                             <Input
                                 placeholder="Buscar en todo el inventario..."
                                 icon={<MagnifyingGlass size={18} weight="bold" />}
