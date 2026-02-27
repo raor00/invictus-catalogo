@@ -23,7 +23,7 @@ export default function AdminDashboardPage() {
     return (
         <div className="flex-1 flex flex-col h-full z-10 w-full">
             {/* Top Header & Stats */}
-            <div className="px-8 py-8 z-10 flex flex-col gap-8 flex-shrink-0">
+            <div className="px-4 sm:px-8 py-6 sm:py-8 z-10 flex flex-col gap-8 flex-shrink-0">
                 <div className="flex justify-between items-end">
                     <div>
                         <h2 className="text-foreground font-heading font-bold text-3xl tracking-tight">Panel de Control</h2>
@@ -42,7 +42,7 @@ export default function AdminDashboardPage() {
                 </div>
 
                 {/* Metrics Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                     {/* Stat Card 1 */}
                     <div className="bg-surface border border-surface-highlight p-6 rounded-2xl flex flex-col justify-between h-36 hover:border-text-muted transition-colors shadow-glass group">
                         <div className="flex justify-between items-start">
@@ -80,7 +80,7 @@ export default function AdminDashboardPage() {
             </div>
 
             {/* Table Container */}
-            <div className="flex-1 px-8 pb-8 overflow-hidden flex flex-col z-10 w-full max-w-[1400px] mx-auto">
+            <div className="flex-1 px-4 sm:px-8 pb-8 overflow-hidden flex flex-col z-10 w-full max-w-[1400px] mx-auto">
                 <div className="bg-surface border border-surface-highlight rounded-2xl flex flex-col h-full overflow-hidden shadow-glass">
 
                     {/* Table Toolbar */}
@@ -136,8 +136,8 @@ export default function AdminDashboardPage() {
                                             </div>
                                             <div className="col-span-2 flex justify-center">
                                                 <div className={`px-4 py-1.5 rounded font-mono text-sm tracking-wide font-bold ${product.stock === 0 ? 'bg-critical/10 border border-critical/30 text-critical' :
-                                                        product.stock < 3 ? 'bg-orange-500/10 border border-orange-500/30 text-orange-500' :
-                                                            'bg-surface-highlight/50 border border-surface-highlight text-foreground'
+                                                    product.stock < 3 ? 'bg-orange-500/10 border border-orange-500/30 text-orange-500' :
+                                                        'bg-surface-highlight/50 border border-surface-highlight text-foreground'
                                                     }`}>
                                                     {product.stock} Un.
                                                 </div>
