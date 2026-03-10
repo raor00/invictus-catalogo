@@ -20,11 +20,13 @@ export const ProductModal = () => {
         stock: "",
         image: "",
         category: "Smartphones",
+        storage: "128GB",
+        condition: "used" as Product['condition'],
     })
 
     useEffect(() => {
         const handleOpen = (e: any) => {
-            if (e.detail) {
+            if (e.detail && e.detail.id) {
                 setIsEditing(true)
                 setCurrentId(e.detail.id)
                 setFormData({
@@ -32,8 +34,10 @@ export const ProductModal = () => {
                     sku: e.detail.sku,
                     price: e.detail.price.toString(),
                     stock: e.detail.stock.toString(),
-                    image: e.detail.image,
+                    image: e.detail.image.startsWith('placeholder:') ? '' : e.detail.image,
                     category: e.detail.category,
+                    storage: e.detail.storage || '128GB',
+                    condition: e.detail.condition || 'used',
                 })
             } else {
                 setIsEditing(false)
@@ -44,7 +48,9 @@ export const ProductModal = () => {
                     price: "",
                     stock: "",
                     image: "",
-                    category: e.detail?.defaultCategory || "Smartphones"
+                    category: e.detail?.defaultCategory || "Smartphones",
+                    storage: "128GB",
+                    condition: "used",
                 })
             }
             setIsOpen(true)
@@ -68,8 +74,10 @@ export const ProductModal = () => {
             sku: formData.sku,
             price: parseFloat(formData.price) || 0,
             stock: stockNum,
-            image: formData.image || "https://via.placeholder.com/150",
+            image: formData.image || `placeholder:${formData.name.toLowerCase().replace(/\s+/g, '-')}`,
             category: formData.category,
+            storage: formData.storage,
+            condition: formData.condition,
             status
         }
 
@@ -81,6 +89,8 @@ export const ProductModal = () => {
 
         setIsOpen(false)
     }
+
+    const selectClass = "h-10 w-full rounded-lg border border-surface-highlight bg-surface px-3 text-sm text-foreground focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all"
 
     return (
         <AnimatePresence>
@@ -112,13 +122,41 @@ export const ProductModal = () => {
                                 <div className="flex flex-col gap-1.5">
                                     <label className="text-sm font-bold text-text-muted">Categoría</label>
                                     <select
-                                        className="h-10 w-full rounded-lg border border-surface-highlight bg-surface px-3 text-sm text-foreground focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all"
+                                        className={selectClass}
                                         value={formData.category}
                                         onChange={(e) => setFormData({ ...formData, category: e.target.value })}
                                     >
                                         <option value="Smartphones">Smartphones</option>
                                         <option value="Repuestos">Repuestos</option>
                                         <option value="Accesorios">Accesorios</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div className="grid grid-cols-2 gap-4">
+                                <div className="flex flex-col gap-1.5">
+                                    <label className="text-sm font-bold text-text-muted">Almacenamiento</label>
+                                    <select
+                                        className={selectClass}
+                                        value={formData.storage}
+                                        onChange={(e) => setFormData({ ...formData, storage: e.target.value })}
+                                    >
+                                        <option value="64GB">64GB</option>
+                                        <option value="128GB">128GB</option>
+                                        <option value="256GB">256GB</option>
+                                        <option value="512GB">512GB</option>
+                                        <option value="1TB">1TB</option>
+                                    </select>
+                                </div>
+                                <div className="flex flex-col gap-1.5">
+                                    <label className="text-sm font-bold text-text-muted">Condición</label>
+                                    <select
+                                        className={selectClass}
+                                        value={formData.condition}
+                                        onChange={(e) => setFormData({ ...formData, condition: e.target.value as Product['condition'] })}
+                                    >
+                                        <option value="new">Nuevo</option>
+                                        <option value="refurbished">Refurbished</option>
+                                        <option value="used">Usado</option>
                                     </select>
                                 </div>
                             </div>
@@ -133,8 +171,8 @@ export const ProductModal = () => {
                                 </div>
                             </div>
                             <div className="flex flex-col gap-1.5">
-                                <label className="text-sm font-bold text-text-muted">URL de Imagen</label>
-                                <Input value={formData.image} onChange={(e) => setFormData({ ...formData, image: e.target.value })} placeholder="https://..." />
+                                <label className="text-sm font-bold text-text-muted">URL de Imagen (opcional)</label>
+                                <Input value={formData.image} onChange={(e) => setFormData({ ...formData, image: e.target.value })} placeholder="https://... (dejar vacío para silhouette)" />
                             </div>
 
                             <div className="mt-4 flex justify-end gap-3 pt-4 border-t border-surface-highlight">

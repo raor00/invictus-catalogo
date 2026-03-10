@@ -1,4 +1,8 @@
+import React from "react"
 import { PublicHeader } from "@/components/layout/PublicHeader"
+import { CartPanel } from "@/components/CartPanel"
+import { PhoneViewer3DGlobal } from "@/components/PhoneViewer3D"
+import { WHATSAPP_NUMBER } from "@/lib/config"
 
 export default function PublicLayout({ children }: { children: React.ReactNode }) {
     return (
@@ -8,12 +12,18 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
                 {children}
             </main>
 
-            {/* Floating Action WhatsApp Support */}
+            {/* Cart slide-over panel */}
+            <CartPanel />
+
+            {/* Global 3D phone viewer — mounted outside cards to avoid overflow-hidden clipping */}
+            <PhoneViewer3DGlobal />
+
+            {/* Floating WhatsApp Support */}
             <a
-                href="https://wa.me/1234567890"
+                href={`https://wa.me/${WHATSAPP_NUMBER}`}
                 target="_blank"
                 rel="noreferrer"
-                className="fixed bottom-8 right-8 z-50 group drop-shadow-2xl"
+                className="fixed bottom-8 right-8 z-40 group drop-shadow-2xl"
             >
                 <span className="absolute right-full mr-4 top-1/2 -translate-y-1/2 bg-surface border border-surface-highlight text-text-main text-xs px-3 py-1.5 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-glass">
                     Soporte WhatsApp

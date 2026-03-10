@@ -5,11 +5,13 @@ import Link from "next/link"
 import { useSearchParams } from "next/navigation"
 import { Lightning, UserCircle, ShoppingBag } from "@phosphor-icons/react"
 import { motion } from "framer-motion"
+import { useCart } from "@/lib/CartContext"
 
 export function PublicHeader() {
     const searchParams = useSearchParams()
     const currentCategory = searchParams.get("category") || "iphones"
     const isPartsActive = currentCategory === "parts"
+    const { cartCount, openCart } = useCart()
 
     return (
         <header className="fixed top-0 left-0 right-0 z-50 glass-panel">
@@ -42,9 +44,17 @@ export function PublicHeader() {
                             <span className="hidden sm:inline">Ingresar</span>
                         </Link>
 
-                        <button className="relative p-2 text-text-muted hover:text-primary transition-colors active:scale-95">
-                            <ShoppingBag size={24} weight="regular" />
-                            <span className="absolute top-1 right-1 w-2 h-2 bg-primary rounded-full animate-pulse shadow-glow"></span>
+                        <button
+                            onClick={openCart}
+                            className="relative p-2 text-text-muted hover:text-primary transition-colors active:scale-95"
+                            aria-label={`Abrir carrito${cartCount > 0 ? ` (${cartCount} productos)` : ''}`}
+                        >
+                            <ShoppingBag size={24} weight={cartCount > 0 ? "fill" : "regular"} className={cartCount > 0 ? "text-primary" : ""} />
+                            {cartCount > 0 && (
+                                <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] bg-primary text-black rounded-full text-[9px] font-mono font-bold flex items-center justify-center px-1 shadow-neon">
+                                    {cartCount > 99 ? "99+" : cartCount}
+                                </span>
+                            )}
                         </button>
                     </div>
                 </div>

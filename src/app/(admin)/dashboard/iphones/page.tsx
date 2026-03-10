@@ -112,7 +112,7 @@ export default function IPhonesDashboardPage() {
                             {/* Table Header */}
                             <div className="grid grid-cols-12 gap-4 px-6 py-3 bg-surface-highlight/30 border-b border-surface-highlight text-xs font-mono uppercase tracking-wider text-text-muted font-bold sticky top-0">
                                 <div className="col-span-4 pl-2">Equipo</div>
-                                <div className="col-span-2 text-right">Precio Unitario</div>
+                                <div className="col-span-2 text-right">Precio / Valor</div>
                                 <div className="col-span-2 text-center">Stock Físico</div>
                                 <div className="col-span-2 text-right">Estado</div>
                                 <div className="col-span-2 text-right pr-2">Acciones</div>
@@ -127,15 +127,24 @@ export default function IPhonesDashboardPage() {
                                         <div key={product.id} className={`grid grid-cols-12 gap-4 px-6 py-4 border-b border-surface-highlight items-center hover:bg-surface-highlight/20 group transition-all duration-200 ${product.stock === 0 ? 'opacity-70 hover:opacity-100' : ''}`}>
                                             <div className="col-span-4 flex gap-4 items-center pl-2">
                                                 <div className="h-12 w-12 rounded bg-background border border-surface-highlight flex items-center justify-center overflow-hidden flex-shrink-0 p-1">
-                                                    <img src={product.image || 'https://via.placeholder.com/150'} alt="Product" className={`h-full w-full object-contain ${product.stock === 0 ? 'grayscale' : ''}`} />
+                                                    {product.image.startsWith('placeholder:') ? (
+                                                      <span className="text-[8px] font-mono text-text-muted text-center leading-tight">📱</span>
+                                                    ) : (
+                                                      <img src={product.image} alt="Product" className={`h-full w-full object-contain ${product.stock === 0 ? 'grayscale' : ''}`} />
+                                                    )}
                                                 </div>
                                                 <div className="flex flex-col min-w-0">
                                                     <span className={`text-foreground font-bold truncate font-heading ${product.stock === 0 ? 'line-through decoration-surface-highlight text-text-muted' : ''}`}>{product.name}</span>
                                                     <span className="text-text-muted text-xs font-mono truncate">SKU: {product.sku}</span>
                                                 </div>
                                             </div>
-                                            <div className="col-span-2 flex justify-end">
+                                            <div className="col-span-2 flex flex-col items-end">
                                                 <span className={`font-mono font-bold ${product.stock === 0 ? 'text-text-muted' : 'text-foreground'}`}>${product.price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                                                {product.stock > 0 && (
+                                                  <span className="text-[10px] font-mono text-primary mt-0.5">
+                                                    Val: ${(product.price * product.stock).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
+                                                  </span>
+                                                )}
                                             </div>
                                             <div className="col-span-2 flex justify-center">
                                                 <div className={`px-4 py-1.5 rounded font-mono text-sm tracking-wide font-bold ${product.stock === 0 ? 'bg-critical/10 border border-critical/30 text-critical' :

@@ -1,11 +1,17 @@
 "use client"
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { DEFAULT_CATALOG } from '@/data/catalog';
+
+// Bump this version when the catalog data changes to force a reset of localStorage
+const CATALOG_VERSION = '2025-03-10-v3';
 
 export type Product = {
   id: string;
   name: string;
   sku: string;
+  storage: string;
+  condition: 'used' | 'refurbished' | 'new';
   price: number;
   stock: number;
   image: string;
@@ -31,36 +37,32 @@ export const StoreProvider = ({ children }: { children: React.ReactNode }) => {
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
+    // If catalog version changed, wipe old data and reload fresh catalog
+    const savedVersion = localStorage.getItem('invictus_catalog_version');
+    if (savedVersion !== CATALOG_VERSION) {
+      localStorage.removeItem('invictus_products');
+      localStorage.setItem('invictus_catalog_version', CATALOG_VERSION);
+    }
+
     const savedProducts = localStorage.getItem('invictus_products');
     if (savedProducts) {
-      setProducts(JSON.parse(savedProducts));
+      try {
+        const parsed = JSON.parse(savedProducts);
+        const migrated = parsed.map((p: Product) => ({
+          ...p,
+          storage: p.storage ?? '128GB',
+          condition: p.condition ?? ('used' as const),
+        }));
+        setProducts(migrated);
+      } catch {
+        setProducts(DEFAULT_CATALOG);
+        localStorage.setItem('invictus_products', JSON.stringify(DEFAULT_CATALOG));
+      }
     } else {
-      const defaultProducts: Product[] = [
-        {
-          id: '1',
-          name: 'iPhone 15 Pro Titanium',
-          sku: 'INV-15P-256-TI',
-          price: 1150.00,
-          stock: 15,
-          image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDbNDBIEyos7MLY1KGUUacqAWL8K45YfWPkMwkeYlKYHxo_9cHfXPDOLYLPmKKfSJl574We01MQGUcLhWRpwg7F6_YnwNYvddTaGYnWL4mA2VmphwzObwsa17HF6PjdUmk3Qf-FiFYQqWWkpogsuv3ATiMmvy4fJFHTv7sRRp3JmL_FXOTP44R5foZOkXh1Z1FDogsD6ZlnYtULJLdstFZcgJFwKWfsPUiTZo-S8SghIYWmMI83vnYwinPM2_tm_Iye0dbrCG1H4laB',
-          category: 'Smartphones',
-          status: 'Disponible'
-        },
-        {
-          id: '2',
-          name: 'Display iPhone 11 - Original',
-          sku: 'REP-DIS-IP11-OG',
-          price: 45.00,
-          stock: 2,
-          image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDjZ7P-kSyhc0Nefz0U47RTvuxrr-HpbAPnqjcCp10YU2VHFqBiT6-OPs8ZuVJjnElzsQYgSrq4qJ0vPCpucxmZUKJXS_OfYjMXNbVV_ppUJWuyMkt_PSIXVMzPLQR5lId3p4BfJo3zXJYcMzASQ-X_uqt0EqY4DRizdzJsgkQCJeJNfxw5w4EZXk-WuUn4j_uWx_oOiIfQbnbTjFAxwNancAqNV4_BOcrwKmYoIrMR50TYIVK2NPujQNfwW0wBIapzHjt9iyGLP-xB',
-          category: 'Repuestos',
-          status: 'Pocas Unidades'
-        }
-      ];
-      setProducts(defaultProducts);
-      localStorage.setItem('invictus_products', JSON.stringify(defaultProducts));
+      setProducts(DEFAULT_CATALOG);
+      localStorage.setItem('invictus_products', JSON.stringify(DEFAULT_CATALOG));
     }
-    
+
     const auth = localStorage.getItem('invictus_auth');
     if (auth === 'true') {
       setIsAuthenticated(true);
