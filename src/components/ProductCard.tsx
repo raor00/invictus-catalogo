@@ -9,41 +9,7 @@ import type { Product } from "@/lib/StoreContext"
 import { useCart } from "@/lib/CartContext"
 import { MIN_ORDER_QUANTITY } from "@/lib/config"
 
-// iPhone SVG silhouette for placeholder images
-function IPhoneSilhouette() {
-  return (
-    <svg
-      viewBox="0 0 120 240"
-      className="w-full h-full"
-      style={{ maxHeight: "180px", maxWidth: "90px" }}
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <defs>
-        <linearGradient id="phoneGradC" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#1D1D1F" />
-          <stop offset="100%" stopColor="#3A3A3C" />
-        </linearGradient>
-        <linearGradient id="screenGradC" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#0A0A0A" />
-          <stop offset="100%" stopColor="#1A1A2E" />
-        </linearGradient>
-        <linearGradient id="limeGradC" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#CCFF00" stopOpacity="0.9" />
-          <stop offset="100%" stopColor="#99CC00" stopOpacity="0.3" />
-        </linearGradient>
-      </defs>
-      <rect x="5" y="4" width="110" height="232" rx="22" fill="url(#phoneGradC)" />
-      <rect x="10" y="16" width="100" height="208" rx="14" fill="url(#screenGradC)" />
-      <rect x="40" y="22" width="40" height="10" rx="5" fill="#0A0A0A" />
-      <rect x="41" y="214" width="38" height="5" rx="2.5" fill="#3A3A3C" />
-      <rect x="10" y="106" width="100" height="2" rx="1" fill="url(#limeGradC)" opacity="0.5" />
-      <rect x="111" y="68" width="4" height="28" rx="2" fill="#2C2C2E" />
-      <rect x="5" y="66" width="4" height="18" rx="2" fill="#2C2C2E" />
-      <rect x="5" y="90" width="4" height="18" rx="2" fill="#2C2C2E" />
-    </svg>
-  )
-}
+import { PhoneModel3D } from "./PhoneModel3D"
 
 const statusConfig = {
   Disponible: { label: "Disponible", variant: "default" as const, pulse: true },
@@ -61,7 +27,6 @@ export function ProductCard({ product }: { product: Product }) {
   const ref = useRef<HTMLDivElement>(null)
   const { addToCart, openCart, openViewer3D } = useCart()
   const [qty, setQty] = useState(MIN_ORDER_QUANTITY)
-  const [imgError, setImgError] = useState(false)
   const [showConfirm, setShowConfirm] = useState(false)
 
   // Mouse tracking for Spotlight effect only (no card tilt)
@@ -79,7 +44,6 @@ export function ProductCard({ product }: { product: Product }) {
   const status = product.status as keyof typeof statusConfig
   const { label, variant, pulse } = statusConfig[status] ?? statusConfig["Agotado"]
   const isSoldOut = product.status === "Agotado"
-  const isPlaceholder = product.image.startsWith("placeholder:") || imgError
 
   function handleAddToCart(e: React.MouseEvent) {
     e.preventDefault()
@@ -166,7 +130,7 @@ export function ProductCard({ product }: { product: Product }) {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-50px" }}
         transition={{ type: "spring", stiffness: 100, damping: 20 }}
-        className="group relative flex h-full flex-col overflow-hidden rounded-2xl bg-surface border border-surface-highlight hover:border-[#D2D2D7] transition-colors"
+        className="group relative flex h-full flex-col overflow-hidden rounded-xl bg-surface border border-surface-highlight hover:border-[#D2D2D7] transition-colors"
       >
         {/* Spotlight hover refraction */}
         <motion.div
@@ -182,154 +146,104 @@ export function ProductCard({ product }: { product: Product }) {
           }}
         />
 
-        {/* Status Badge */}
-        <div className="absolute top-3 right-3 z-20">
-          <Badge variant={variant} pulse={pulse}>
-            {label}
-          </Badge>
-        </div>
-
-        {/* Condition Badge */}
-        <div className="absolute top-3 left-3 z-20">
-          <span className="text-[9px] font-mono font-bold uppercase tracking-widest px-1.5 py-0.5 rounded bg-black/10 dark:bg-white/10 text-text-muted border border-surface-highlight">
-            {conditionLabel[product.condition] ?? product.condition}
-          </span>
-        </div>
-
         {/* Image Area — clickable to open 3D viewer */}
         <div
-          className="relative flex h-[220px] items-center justify-center bg-gradient-to-b from-[#F2F2F7] to-surface p-6 dark:from-[#111] dark:to-surface overflow-hidden cursor-pointer"
+          className="relative flex h-[110px] items-center justify-center bg-gradient-to-b from-[#F2F2F7] to-surface p-2 dark:from-[#111] dark:to-surface overflow-hidden cursor-pointer"
           onClick={handleImageClick}
         >
-          {/* Glow behind image */}
-          <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-25 transition-opacity duration-700">
-            <div className="w-32 h-32 rounded-full bg-primary blur-3xl" />
+          {/* Glow */}
+          <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-20 transition-opacity duration-500">
+            <div className="w-16 h-16 rounded-full bg-primary blur-2xl" />
           </div>
 
-          {/* 3D hint overlay on hover */}
-          <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10">
-            <div className="bg-black/40 backdrop-blur-sm rounded-xl px-3 py-2 flex items-center gap-2 text-white text-xs font-bold shadow-lg">
-              <Cube size={16} weight="fill" className="text-[#CCFF00]" />
-              Ver en 3D
+          <motion.div
+            className={`relative z-10 w-full h-full flex items-center justify-center transition-transform duration-500 max-h-[140px] px-4 py-2 ${isSoldOut ? "opacity-50 grayscale" : ""}`}
+            whileHover={{ scale: 1.15 }}
+          >
+            <PhoneModel3D modelName={product.name} />
+          </motion.div>
+
+          {/* 3D hint — shows on hover */}
+          <div className="absolute inset-0 flex items-end justify-center pb-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-150 z-20 pointer-events-none">
+            <div className="bg-black/70 backdrop-blur-sm rounded px-1.5 py-0.5 flex items-center gap-1 text-white text-[9px] font-bold">
+              <Cube size={9} weight="fill" className="text-[#CCFF00]" />
+              3D
             </div>
           </div>
-
-          {isPlaceholder ? (
-            <motion.div
-              className={`relative z-10 flex items-center justify-center transition-transform duration-700 ease-out group-hover:scale-105 ${isSoldOut ? "opacity-50 grayscale" : ""}`}
-              style={{ height: "170px" }}
-            >
-              <IPhoneSilhouette />
-            </motion.div>
-          ) : (
-            <motion.img
-              src={product.image}
-              alt={product.name}
-              onError={() => setImgError(true)}
-              className={`h-full w-full object-contain drop-shadow-2xl transition-transform duration-700 ease-out group-hover:scale-105 relative z-10 select-none ${isSoldOut ? "opacity-60 grayscale" : ""}`}
-              draggable={false}
-            />
-          )}
         </div>
 
         {/* Content */}
-        <div className="flex flex-grow flex-col p-4 z-10 bg-surface">
+        <div className="flex flex-grow flex-col p-2 z-10 bg-surface">
+          <div className="flex items-center justify-between mb-1">
+            <div className="flex items-center gap-1 flex-wrap">
+              <span className="text-[8px] font-mono font-bold uppercase tracking-wide text-text-muted">
+                {conditionLabel[product.condition] ?? product.condition}
+              </span>
+              <span className="text-text-muted/30">·</span>
+              <span className="font-mono text-[8px] text-text-muted">{product.storage}</span>
+            </div>
+            <div className="scale-90 origin-right">
+              <Badge variant={variant} pulse={pulse}>
+                {label}
+              </Badge>
+            </div>
+          </div>
+
           {/* Model name */}
-          <h3 className={`font-heading text-base font-bold leading-tight ${isSoldOut ? "text-text-muted" : "text-foreground"}`}>
+          <h3 className={`font-heading text-[11px] font-bold leading-tight mb-1 ${isSoldOut ? "text-text-muted" : "text-foreground"}`}>
             {product.name}
           </h3>
 
-          {/* Spec tags */}
-          <div className="mt-2 mb-3 flex flex-wrap gap-1.5">
-            <span className="rounded border border-surface-highlight bg-background px-2 py-0.5 font-mono text-xs text-text-muted">
-              {product.storage}
-            </span>
-            {product.stock > 0 && (
-              <span className="rounded border border-surface-highlight bg-background px-2 py-0.5 font-mono text-xs text-text-muted">
-                {product.stock} uds. disponibles
-              </span>
-            )}
-          </div>
-
-          {/* Footer */}
-          <div className="mt-auto flex flex-col gap-3 border-t border-surface-highlight pt-3">
-            {/* Price block */}
+          {/* Price */}
+          <div className="mt-auto pt-1.5 border-t border-surface-highlight">
             {product.price > 0 ? (
-              <div className="flex flex-col gap-1">
-                <div className="flex items-baseline justify-between">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-text-muted">
-                    Precio c/u
-                  </span>
-                  <span className={`font-mono text-xl font-bold tracking-tight ${isSoldOut ? "text-text-muted" : "text-foreground"}`}>
-                    ${product.price.toFixed(2)}
-                  </span>
-                </div>
-                <div className="flex items-baseline justify-between">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-primary">
-                    Mínimo 3 uds.
-                  </span>
-                  <span className="font-mono text-sm font-bold text-primary">
-                    ${(product.price * 3).toFixed(2)}
-                  </span>
-                </div>
+              <div className="flex items-baseline justify-between mb-1">
+                <span className="text-[8px] font-bold uppercase text-text-muted">c/u</span>
+                <span className={`font-mono text-xs font-bold ${isSoldOut ? "text-text-muted" : "text-foreground"}`}>
+                  ${product.price.toFixed(0)}
+                </span>
               </div>
             ) : (
-              <div className="flex items-baseline justify-between">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-text-muted">Precio</span>
-                <span className="font-mono text-xl font-bold text-text-muted">—</span>
+              <div className="flex items-baseline justify-between mb-1">
+                <span className="text-[8px] font-bold uppercase text-text-muted">Precio</span>
+                <span className="font-mono text-xs font-bold text-text-muted">—</span>
               </div>
             )}
 
             {/* Actions */}
             {isSoldOut ? (
-              <Button variant="critical" disabled className="w-full gap-2 text-sm">
-                <Prohibit size={16} weight="bold" />
+              <div className="w-full text-center text-[9px] font-bold text-red-400 py-1 border border-red-400/30 rounded-lg">
                 Agotado
-              </Button>
+              </div>
             ) : (
-              <div className="flex flex-col gap-2" onClick={e => e.preventDefault()}>
-                {/* Quantity selector */}
+              <div className="flex flex-col gap-1" onClick={e => e.preventDefault()}>
+                {/* Qty selector */}
                 <div className="flex items-center justify-between">
-                  <span className="text-[10px] font-bold text-text-muted uppercase tracking-wider">
-                    Cant. (mín. {MIN_ORDER_QUANTITY})
-                  </span>
-                  <div className="flex items-center gap-1.5">
+                  <span className="text-[8px] text-text-muted font-bold uppercase">Cant.</span>
+                  <div className="flex items-center gap-0.5">
                     <button
                       onClick={handleQtyDecrease}
-                      className="w-7 h-7 rounded border border-surface-highlight hover:border-primary flex items-center justify-center text-text-muted hover:text-primary transition-colors active:scale-95"
+                      className="w-5 h-5 rounded border border-surface-highlight hover:border-primary flex items-center justify-center text-text-muted hover:text-primary transition-colors"
                     >
-                      <Minus size={12} weight="bold" />
+                      <Minus size={8} weight="bold" />
                     </button>
-                    <span className="w-7 text-center font-mono text-sm font-bold text-foreground">
-                      {qty}
-                    </span>
+                    <span className="w-5 text-center font-mono text-[10px] font-bold text-foreground">{qty}</span>
                     <button
                       onClick={handleQtyIncrease}
-                      className="w-7 h-7 rounded border border-surface-highlight hover:border-primary flex items-center justify-center text-text-muted hover:text-primary transition-colors active:scale-95"
+                      className="w-5 h-5 rounded border border-surface-highlight hover:border-primary flex items-center justify-center text-text-muted hover:text-primary transition-colors"
                     >
-                      <Plus size={12} weight="bold" />
+                      <Plus size={8} weight="bold" />
                     </button>
                   </div>
                 </div>
 
-                {/* Subtotal hint */}
-                {product.price > 0 && (
-                  <div className="text-right">
-                    <span className="text-[10px] font-mono text-text-muted">
-                      Subtotal: <span className="text-foreground font-bold">${(product.price * qty).toFixed(2)}</span>
-                    </span>
-                  </div>
-                )}
-
-                {/* Add to cart button */}
-                <Button
-                  variant="default"
-                  className="w-full gap-2 text-sm"
+                <button
                   onClick={handleAddToCart}
+                  className="w-full flex items-center justify-center gap-1 bg-primary text-black text-[9px] font-bold py-1.5 rounded-lg hover:bg-[#d4ff33] transition-colors active:scale-95"
                 >
-                  <ShoppingBag size={16} weight="fill" />
-                  Añadir al Carrito
-                </Button>
+                  <ShoppingBag size={10} weight="fill" />
+                  Añadir
+                </button>
               </div>
             )}
           </div>

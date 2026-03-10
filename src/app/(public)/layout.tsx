@@ -8,7 +8,7 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
     return (
         <>
             <PublicHeader />
-            <main className="flex-grow pt-[145px] pb-20 px-4 sm:px-6 lg:px-8 max-w-[1440px] mx-auto w-full">
+            <main className="flex-grow pt-[108px] sm:pt-[145px] pb-20 px-3 sm:px-6 lg:px-8 max-w-[1200px] mx-auto w-full">
                 {children}
             </main>
 

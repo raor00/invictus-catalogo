@@ -39,23 +39,23 @@ function generateWhatsAppMessage(
   const itemLines = cartItems
     .map(item => {
       const subtotal = item.product.price * item.quantity
-      return `• ${item.product.name} ${item.product.storage} x${item.quantity} — $${item.product.price.toFixed(2)} c/u = $${subtotal.toLocaleString("es-VE", { minimumFractionDigits: 2 })}`
+      return `- ${item.product.name} ${item.product.storage} x${item.quantity} - $${item.product.price.toFixed(2)} c/u = $${subtotal.toLocaleString("es-VE", { minimumFractionDigits: 2 })}`
     })
     .join("\n")
 
-  return `🛒 *PEDIDO ${APP_NAME}*
+  return `*PEDIDO ${APP_NAME}*
 
-📋 *DATOS DEL CLIENTE:*
-• Nombre: ${formData.nombre}
-• Cédula/RIF: ${formData.cedula}
-• Teléfono: ${formData.telefono}
+*DATOS DEL CLIENTE:*
+- Nombre: ${formData.nombre}
+- Cédula/RIF: ${formData.cedula}
+- Teléfono: ${formData.telefono}
 
-📦 *PRODUCTOS SOLICITADOS:*
+*PRODUCTOS SOLICITADOS:*
 ${itemLines}
 
-💵 *TOTAL DEL PEDIDO: $${cartTotal.toLocaleString("es-VE", { minimumFractionDigits: 2 })}*
+*TOTAL DEL PEDIDO: $${cartTotal.toLocaleString("es-VE", { minimumFractionDigits: 2 })}*
 
-📅 Fecha: ${date}`
+Fecha: ${date}`
 }
 
 export function OrderForm({ isOpen, onClose }: OrderFormProps) {

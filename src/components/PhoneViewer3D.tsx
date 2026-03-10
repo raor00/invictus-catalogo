@@ -6,62 +6,7 @@ import { X, ArrowCounterClockwise } from "@phosphor-icons/react"
 import type { Product } from "@/lib/StoreContext"
 import { useCart } from "@/lib/CartContext"
 
-// iPhone silhouette fallback
-function IPhoneSilhouetteLarge() {
-  return (
-    <svg viewBox="0 0 240 480" className="w-full h-full" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <linearGradient id="bodyG" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#2C2C2E" />
-          <stop offset="50%" stopColor="#1C1C1E" />
-          <stop offset="100%" stopColor="#3A3A3C" />
-        </linearGradient>
-        <linearGradient id="screenG" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#0A0A0F" />
-          <stop offset="100%" stopColor="#1A1A2E" />
-        </linearGradient>
-        <linearGradient id="limeG" x1="0%" y1="0%" x2="100%" y2="0%">
-          <stop offset="0%" stopColor="#CCFF00" stopOpacity="0.8" />
-          <stop offset="100%" stopColor="#99CC00" stopOpacity="0.3" />
-        </linearGradient>
-        <filter id="glow">
-          <feGaussianBlur stdDeviation="4" result="blur" />
-          <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
-        </filter>
-      </defs>
-      {/* Body */}
-      <rect x="10" y="8" width="220" height="464" rx="36" fill="url(#bodyG)" />
-      {/* Screen bezel */}
-      <rect x="18" y="24" width="204" height="432" rx="28" fill="url(#screenG)" />
-      {/* Dynamic Island */}
-      <rect x="84" y="38" width="72" height="20" rx="10" fill="#0A0A0A" />
-      {/* Front camera */}
-      <circle cx="134" cy="48" r="5" fill="#1C1C1E" />
-      <circle cx="134" cy="48" r="2" fill="#3A3A3C" />
-      {/* Neon accent glow line */}
-      <rect x="18" y="200" width="204" height="3" rx="1.5" fill="url(#limeG)" filter="url(#glow)" />
-      {/* Home indicator */}
-      <rect x="88" y="434" width="64" height="5" rx="2.5" fill="#3A3A3C" />
-      {/* Side button */}
-      <rect x="226" y="120" width="6" height="52" rx="3" fill="#3A3A3C" />
-      {/* Volume buttons */}
-      <rect x="8" y="116" width="6" height="32" rx="3" fill="#3A3A3C" />
-      <rect x="8" y="158" width="6" height="32" rx="3" fill="#3A3A3C" />
-      {/* Camera module */}
-      <rect x="144" y="40" width="62" height="62" rx="18" fill="#1C1C1E" opacity="0.5" />
-      <circle cx="162" cy="58" r="12" fill="#0A0A0A" />
-      <circle cx="162" cy="58" r="7" fill="#1C1C1E" />
-      <circle cx="185" cy="58" r="12" fill="#0A0A0A" />
-      <circle cx="185" cy="58" r="7" fill="#1C1C1E" />
-      <circle cx="162" cy="82" r="12" fill="#0A0A0A" />
-      <circle cx="162" cy="82" r="7" fill="#1C1C1E" />
-      {/* Screen content hint */}
-      <rect x="36" y="120" width="168" height="12" rx="6" fill="#CCFF00" opacity="0.08" />
-      <rect x="36" y="144" width="120" height="8" rx="4" fill="#CCFF00" opacity="0.05" />
-      <rect x="36" y="162" width="144" height="8" rx="4" fill="#CCFF00" opacity="0.05" />
-    </svg>
-  )
-}
+import { PhoneModel3D } from "./PhoneModel3D"
 
 interface ViewerContentProps {
   product: Product
@@ -71,7 +16,6 @@ interface ViewerContentProps {
 function ViewerContent({ product, onClose }: ViewerContentProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const [isDragging, setIsDragging] = useState(false)
-  const [imgError, setImgError] = useState(false)
 
   const rotateY = useMotionValue(20)
   const rotateX = useMotionValue(-8)
@@ -136,11 +80,11 @@ function ViewerContent({ product, onClose }: ViewerContentProps) {
     rotateX.set(-8)
   }
 
-  const isPlaceholder = product.image.startsWith('placeholder:') || imgError
+
 
   return (
     <div
-      className="relative pointer-events-auto flex flex-col items-center gap-6 w-full max-w-lg"
+      className="relative pointer-events-auto flex flex-col items-center gap-4 sm:gap-6 w-full max-w-lg"
       onClick={e => e.stopPropagation()}
     >
       {/* Header */}
@@ -172,7 +116,7 @@ function ViewerContent({ product, onClose }: ViewerContentProps) {
       <div
         ref={containerRef}
         className="relative flex items-center justify-center w-full"
-        style={{ height: "420px", perspective: "800px", perspectiveOrigin: "50% 50%", cursor: isDragging ? "grabbing" : "grab" }}
+        style={{ height: "min(420px, 50vh)", perspective: "800px", perspectiveOrigin: "50% 50%", cursor: isDragging ? "grabbing" : "grab" }}
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerUp}
@@ -200,20 +144,9 @@ function ViewerContent({ product, onClose }: ViewerContentProps) {
           className="relative"
         >
           <div className="relative" style={{ transformStyle: "preserve-3d" }}>
-            {isPlaceholder ? (
-              <div className="w-[200px] h-[400px] drop-shadow-2xl">
-                <IPhoneSilhouetteLarge />
-              </div>
-            ) : (
-              <motion.img
-                src={product.image}
-                alt={product.name}
-                onError={() => setImgError(true)}
-                className="object-contain drop-shadow-2xl select-none"
-                style={{ height: "400px", maxWidth: "220px", pointerEvents: "none" }}
-                draggable={false}
-              />
-            )}
+            <div className="w-[140px] sm:w-[200px] h-[280px] sm:h-[400px] drop-shadow-2xl">
+              <PhoneModel3D modelName={product.name} disableInteractive className="pointer-events-none" />
+            </div>
 
             {/* Right edge depth illusion */}
             <motion.div
@@ -301,7 +234,7 @@ export function PhoneViewer3DGlobal() {
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.85 }}
             transition={{ type: "spring", stiffness: 280, damping: 26 }}
-            className="fixed inset-0 z-[71] flex items-center justify-center p-6 pointer-events-none"
+            className="fixed inset-0 z-[71] flex items-center justify-center p-4 sm:p-6 pointer-events-none overflow-y-auto"
           >
             <ViewerContent product={viewer3DProduct} onClose={closeViewer3D} />
           </motion.div>

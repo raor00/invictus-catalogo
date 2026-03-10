@@ -6,41 +6,40 @@ function deriveStatus(stock: number): Product['status'] {
   return 'Disponible'
 }
 
-// iPhone product images — using Apple's official CDN (public, no auth required)
-// Format: https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/{image-id}?wid=400&hei=400&fmt=jpeg&qlt=95
+// iPhone product images — using Apple's official CDN (public marketing images)
 const IMAGES: Record<string, string> = {
   // iPhone 17 series
-  'iphone-17-pro-max': 'https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone17-pro-max-finish-select-202509-naturaltitanium?wid=400&hei=400&fmt=jpeg&qlt=95&.v=1748022285885',
-  'iphone-17-pro': 'https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone17-pro-finish-select-202509-naturalblacktitanium?wid=400&hei=400&fmt=jpeg&qlt=95&.v=1748022304697',
-  'iphone-17': 'https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone17-finish-select-202509-ultramarine?wid=400&hei=400&fmt=jpeg&qlt=95&.v=1748022279424',
+  'iphone-17-pro-max': 'https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/iphone-17-pro-max-finish-select-202509-naturaltitanium?wid=400&hei=400&fmt=jpeg&qlt=95',
+  'iphone-17-pro': 'https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/iphone-17-pro-finish-select-202509-naturaltitanium?wid=400&hei=400&fmt=jpeg&qlt=95',
+  'iphone-17': 'https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/iphone-17-finish-select-202509-ultramarine?wid=400&hei=400&fmt=jpeg&qlt=95',
   // iPhone 16 series
-  'iphone-16-pro-max': 'https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-16-pro-max-finish-select-202409-desertttitanium?wid=400&hei=400&fmt=jpeg&qlt=95&.v=1723095335621',
-  'iphone-16-pro': 'https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-16-pro-finish-select-202409-blacktitanium?wid=400&hei=400&fmt=jpeg&qlt=95&.v=1723095338220',
-  'iphone-16-plus': 'https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-16-plus-finish-select-202409-starlight?wid=400&hei=400&fmt=jpeg&qlt=95&.v=1723095337575',
-  'iphone-16': 'https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-16-finish-select-202409-blue?wid=400&hei=400&fmt=jpeg&qlt=95&.v=1723095335063',
+  'iphone-16-pro-max': 'https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/iphone-16-pro-max-finish-select-202409-desertttitanium?wid=400&hei=400&fmt=jpeg&qlt=95',
+  'iphone-16-pro': 'https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/iphone-16-pro-finish-select-202409-blacktitanium?wid=400&hei=400&fmt=jpeg&qlt=95',
+  'iphone-16-plus': 'https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/iphone-16-plus-finish-select-202409-starlight?wid=400&hei=400&fmt=jpeg&qlt=95',
+  'iphone-16': 'https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/iphone-16-finish-select-202409-blue?wid=400&hei=400&fmt=jpeg&qlt=95',
   // iPhone 15 series
-  'iphone-15-pro-max': 'https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-15-pro-max-black-titanium-select?wid=400&hei=400&fmt=jpeg&qlt=95&.v=1693009283816',
-  'iphone-15-pro': 'https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-15-pro-black-titanium-select?wid=400&hei=400&fmt=jpeg&qlt=95&.v=1693009307549',
-  'iphone-15-plus': 'https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-15-plus-pink-select?wid=400&hei=400&fmt=jpeg&qlt=95&.v=1693010292526',
-  'iphone-15': 'https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-15-pink-select?wid=400&hei=400&fmt=jpeg&qlt=95&.v=1693009283816',
+  'iphone-15-pro-max': 'https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/iphone-15-pro-max-black-titanium-select?wid=400&hei=400&fmt=jpeg&qlt=95',
+  'iphone-15-pro': 'https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/iphone-15-pro-black-titanium-select?wid=400&hei=400&fmt=jpeg&qlt=95',
+  'iphone-15-plus': 'https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/iphone-15-plus-blue-select?wid=400&hei=400&fmt=jpeg&qlt=95',
+  'iphone-15': 'https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/iphone-15-blue-select?wid=400&hei=400&fmt=jpeg&qlt=95',
   // iPhone 14 series
-  'iphone-14-pro-max': 'https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-14-pro-max-deepviolet-select?wid=400&hei=400&fmt=jpeg&qlt=95&.v=1660753619973',
-  'iphone-14-pro': 'https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-14-pro-space-black-select?wid=400&hei=400&fmt=jpeg&qlt=95&.v=1660753619973',
-  'iphone-14-plus': 'https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-14-plus-blue-select?wid=400&hei=400&fmt=jpeg&qlt=95&.v=1660748711525',
-  'iphone-14': 'https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-14-blue-select-202209?wid=400&hei=400&fmt=jpeg&qlt=95&.v=1660803972361',
+  'iphone-14-pro-max': 'https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/iphone-14-pro-max-deepviolet-select?wid=400&hei=400&fmt=jpeg&qlt=95',
+  'iphone-14-pro': 'https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/iphone-14-pro-space-black-select?wid=400&hei=400&fmt=jpeg&qlt=95',
+  'iphone-14-plus': 'https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/iphone-14-plus-blue-select?wid=400&hei=400&fmt=jpeg&qlt=95',
+  'iphone-14': 'https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/iphone-14-blue-select-202209?wid=400&hei=400&fmt=jpeg&qlt=95',
   // iPhone 13 series
-  'iphone-13-pro-max': 'https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-13-pro-max-graphite-select?wid=400&hei=400&fmt=jpeg&qlt=95&.v=1631652958000',
-  'iphone-13-pro': 'https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-13-pro-graphite-select?wid=400&hei=400&fmt=jpeg&qlt=95&.v=1631652958000',
-  'iphone-13': 'https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-13-midnight-select-2021?wid=400&hei=400&fmt=jpeg&qlt=95&.v=1645572386470',
-  'iphone-13-mini': 'https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-13-mini-midnight-select-2021?wid=400&hei=400&fmt=jpeg&qlt=95&.v=1645572386470',
+  'iphone-13-pro-max': 'https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/iphone-13-pro-max-graphite-select?wid=400&hei=400&fmt=jpeg&qlt=95',
+  'iphone-13-pro': 'https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/iphone-13-pro-graphite-select?wid=400&hei=400&fmt=jpeg&qlt=95',
+  'iphone-13': 'https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/iphone-13-midnight-select-2021?wid=400&hei=400&fmt=jpeg&qlt=95',
+  'iphone-13-mini': 'https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/iphone-13-mini-midnight-select-2021?wid=400&hei=400&fmt=jpeg&qlt=95',
   // iPhone 12 series
-  'iphone-12-pro-max': 'https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-12-pro-max-graphite-select-2020?wid=400&hei=400&fmt=jpeg&qlt=95&.v=1604021663000',
-  'iphone-12-pro': 'https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-12-pro-graphite-select-2020?wid=400&hei=400&fmt=jpeg&qlt=95&.v=1604021663000',
-  'iphone-12-mini': 'https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-12-mini-black-select-2020?wid=400&hei=400&fmt=jpeg&qlt=95&.v=1604021663000',
-  'iphone-12': 'https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-12-black-select-2020?wid=400&hei=400&fmt=jpeg&qlt=95&.v=1604021663000',
+  'iphone-12-pro-max': 'https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/iphone-12-pro-max-graphite-select-2020?wid=400&hei=400&fmt=jpeg&qlt=95',
+  'iphone-12-pro': 'https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/iphone-12-pro-graphite-select-2020?wid=400&hei=400&fmt=jpeg&qlt=95',
+  'iphone-12-mini': 'https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/iphone-12-mini-black-select-2020?wid=400&hei=400&fmt=jpeg&qlt=95',
+  'iphone-12': 'https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/iphone-12-black-select-2020?wid=400&hei=400&fmt=jpeg&qlt=95',
   // iPhone 11 series
-  'iphone-11-pro': 'https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-11-pro-midnight-green-select-2019?wid=400&hei=400&fmt=jpeg&qlt=95&.v=1567473004082',
-  'iphone-11': 'https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-11-black-select-2019?wid=400&hei=400&fmt=jpeg&qlt=95&.v=1567473004082',
+  'iphone-11-pro': 'https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/iphone-11-pro-midnight-green-select-2019?wid=400&hei=400&fmt=jpeg&qlt=95',
+  'iphone-11': 'https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/iphone-11-black-select-2019?wid=400&hei=400&fmt=jpeg&qlt=95',
 }
 
 function img(model: string): string {

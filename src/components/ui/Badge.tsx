@@ -9,7 +9,7 @@ export interface BadgeProps extends React.HTMLAttributes<HTMLDivElement> {
 const Badge = React.forwardRef<HTMLDivElement, BadgeProps>(
     ({ className, variant = "default", pulse = false, children, ...props }, ref) => {
 
-        const baseStyles = "inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-bold tracking-wider uppercase backdrop-blur-sm shadow-glass border transition-all"
+        const baseStyles = "inline-flex items-center justify-center text-center px-2.5 py-1 min-h-[22px] rounded-full text-[9px] leading-none font-bold tracking-wider uppercase backdrop-blur-sm shadow-glass border transition-all"
 
         const variants = {
             default: "bg-background-dark/80 border-primary text-primary",
@@ -34,7 +34,7 @@ const Badge = React.forwardRef<HTMLDivElement, BadgeProps>(
                 {...props}
             >
                 {pulse && (
-                    <span className={cn("w-1.5 h-1.5 rounded-full mr-2", pulse && "animate-pulse", dotColors[variant])} />
+                    <span className={cn("w-1.5 h-1.5 rounded-full mr-1.5", pulse && "animate-pulse", dotColors[variant])} />
                 )}
                 {children}
             </div>

@@ -4,7 +4,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import { DEFAULT_CATALOG } from '@/data/catalog';
 
 // Bump this version when the catalog data changes to force a reset of localStorage
-const CATALOG_VERSION = '2025-03-10-v3';
+const CATALOG_VERSION = '2026-03-10-v4';
 
 export type Product = {
   id: string;
