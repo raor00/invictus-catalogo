@@ -5,12 +5,13 @@ import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import { useStore } from "@/lib/StoreContext"
 import { cn } from "@/components/ui/Button"
+import { Lightning, SquaresFour, DeviceMobile, Wrench, Package, GearSix, SignOut, X } from "@phosphor-icons/react"
 
 const navLinks = [
-    { name: "Dashboard", href: "/dashboard", icon: "dashboard" },
-    { name: "iPhones", href: "/dashboard/iphones", icon: "smartphone" },
-    { name: "Repuestos", href: "/dashboard/parts", icon: "build" },
-    { name: "Inventario", href: "/dashboard/inventory", icon: "inventory_2" },
+    { name: "Dashboard", href: "/dashboard", icon: SquaresFour },
+    { name: "iPhones", href: "/dashboard/iphones", icon: DeviceMobile },
+    { name: "Repuestos", href: "/dashboard/parts", icon: Wrench },
+    { name: "Inventario", href: "/dashboard/inventory", icon: Package },
 ]
 
 interface AdminSidebarProps {
@@ -46,7 +47,7 @@ export function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
                     {/* Brand & Close Button */}
                     <div className="flex justify-between items-center">
                         <div className="flex gap-3 items-center">
-                            <span className="material-symbols-outlined text-black text-4xl">bolt</span>
+                            <Lightning weight="fill" className="text-black text-4xl" />
                             <div className="flex flex-col">
                                 <span className="font-heading font-bold text-xl tracking-tight leading-none text-black">INVICTUS</span>
                                 <span className="font-mono text-black text-[8px] tracking-[0.3em] leading-none mt-1 font-bold">MAYORISTA</span>
@@ -56,7 +57,7 @@ export function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
                             onClick={onClose}
                             className="lg:hidden text-text-muted hover:text-foreground"
                         >
-                            <span className="material-symbols-outlined">close</span>
+                            <X size={24} weight="bold" />
                         </button>
                     </div>
 
@@ -78,12 +79,13 @@ export function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
                                             : "text-foreground/70 hover:text-foreground hover:bg-surface-highlight/50 border-l-[3px] border-transparent"
                                     )}
                                 >
-                                    <span className={cn(
-                                        "material-symbols-outlined text-[22px]",
-                                        isActive ? "text-primary" : "text-foreground/60 group-hover:text-foreground transition-colors"
-                                    )} style={{ fontVariationSettings: isActive ? "'FILL' 1" : "'FILL' 0" }}>
-                                        {link.icon}
-                                    </span>
+                                    <link.icon
+                                        size={22}
+                                        weight={isActive ? "fill" : "regular"}
+                                        className={cn(
+                                            isActive ? "text-primary" : "text-foreground/60 group-hover:text-foreground transition-colors"
+                                        )}
+                                    />
                                     <span className={cn(
                                         "text-sm font-heading tracking-wide",
                                         isActive ? "font-bold" : "font-semibold"
@@ -105,12 +107,13 @@ export function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
                                 : "text-text-muted hover:text-foreground hover:bg-surface-highlight/30"
                         )}
                     >
-                        <span className={cn(
-                            "material-symbols-outlined text-[20px]",
-                            pathname === "/dashboard/settings" ? "text-primary" : "group-hover:text-foreground"
-                        )} style={{ fontVariationSettings: pathname === "/dashboard/settings" ? "'FILL' 1" : "'FILL' 0" }}>
-                            settings
-                        </span>
+                        <GearSix
+                            size={20}
+                            weight={pathname === "/dashboard/settings" ? "fill" : "regular"}
+                            className={cn(
+                                pathname === "/dashboard/settings" ? "text-primary" : "group-hover:text-foreground"
+                            )}
+                        />
                         <span className="text-sm font-medium font-heading tracking-wide">Configuración</span>
                     </Link>
 
@@ -126,9 +129,7 @@ export function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
                             <span className="text-foreground text-sm font-medium leading-none">Admin User</span>
                             <span className="text-text-muted text-xs mt-1">Manager</span>
                         </div>
-                        <span className="material-symbols-outlined text-[16px] text-text-muted group-hover:text-critical transition-colors">
-                            logout
-                        </span>
+                        <SignOut size={16} weight="bold" className="text-text-muted group-hover:text-critical transition-colors" />
                     </div>
                 </div>
             </aside>

@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { AdminSidebar } from "@/components/layout/AdminSidebar"
 import { ProductModal } from "@/components/modals/ProductModal"
+import { Lightning, List } from "@phosphor-icons/react"
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false)
@@ -18,14 +19,14 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 {/* Mobile Header */}
                 <header className="lg:hidden h-16 flex items-center justify-between px-6 bg-background border-b border-surface-highlight z-50 flex-shrink-0">
                     <div className="flex gap-2 items-center">
-                        <span className="material-symbols-outlined text-black text-2xl">bolt</span>
+                        <Lightning weight="fill" className="text-black text-2xl" />
                         <span className="font-heading font-bold text-sm tracking-tight text-black">INVICTUS</span>
                     </div>
                     <button
                         onClick={() => setIsSidebarOpen(true)}
                         className="p-2 text-text-muted hover:text-foreground"
                     >
-                        <span className="material-symbols-outlined">menu</span>
+                        <List size={24} />
                     </button>
                 </header>
 

@@ -3,6 +3,7 @@
 import React, { useState } from "react"
 import { useRouter } from "next/navigation"
 import { useStore } from "@/lib/StoreContext"
+import { Lightning, Package, ArrowsClockwise, Eye, EyeSlash } from "@phosphor-icons/react"
 
 export default function LoginPage() {
     const [username, setUsername] = useState("")
@@ -30,7 +31,7 @@ export default function LoginPage() {
                 {/* Branding */}
                 <div className="relative z-10">
                     <div className="flex items-center gap-2">
-                        <span className="material-symbols-outlined text-black text-4xl">bolt</span>
+                        <Lightning weight="fill" className="text-black text-4xl" />
                         <div className="flex flex-col">
                             <span className="font-heading font-bold text-3xl tracking-tight leading-none text-black">INVICTUS</span>
                             <span className="font-mono text-black text-[10px] tracking-[0.3em] leading-none mt-1 font-bold">MAYORISTA</span>
@@ -51,14 +52,14 @@ export default function LoginPage() {
 
                     <div className="mt-14 flex gap-6">
                         <div className="flex items-center gap-4 px-6 py-4 bg-white shadow-sm w-fit min-w-[160px]">
-                            <span className="material-symbols-outlined text-black text-2xl">inventory_2</span>
+                            <Package weight="fill" className="text-black text-2xl" />
                             <div className="flex flex-col">
                                 <span className="text-[10px] text-[#999] font-bold uppercase tracking-wider mb-1">SKUS ACTIVOS</span>
                                 <span className="font-mono text-black text-2xl font-bold leading-none">2,450+</span>
                             </div>
                         </div>
                         <div className="flex items-center gap-4 px-6 py-4 bg-white shadow-sm w-fit min-w-[160px]">
-                            <span className="material-symbols-outlined text-black text-2xl">update</span>
+                            <ArrowsClockwise weight="bold" className="text-black text-2xl" />
                             <div className="flex flex-col">
                                 <span className="text-[10px] text-[#999] font-bold uppercase tracking-wider mb-1">ÚLTIMO SYNC</span>
                                 <span className="font-mono text-black text-2xl font-bold leading-none">09:41 AM</span>
@@ -78,7 +79,7 @@ export default function LoginPage() {
             <div className="w-full lg:w-1/2 flex flex-col justify-center items-center p-6 sm:p-12 lg:p-24 bg-[#000000] relative">
                 {/* Mobile Logo */}
                 <div className="lg:hidden flex items-center gap-2 mb-8 self-start">
-                    <span className="material-symbols-outlined text-white text-3xl">bolt</span>
+                    <Lightning weight="fill" className="text-white text-3xl" />
                     <span className="font-heading font-bold text-2xl tracking-tight text-white">INVICTUS</span>
                 </div>
 
@@ -136,9 +137,11 @@ export default function LoginPage() {
                                     type="button"
                                     onClick={() => setShowPassword(!showPassword)}
                                 >
-                                    <span className="material-symbols-outlined text-[20px]">
-                                        {showPassword ? "visibility" : "visibility_off"}
-                                    </span>
+                                    {showPassword ? (
+                                        <Eye size={20} weight="bold" />
+                                    ) : (
+                                        <EyeSlash size={20} weight="bold" />
+                                    )}
                                 </button>
                             </div>
                         </div>
