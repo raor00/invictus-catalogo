@@ -25,8 +25,8 @@ export function PublicHeader() {
                             <Lightning weight="fill" size={20} />
                         </div>
                         <div className="flex flex-col leading-none">
-                            <h1 className="font-heading font-bold text-lg sm:text-xl tracking-wide text-text-main">INVICTUS</h1>
-                            <span className="font-mono text-[9px] sm:text-[10px] text-primary tracking-[0.2em] uppercase">Mayorista</span>
+                            <h1 className="font-heading font-bold text-lg sm:text-xl tracking-wide text-text-main">VENTAS</h1>
+                            <span className="font-mono text-[9px] sm:text-[10px] text-primary tracking-[0.2em] uppercase">Al Mayor</span>
                         </div>
                     </Link>
 

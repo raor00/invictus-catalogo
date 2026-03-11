@@ -112,7 +112,7 @@ export const PublicCatalogGrid = ({ isParts }: { isParts: boolean }) => {
       {filteredProducts.length > 0 && (
         <div className="mt-16 text-center">
           <p className="text-xs text-text-muted font-mono tracking-wider">
-            INVICTUS MAYORISTA © {new Date().getFullYear()}. STOCK ACTUALIZADO EN TIEMPO REAL.
+            VENTAS AL MAYOR © {new Date().getFullYear()}. STOCK ACTUALIZADO EN TIEMPO REAL.
           </p>
         </div>
       )}

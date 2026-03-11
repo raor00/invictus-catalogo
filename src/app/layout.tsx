@@ -20,8 +20,8 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Invictus Phone | Catálogo Mayorista",
-  description: "B2B iPhone Distribution and Repair Parts.",
+  title: "Ventas al Mayor | Catálogo Mayorista",
+  description: "Catálogo mayorista de iPhone y repuestos.",
 };
 
 export default function RootLayout({

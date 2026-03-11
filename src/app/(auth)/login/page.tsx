@@ -16,7 +16,11 @@ export default function LoginPage() {
     const handleLogin = (e: React.FormEvent) => {
         e.preventDefault()
         const normalizedUser = username.trim().toLowerCase()
-        if ((normalizedUser === "admin" || normalizedUser === "admin@invictus.com") && password === "admin123") {
+        if (
+            (normalizedUser === "admin" ||
+                normalizedUser === "admin@mayorista.com") &&
+            password === "admin123"
+        ) {
             login()
             router.push("/dashboard")
         } else {
@@ -33,8 +37,7 @@ export default function LoginPage() {
                     <div className="flex items-center gap-2">
                         <Lightning weight="fill" className="text-black text-4xl" />
                         <div className="flex flex-col">
-                            <span className="font-heading font-bold text-3xl tracking-tight leading-none text-black">INVICTUS</span>
-                            <span className="font-mono text-black text-[10px] tracking-[0.3em] leading-none mt-1 font-bold">MAYORISTA</span>
+                            <span className="font-heading font-bold text-3xl tracking-tight leading-none text-black">MAYORISTA</span>
                         </div>
                     </div>
                 </div>
@@ -80,7 +83,7 @@ export default function LoginPage() {
                 {/* Mobile Logo */}
                 <div className="lg:hidden flex items-center gap-2 mb-8 self-start">
                     <Lightning weight="fill" className="text-white text-3xl" />
-                    <span className="font-heading font-bold text-2xl tracking-tight text-white">INVICTUS</span>
+                    <span className="font-heading font-bold text-2xl tracking-tight text-white">MAYORISTA</span>
                 </div>
 
                 <div className="w-full max-w-md flex flex-col gap-10 z-10">
@@ -180,7 +183,7 @@ export default function LoginPage() {
 
                     <div className="mt-8">
                         <p className="text-[10px] text-[#333] font-mono leading-relaxed font-bold">
-                            © 2024 INVICTUS DISTRIBUCIÓN. TODOS LOS DERECHOS RESERVADOS.
+                            © {new Date().getFullYear()} MAYORISTA. TODOS LOS DERECHOS RESERVADOS.
                             <br />ACCESO PROTEGIDO POR 2FA.
                         </p>
                     </div>

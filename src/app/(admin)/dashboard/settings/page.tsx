@@ -55,7 +55,7 @@ export default function SettingsPage() {
                         </div>
                         <div className="flex flex-col gap-1">
                             <span className="text-foreground font-bold font-heading text-xl">Admin User</span>
-                            <span className="text-text-muted text-sm font-mono">admin@invictus.com</span>
+                            <span className="text-text-muted text-sm font-mono">admin@mayorista.com</span>
                             <span className="mt-1 px-2 py-0.5 bg-primary/10 border border-primary/30 text-primary text-xs font-mono font-bold uppercase tracking-wider rounded-full w-fit">
                                 Manager
                             </span>
@@ -72,7 +72,7 @@ export default function SettingsPage() {
                         <div className="flex flex-col gap-1.5">
                             <label className="text-xs font-mono uppercase tracking-wider text-text-muted">Email Corporativo</label>
                             <input
-                                defaultValue="admin@invictus.com"
+                                defaultValue="admin@mayorista.com"
                                 className="w-full bg-background border border-surface-highlight rounded-lg px-4 py-2.5 text-foreground font-body text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary/30 transition-all"
                             />
                         </div>
