@@ -1,12 +1,26 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import { useRouter } from "next/navigation"
 import { AdminSidebar } from "@/components/layout/AdminSidebar"
 import { ProductModal } from "@/components/modals/ProductModal"
 import { Lightning, List } from "@phosphor-icons/react"
+import { useStore } from "@/lib/StoreContext"
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false)
+    const router = useRouter()
+    const { isAuthenticated, isReady } = useStore()
+
+    useEffect(() => {
+        if (isReady && !isAuthenticated) {
+            router.replace("/login")
+        }
+    }, [isAuthenticated, isReady, router])
+
+    if (!isReady || !isAuthenticated) {
+        return null
+    }
 
     return (
         <div className="flex h-[100dvh] w-full overflow-hidden bg-surface">

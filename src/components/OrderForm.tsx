@@ -7,6 +7,8 @@ import { useCart } from "@/lib/CartContext"
 import { Button } from "@/components/ui/Button"
 import { Input } from "@/components/ui/Input"
 import { WHATSAPP_NUMBER, APP_NAME, MIN_ORDER_TOTAL_QUANTITY } from "@/lib/config"
+import { useStore } from "@/lib/StoreContext"
+import { isProductAvailable } from "@/lib/productAvailability"
 
 interface OrderFormProps {
   isOpen: boolean
@@ -61,6 +63,7 @@ Fecha: ${date}`
 
 export function OrderForm({ isOpen, onClose }: OrderFormProps) {
   const { cartItems, cartTotal, cartCount, clearCart, closeCart } = useCart()
+  const { placeOrder, products } = useStore()
   const [formData, setFormData] = useState<FormData>({
     nombre: "",
     cedula: "",
@@ -77,28 +80,77 @@ export function OrderForm({ isOpen, onClose }: OrderFormProps) {
     if (!formData.nombre.trim()) newErrors.nombre = "El nombre es requerido"
     if (!formData.cedula.trim()) newErrors.cedula = "La cédula/RIF es requerida"
     if (!formData.telefono.trim()) newErrors.telefono = "El teléfono es requerido"
+
+    for (const item of cartItems) {
+      const currentProduct = products.find(product => product.id === item.product.id)
+
+      if (!currentProduct) {
+        newErrors.cart = `El producto ${item.product.name} ya no existe en inventario`
+        break
+      }
+
+      if (!isProductAvailable(currentProduct)) {
+        newErrors.cart = `El producto ${item.product.name} ya no esta disponible`
+        break
+      }
+
+      if (item.quantity > currentProduct.stock) {
+        newErrors.cart = `Solo quedan ${currentProduct.stock} unidades de ${item.product.name}`
+        break
+      }
+    }
+
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
   }
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     if (!validate()) return
 
     setSubmitting(true)
     const message = generateWhatsAppMessage(formData, cartItems, cartTotal)
     const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`
-    window.open(url, "_blank", "noreferrer")
 
-    // Reset state
-    setTimeout(() => {
+    const whatsappWindow = window.open("", "_blank", "noreferrer")
+
+    if (!whatsappWindow) {
+      setSubmitting(false)
+      setErrors({
+        cart: "Debes permitir ventanas emergentes para continuar con WhatsApp",
+      })
+      return
+    }
+
+    try {
+      await placeOrder({
+        customer: formData,
+        items: cartItems.map((item) => ({
+          product: item.product,
+          productId: item.product.id,
+          quantity: item.quantity,
+        })),
+        total: cartTotal,
+        channel: "whatsapp",
+      })
+
+      whatsappWindow.location.href = url
       clearCart()
       closeCart()
       onClose()
       setFormData({ nombre: "", cedula: "", telefono: "" })
       setErrors({})
+    } catch (error) {
+      whatsappWindow.close()
+      setErrors({
+        cart:
+          error instanceof Error
+            ? error.message
+            : "No se pudo registrar el pedido en inventario",
+      })
+    } finally {
       setSubmitting(false)
-    }, 300)
+    }
   }
 
   function handleChange(field: keyof FormData) {

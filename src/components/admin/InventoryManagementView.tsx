@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useEffect, useState } from "react"
+import React, { useMemo, useState } from "react"
 import {
   CheckCircle,
   CurrencyDollar,
@@ -140,8 +140,8 @@ function ProductQuickCard({
 }: {
   draft: ProductDraft
   onChange: (id: string, field: keyof ProductDraft, value: string | boolean) => void
-  onDelete: (product: Product) => void
-  onSave: (product: Product) => void
+  onDelete: (product: Product) => Promise<void> | void
+  onSave: (product: Product) => Promise<void> | void
   product: Product
 }) {
   const previewProduct = getPreviewProduct(product, draft)
@@ -240,11 +240,11 @@ function ProductQuickCard({
             variant="ghost"
             size="icon"
             className="text-critical hover:bg-critical/10"
-            onClick={() => onDelete(product)}
+            onClick={() => void onDelete(product)}
           >
             <Trash size={16} />
           </Button>
-          <Button className="gap-2" disabled={!dirty} onClick={() => onSave(product)}>
+          <Button className="gap-2" disabled={!dirty} onClick={() => void onSave(product)}>
             <FloppyDisk size={16} weight="fill" />
             Guardar
           </Button>
@@ -269,17 +269,23 @@ export function InventoryManagementView({
   const [searchTerm, setSearchTerm] = useState("")
   const [availabilityFilter, setAvailabilityFilter] = useState<AvailabilityFilter>("all")
   const [drafts, setDrafts] = useState<Record<string, ProductDraft>>({})
-
-  useEffect(() => {
-    const nextDrafts = products.reduce<Record<string, ProductDraft>>((acc, product) => {
-      acc[product.id] = buildDraft(product)
-      return acc
-    }, {})
-
-    setDrafts(nextDrafts)
-  }, [products])
-
-  const previewProducts = products.map((product) => getPreviewProduct(product, drafts[product.id]))
+  const productMap = useMemo(
+    () =>
+      products.reduce<Record<string, Product>>((acc, product) => {
+        acc[product.id] = product
+        return acc
+      }, {}),
+    [products]
+  )
+  const resolvedDrafts = useMemo(
+    () =>
+      products.reduce<Record<string, ProductDraft>>((acc, product) => {
+        acc[product.id] = drafts[product.id] ?? buildDraft(product)
+        return acc
+      }, {}),
+    [drafts, products]
+  )
+  const previewProducts = products.map((product) => getPreviewProduct(product, resolvedDrafts[product.id]))
   const statProducts = statsFilter ? previewProducts.filter(statsFilter) : previewProducts
   const totalCount = statProducts.reduce((acc, product) => acc + product.stock, 0)
   const availableCount = statProducts
@@ -346,29 +352,47 @@ export function InventoryManagementView({
     setDrafts((current) => ({
       ...current,
       [id]: {
-        ...current[id],
+        ...(current[id] ?? buildDraft(productMap[id])),
         [field]: value,
       },
     }))
   }
 
-  function handleSave(product: Product) {
-    const draft = drafts[product.id]
+  async function handleSave(product: Product) {
+    const draft = resolvedDrafts[product.id]
 
     if (!draft) {
       return
     }
 
-    updateProduct(product.id, {
-      price: Math.max(0, Number.parseFloat(draft.price) || 0),
-      stock: Math.max(0, Number.parseInt(draft.stock, 10) || 0),
-      isAvailable: draft.isAvailable,
-    })
+    try {
+      await updateProduct(product.id, {
+        price: Math.max(0, Number.parseFloat(draft.price) || 0),
+        stock: Math.max(0, Number.parseInt(draft.stock, 10) || 0),
+        isAvailable: draft.isAvailable,
+      })
+      setDrafts((current) => {
+        const nextDrafts = { ...current }
+        delete nextDrafts[product.id]
+        return nextDrafts
+      })
+    } catch (error) {
+      alert(error instanceof Error ? error.message : "No se pudo guardar el producto")
+    }
   }
 
-  function handleDelete(product: Product) {
+  async function handleDelete(product: Product) {
     if (confirm(`¿Eliminar ${product.name}?`)) {
-      deleteProduct(product.id)
+      try {
+        await deleteProduct(product.id)
+        setDrafts((current) => {
+          const nextDrafts = { ...current }
+          delete nextDrafts[product.id]
+          return nextDrafts
+        })
+      } catch (error) {
+        alert(error instanceof Error ? error.message : "No se pudo eliminar el producto")
+      }
     }
   }
 
@@ -496,7 +520,7 @@ export function InventoryManagementView({
               filteredProducts.map((product) => (
                 <ProductQuickCard
                   key={product.id}
-                  draft={drafts[product.id] ?? buildDraft(product)}
+                  draft={resolvedDrafts[product.id] ?? buildDraft(product)}
                   product={product}
                   onChange={handleDraftChange}
                   onDelete={handleDelete}

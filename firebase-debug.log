@@ -1,0 +1,72 @@
+[debug] [2026-03-13T17:26:23.994Z] ----------------------------------------------------------------------
+[debug] [2026-03-13T17:26:24.004Z] Command:       /usr/local/bin/node /Users/mac/.npm/_npx/7750544ccf494d8b/node_modules/.bin/firebase deploy --only firestore:rules --project ventas-al-mayor-562a7
+[debug] [2026-03-13T17:26:24.005Z] CLI Version:   15.10.0
+[debug] [2026-03-13T17:26:24.005Z] Platform:      darwin
+[debug] [2026-03-13T17:26:24.005Z] Node Version:  v24.13.1
+[debug] [2026-03-13T17:26:24.005Z] Time:          Fri Mar 13 2026 13:26:24 GMT-0400 (Venezuela Time)
+[debug] [2026-03-13T17:26:24.005Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2026-03-13T17:26:24.012Z] >>> [apiv2][query] GET https://firebase-public.firebaseio.com/cli.json [none]
+[debug] [2026-03-13T17:26:27.371Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-03-13T17:26:27.768Z] <<< [apiv2][status] GET https://firebase-public.firebaseio.com/cli.json 200
+[debug] [2026-03-13T17:26:27.769Z] <<< [apiv2][body] GET https://firebase-public.firebaseio.com/cli.json {"cloudBuildErrorAfter":1594252800000,"cloudBuildWarnAfter":1590019200000,"defaultNode10After":1594252800000,"minVersion":"3.0.5","node8DeploysDisabledAfter":1613390400000,"node8RuntimeDisabledAfter":1615809600000,"node8WarnAfter":1600128000000}
+[debug] [2026-03-13T17:26:27.848Z] Running auto auth
+[debug] [2026-03-13T17:26:27.848Z] [iam] checking project ventas-al-mayor-562a7 for permissions ["datastore.indexes.create","datastore.indexes.delete","datastore.indexes.list","datastore.indexes.update","firebase.projects.get"]
+[debug] [2026-03-13T17:26:27.853Z] No OAuth tokens found
+[debug] [2026-03-13T17:26:27.854Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/ventas-al-mayor-562a7:testIamPermissions [none]
+[debug] [2026-03-13T17:26:27.861Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/ventas-al-mayor-562a7:testIamPermissions  x-goog-user-project=ventas-al-mayor-562a7
+[debug] [2026-03-13T17:26:27.862Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/ventas-al-mayor-562a7:testIamPermissions {"permissions":["datastore.indexes.create","datastore.indexes.delete","datastore.indexes.list","datastore.indexes.update","firebase.projects.get"]}
+[debug] [2026-03-13T17:26:28.231Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/ventas-al-mayor-562a7:testIamPermissions 403
+[debug] [2026-03-13T17:26:28.232Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/ventas-al-mayor-562a7:testIamPermissions {"error":{"code":403,"message":"Caller does not have required permission to use project ventas-al-mayor-562a7. Grant the caller the roles/serviceusage.serviceUsageConsumer role, or a custom role with the serviceusage.services.use permission, by visiting https://console.developers.google.com/iam-admin/iam?project=ventas-al-mayor-562a7 and then retry. Propagation of the new permission may take a few minutes.","status":"PERMISSION_DENIED","details":[{"@type":"type.googleapis.com/google.rpc.ErrorInfo","reason":"USER_PROJECT_DENIED","domain":"googleapis.com","metadata":{"containerInfo":"ventas-al-mayor-562a7","consoleUrl":"https://console.developers.google.com/iam-admin/iam?project=ventas-al-mayor-562a7","service":"cloudresourcemanager.googleapis.com","consumer":"projects/ventas-al-mayor-562a7"}},{"@type":"type.googleapis.com/google.rpc.LocalizedMessage","locale":"en-US","message":"Caller does not have required permission to use project ventas-al-mayor-562a7. Grant the caller the roles/serviceusage.serviceUsageConsumer role, or a custom role with the serviceusage.services.use permission, by visiting https://console.developers.google.com/iam-admin/iam?project=ventas-al-mayor-562a7 and then retry. Propagation of the new permission may take a few minutes."},{"@type":"type.googleapis.com/google.rpc.Help","links":[{"description":"Google developer console IAM admin","url":"https://console.developers.google.com/iam-admin/iam?project=ventas-al-mayor-562a7"}]}]}}
+[debug] [2026-03-13T17:26:28.234Z] [iam] error while checking permissions, command may fail: Request to https://cloudresourcemanager.googleapis.com/v1/projects/ventas-al-mayor-562a7:testIamPermissions had HTTP Error: 403, Caller does not have required permission to use project ventas-al-mayor-562a7. Grant the caller the roles/serviceusage.serviceUsageConsumer role, or a custom role with the serviceusage.services.use permission, by visiting https://console.developers.google.com/iam-admin/iam?project=ventas-al-mayor-562a7 and then retry. Propagation of the new permission may take a few minutes.
+[info] 
+[info] === Deploying to 'ventas-al-mayor-562a7'...
+[info] 
+[info] i  deploying firestore 
+[info] i  firestore: ensuring required API firestore.googleapis.com is enabled... 
+[debug] [2026-03-13T17:26:28.250Z] No OAuth tokens found
+[debug] [2026-03-13T17:26:28.251Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/ventas-al-mayor-562a7/services/firestore.googleapis.com [none]
+[debug] [2026-03-13T17:26:28.252Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/ventas-al-mayor-562a7/services/firestore.googleapis.com  x-goog-user-project=ventas-al-mayor-562a7
+[debug] [2026-03-13T17:26:28.635Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/ventas-al-mayor-562a7/services/firestore.googleapis.com 403
+[debug] [2026-03-13T17:26:28.638Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/ventas-al-mayor-562a7/services/firestore.googleapis.com [omitted]
+[error] 
+[error] Error: Request to https://serviceusage.googleapis.com/v1/projects/ventas-al-mayor-562a7/services/firestore.googleapis.com had HTTP Error: 403, Caller does not have required permission to use project ventas-al-mayor-562a7. Grant the caller the roles/serviceusage.serviceUsageConsumer role, or a custom role with the serviceusage.services.use permission, by visiting https://console.developers.google.com/iam-admin/iam?project=ventas-al-mayor-562a7 and then retry. Propagation of the new permission may take a few minutes.
+[debug] [2026-03-13T17:26:28.643Z] Error Context: {
+  "body": {
+    "error": {
+      "code": 403,
+      "message": "Caller does not have required permission to use project ventas-al-mayor-562a7. Grant the caller the roles/serviceusage.serviceUsageConsumer role, or a custom role with the serviceusage.services.use permission, by visiting https://console.developers.google.com/iam-admin/iam?project=ventas-al-mayor-562a7 and then retry. Propagation of the new permission may take a few minutes.",
+      "status": "PERMISSION_DENIED",
+      "details": [
+        {
+          "@type": "type.googleapis.com/google.rpc.ErrorInfo",
+          "reason": "USER_PROJECT_DENIED",
+          "domain": "googleapis.com",
+          "metadata": {
+            "consumer": "projects/ventas-al-mayor-562a7",
+            "containerInfo": "ventas-al-mayor-562a7",
+            "consoleUrl": "https://console.developers.google.com/iam-admin/iam?project=ventas-al-mayor-562a7",
+            "service": "serviceusage.googleapis.com"
+          }
+        },
+        {
+          "@type": "type.googleapis.com/google.rpc.LocalizedMessage",
+          "locale": "en-US",
+          "message": "Caller does not have required permission to use project ventas-al-mayor-562a7. Grant the caller the roles/serviceusage.serviceUsageConsumer role, or a custom role with the serviceusage.services.use permission, by visiting https://console.developers.google.com/iam-admin/iam?project=ventas-al-mayor-562a7 and then retry. Propagation of the new permission may take a few minutes."
+        },
+        {
+          "@type": "type.googleapis.com/google.rpc.Help",
+          "links": [
+            {
+              "description": "Google developer console IAM admin",
+              "url": "https://console.developers.google.com/iam-admin/iam?project=ventas-al-mayor-562a7"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "response": {
+    "statusCode": 403
+  }
+}

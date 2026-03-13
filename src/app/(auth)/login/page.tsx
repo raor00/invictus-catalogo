@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { useStore } from "@/lib/StoreContext"
 import { Lightning, Package, ArrowsClockwise, Eye, EyeSlash } from "@phosphor-icons/react"
@@ -11,20 +11,27 @@ export default function LoginPage() {
     const [error, setError] = useState("")
     const [showPassword, setShowPassword] = useState(false)
     const router = useRouter()
-    const { login } = useStore()
+    const { isAuthenticated, isFirebaseEnabled, isReady, login } = useStore()
 
-    const handleLogin = (e: React.FormEvent) => {
+    useEffect(() => {
+        if (isReady && isAuthenticated) {
+            router.replace("/dashboard")
+        }
+    }, [isAuthenticated, isReady, router])
+
+    const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault()
-        const normalizedUser = username.trim().toLowerCase()
-        if (
-            (normalizedUser === "admin" ||
-                normalizedUser === "admin@mayorista.com") &&
-            password === "admin123"
-        ) {
-            login()
+        setError("")
+
+        try {
+            await login(username, password)
             router.push("/dashboard")
-        } else {
-            setError("Credenciales inválidas. Usuario: admin / Contraseña: admin123")
+        } catch {
+            setError(
+                isFirebaseEnabled
+                    ? "No se pudo iniciar sesion con Firebase. Verifica correo y contraseña."
+                    : "Credenciales invalidas. Usuario: admin@mayorista.com / Contraseña: admin123"
+            )
         }
     }
 
@@ -96,19 +103,19 @@ export default function LoginPage() {
                         {/* Email Input Group */}
                         <div className="relative bg-white p-4">
                             <label
-                                className="block text-[10px] text-[#999] font-mono font-bold uppercase tracking-[0.2em] mb-1"
-                                htmlFor="username"
+                                    className="block text-[10px] text-[#999] font-mono font-bold uppercase tracking-[0.2em] mb-1"
+                                    htmlFor="username"
                             >
-                                USUARIO
+                                {isFirebaseEnabled ? "CORREO" : "USUARIO"}
                             </label>
                             <input
                                 className="w-full bg-white text-black font-mono text-base focus:outline-none placeholder-gray-300"
                                 id="username"
                                 name="username"
-                                placeholder="admin"
+                                placeholder={isFirebaseEnabled ? "admin@empresa.com" : "admin@mayorista.com"}
                                 required
                                 type="text"
-                                autoComplete="username"
+                                autoComplete={isFirebaseEnabled ? "email" : "username"}
                                 value={username}
                                 onChange={(e) => setUsername(e.target.value)}
                             />

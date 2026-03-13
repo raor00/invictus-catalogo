@@ -1,36 +1,106 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Invictus Catalog
 
-## Getting Started
+Catálogo mayorista con panel admin, inventario en tiempo real y pedidos por WhatsApp.
 
-First, run the development server:
+## Stack
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- Next.js 16
+- React 19
+- Firebase Auth
+- Cloud Firestore
+- Firebase Admin SDK para registrar pedidos y descontar inventario desde el servidor
+
+## Configuración
+
+1. Crea un proyecto en Firebase.
+2. Activa `Authentication > Sign-in method > Email/Password`.
+3. Activa `Firestore Database`.
+4. Crea un usuario admin en `Authentication`.
+5. En `Project settings`, copia la configuración web.
+6. En `Project settings > Service accounts`, genera una llave privada nueva.
+7. Copia `.env.example` a `.env.local` y llena las variables.
+
+## Variables de entorno
+
+Variables públicas para el cliente:
+
+```env
+NEXT_PUBLIC_FIREBASE_API_KEY=
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=
+NEXT_PUBLIC_FIREBASE_PROJECT_ID=
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=
+NEXT_PUBLIC_FIREBASE_APP_ID=
+NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID=
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Variables privadas para el servidor:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```env
+FIREBASE_PROJECT_ID=
+FIREBASE_CLIENT_EMAIL=
+FIREBASE_PRIVATE_KEY=
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+`FIREBASE_PRIVATE_KEY` debe guardarse con `\n` escapados si la pegas en una sola línea.
 
-## Learn More
+## Reglas de Firestore
 
-To learn more about Next.js, take a look at the following resources:
+Usa el archivo [firestore.rules](/Users/mac/Documents/GitHub/Invictus-Catalog/firestore.rules).
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Resumen:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- `products`: lectura pública, escritura solo para usuarios autenticados.
+- `orders`: creación solo desde el servidor; lectura y edición solo para usuarios autenticados.
 
-## Deploy on Vercel
+## Arranque
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```bash
+npm install
+npm run dev
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Cómo queda operando
+
+- El catálogo público lee productos desde Firestore.
+- El admin inicia sesión con Firebase Auth.
+- El admin crea, edita y elimina productos directo en Firestore.
+- El primer admin autenticado que entre con la base vacía siembra el catálogo inicial.
+- Cada pedido de WhatsApp entra por `/api/orders`.
+- El servidor registra el pedido en `orders` y descuenta stock de `products` en una transacción.
+- Al bajar stock, se actualizan también disponibles y valor de inventario.
+
+## Colecciones
+
+### `products`
+
+Documentos por producto con estos campos:
+
+- `id`
+- `name`
+- `sku`
+- `storage`
+- `condition`
+- `price`
+- `stock`
+- `image`
+- `category`
+- `status`
+- `isAvailable`
+
+### `orders`
+
+Documentos de pedido con:
+
+- `id`
+- `customer`
+- `items`
+- `total`
+- `totalQuantity`
+- `channel`
+- `status`
+- `createdAt`
+
+## Fallback local
+
+Si no configuras Firebase, la app sigue funcionando con `localStorage` como respaldo para desarrollo.

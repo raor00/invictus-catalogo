@@ -8,6 +8,10 @@ import { useStore, Product } from "@/lib/StoreContext"
 import { motion, AnimatePresence } from "framer-motion"
 import { hasManualAvailability } from "@/lib/productAvailability"
 
+function isProductDetail(detail: Product | { defaultCategory?: string } | undefined): detail is Product {
+    return Boolean(detail && "id" in detail)
+}
+
 function generateSku({
     category,
     condition,
@@ -38,6 +42,7 @@ export const ProductModal = () => {
     const [isOpen, setIsOpen] = useState(false)
     const [isEditing, setIsEditing] = useState(false)
     const [currentId, setCurrentId] = useState("")
+    const [submitError, setSubmitError] = useState("")
 
     const [formData, setFormData] = useState({
         name: "",
@@ -51,8 +56,10 @@ export const ProductModal = () => {
     })
 
     useEffect(() => {
-        const handleOpen = (e: any) => {
-            if (e.detail && e.detail.id) {
+        const handleOpen = (event: Event) => {
+            const e = event as CustomEvent<Product | { defaultCategory?: string } | undefined>
+            if (isProductDetail(e.detail)) {
+                setSubmitError("")
                 setIsEditing(true)
                 setCurrentId(e.detail.id)
                 setFormData({
@@ -66,6 +73,8 @@ export const ProductModal = () => {
                     isAvailable: hasManualAvailability(e.detail),
                 })
             } else {
+                const defaultCategory = isProductDetail(e.detail) ? undefined : e.detail?.defaultCategory
+                setSubmitError("")
                 setIsEditing(false)
                 setCurrentId("")
                 setFormData({
@@ -73,7 +82,7 @@ export const ProductModal = () => {
                     price: "",
                     stock: "",
                     image: "",
-                    category: e.detail?.defaultCategory || "Smartphones",
+                    category: defaultCategory || "Smartphones",
                     storage: "128GB",
                     condition: "used",
                     isAvailable: true,
@@ -86,8 +95,9 @@ export const ProductModal = () => {
         return () => window.removeEventListener('open-product-modal', handleOpen)
     }, [])
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
+        setSubmitError("")
 
         const stockNum = parseInt(formData.stock) || 0
         const status: 'Disponible' | 'No disponible' =
@@ -107,13 +117,17 @@ export const ProductModal = () => {
             status
         }
 
-        if (isEditing) {
-            updateProduct(currentId, productData)
-        } else {
-            addProduct(productData)
-        }
+        try {
+            if (isEditing) {
+                await updateProduct(currentId, productData)
+            } else {
+                await addProduct(productData)
+            }
 
-        setIsOpen(false)
+            setIsOpen(false)
+        } catch (error) {
+            setSubmitError(error instanceof Error ? error.message : "No se pudo guardar el producto")
+        }
     }
 
     const selectClass = "h-10 w-full rounded-lg border border-surface-highlight bg-surface px-3 text-sm text-foreground focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all"
@@ -213,6 +227,12 @@ export const ProductModal = () => {
                                     <div className="relative h-6 w-11 rounded-full bg-surface-highlight transition-colors peer-checked:bg-primary after:absolute after:left-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:bg-white after:transition-transform peer-checked:after:translate-x-5" />
                                 </label>
                             </div>
+
+                            {submitError && (
+                                <p className="rounded-xl border border-critical/30 bg-critical/10 px-4 py-3 text-sm text-critical">
+                                    {submitError}
+                                </p>
+                            )}
 
                             <div className="mt-4 flex justify-end gap-3 pt-4 border-t border-surface-highlight">
                                 <Button type="button" variant="ghost" onClick={() => setIsOpen(false)}>Cancelar</Button>

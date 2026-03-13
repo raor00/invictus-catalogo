@@ -143,7 +143,17 @@ export default function InventoryDashboardPage() {
                                                 <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => window.dispatchEvent(new CustomEvent('open-product-modal', { detail: product }))}>
                                                     <PencilSimple size={14} />
                                                 </Button>
-                                                <Button variant="ghost" size="icon" className="h-8 w-8 text-critical hover:bg-critical/10" onClick={() => { if (confirm('¿Eliminar producto del inventario?')) deleteProduct(product.id) }}>
+                                                <Button variant="ghost" size="icon" className="h-8 w-8 text-critical hover:bg-critical/10" onClick={async () => {
+                                                    if (!confirm('¿Eliminar producto del inventario?')) {
+                                                        return
+                                                    }
+
+                                                    try {
+                                                        await deleteProduct(product.id)
+                                                    } catch (error) {
+                                                        alert(error instanceof Error ? error.message : 'No se pudo eliminar el producto')
+                                                    }
+                                                }}>
                                                     <Trash size={14} />
                                                 </Button>
                                             </div>

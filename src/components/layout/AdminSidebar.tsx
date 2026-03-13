@@ -22,10 +22,10 @@ interface AdminSidebarProps {
 export function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
     const pathname = usePathname()
     const router = useRouter()
-    const { logout } = useStore()
+    const { logout, userEmail } = useStore()
 
-    const handleLogout = () => {
-        logout()
+    const handleLogout = async () => {
+        await logout()
         router.push("/login")
     }
 
@@ -126,7 +126,7 @@ export function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
                         </div>
                         <div className="flex flex-col flex-1 min-w-0">
                             <span className="text-foreground text-sm font-medium leading-none">Admin User</span>
-                            <span className="text-text-muted text-xs mt-1">Manager</span>
+                            <span className="text-text-muted text-xs mt-1 truncate">{userEmail || "Manager"}</span>
                         </div>
                         <SignOut size={16} weight="bold" className="text-text-muted group-hover:text-critical transition-colors" />
                     </div>
