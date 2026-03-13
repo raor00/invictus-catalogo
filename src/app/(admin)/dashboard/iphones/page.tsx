@@ -17,6 +17,7 @@ export default function IPhonesDashboardPage() {
             newButtonLabel="Nuevo iPhone"
             products={iphones}
             searchPlaceholder="Buscar por modelo..."
+            statsFilter={(product) => product.category === "Smartphones"}
             title="Gestion de iPhones"
         />
     )

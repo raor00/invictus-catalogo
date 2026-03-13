@@ -32,13 +32,13 @@ type ProductDraft = {
 
 type InventoryManagementViewProps = {
   countLabel: string
-  countValue?: number
   description: string
   emptyMessage: string
   newProductDetail?: { defaultCategory?: string }
   newButtonLabel: string
   products: Product[]
   searchPlaceholder: string
+  statsFilter?: (product: Product) => boolean
   title: string
 }
 
@@ -59,11 +59,75 @@ function getDraftNumber(value: string) {
   return Number.isFinite(parsed) ? parsed : 0
 }
 
+function normalizeSearchValue(value: string) {
+  return value
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]+/g, " ")
+    .trim()
+}
+
+function getStorageOrder(storage: string) {
+  const normalized = storage.trim().toUpperCase()
+
+  if (normalized.endsWith("TB")) {
+    const value = Number.parseFloat(normalized.replace("TB", ""))
+    return Number.isFinite(value) ? value * 1024 : Number.MAX_SAFE_INTEGER
+  }
+
+  if (normalized.endsWith("GB")) {
+    const value = Number.parseFloat(normalized.replace("GB", ""))
+    return Number.isFinite(value) ? value : Number.MAX_SAFE_INTEGER
+  }
+
+  return Number.MAX_SAFE_INTEGER
+}
+
+function getIPhoneSortData(name: string) {
+  const match = name.match(/^iPhone\s+(\d+)(?:\s+(.*))?$/i)
+
+  if (!match) {
+    return null
+  }
+
+  const generation = Number.parseInt(match[1], 10)
+  const suffix = (match[2] ?? "").trim().toLowerCase()
+
+  const variantOrder: Record<string, number> = {
+    "pro max": 0,
+    pro: 1,
+    air: 2,
+    plus: 3,
+    "": 4,
+    mini: 5,
+  }
+
+  return {
+    generation,
+    suffix,
+    variantRank: variantOrder[suffix] ?? 99,
+  }
+}
+
 function buildDraft(product: Product): ProductDraft {
   return {
     price: product.price.toString(),
     stock: product.stock.toString(),
     isAvailable: hasManualAvailability(product),
+  }
+}
+
+function getPreviewProduct(product: Product, draft?: ProductDraft): Product {
+  if (!draft) {
+    return product
+  }
+
+  return {
+    ...product,
+    price: Math.max(0, getDraftNumber(draft.price)),
+    stock: Math.max(0, Math.floor(getDraftNumber(draft.stock))),
+    isAvailable: draft.isAvailable,
   }
 }
 
@@ -80,14 +144,9 @@ function ProductQuickCard({
   onSave: (product: Product) => void
   product: Product
 }) {
-  const draftPrice = Math.max(0, getDraftNumber(draft.price))
-  const draftStock = Math.max(0, Math.floor(getDraftNumber(draft.stock)))
-  const previewProduct = {
-    ...product,
-    price: draftPrice,
-    stock: draftStock,
-    isAvailable: draft.isAvailable,
-  }
+  const previewProduct = getPreviewProduct(product, draft)
+  const draftPrice = previewProduct.price
+  const draftStock = previewProduct.stock
   const availableNow = isProductAvailable(previewProduct)
   const currentStatus = getProductStatus(previewProduct)
   const dirty =
@@ -197,13 +256,13 @@ function ProductQuickCard({
 
 export function InventoryManagementView({
   countLabel,
-  countValue,
   description,
   emptyMessage,
   newProductDetail,
   newButtonLabel,
   products,
   searchPlaceholder,
+  statsFilter,
   title,
 }: InventoryManagementViewProps) {
   const { deleteProduct, updateProduct } = useStore()
@@ -220,23 +279,68 @@ export function InventoryManagementView({
     setDrafts(nextDrafts)
   }, [products])
 
-  const totalCount = countValue ?? products.length
-  const availableCount = products.filter((product) => isProductAvailable(product)).length
-  const unavailableCount = products.filter((product) => !isProductAvailable(product)).length
-  const inventoryValue = products.reduce((acc, product) => acc + product.price * product.stock, 0)
+  const previewProducts = products.map((product) => getPreviewProduct(product, drafts[product.id]))
+  const statProducts = statsFilter ? previewProducts.filter(statsFilter) : previewProducts
+  const totalCount = statProducts.reduce((acc, product) => acc + product.stock, 0)
+  const availableCount = statProducts
+    .filter((product) => isProductAvailable(product))
+    .reduce((acc, product) => acc + product.stock, 0)
+  const unavailableCount = statProducts.filter((product) => !isProductAvailable(product)).length
+  const inventoryValue = statProducts.reduce((acc, product) => acc + product.price * product.stock, 0)
 
-  const filteredProducts = products.filter((product) => {
-    const matchesSearch =
-      product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      product.sku.toLowerCase().includes(searchTerm.toLowerCase())
+  const normalizedSearch = normalizeSearchValue(searchTerm)
+  const searchTerms = normalizedSearch.split(" ").filter(Boolean)
 
-    const matchesAvailability =
-      availabilityFilter === "all" ||
-      (availabilityFilter === "available" && isProductAvailable(product)) ||
-      (availabilityFilter === "unavailable" && !isProductAvailable(product))
+  const filteredProducts = previewProducts
+    .filter((product) => {
+      const searchableValue = normalizeSearchValue(
+        [
+          product.name,
+          product.sku,
+          product.storage,
+          conditionLabel[product.condition],
+          product.category,
+        ].join(" ")
+      )
+      const matchesSearch =
+        searchTerms.length === 0 ||
+        searchTerms.every((term) => searchableValue.includes(term))
 
-    return matchesSearch && matchesAvailability
-  })
+      const matchesAvailability =
+        availabilityFilter === "all" ||
+        (availabilityFilter === "available" && isProductAvailable(product)) ||
+        (availabilityFilter === "unavailable" && !isProductAvailable(product))
+
+      return matchesSearch && matchesAvailability
+    })
+    .sort((a, b) => {
+      const aIPhone = getIPhoneSortData(a.name)
+      const bIPhone = getIPhoneSortData(b.name)
+
+      if (aIPhone && bIPhone) {
+        const generationComparison = bIPhone.generation - aIPhone.generation
+        if (generationComparison !== 0) {
+          return generationComparison
+        }
+
+        const variantComparison = aIPhone.variantRank - bIPhone.variantRank
+        if (variantComparison !== 0) {
+          return variantComparison
+        }
+      } else {
+        const nameComparison = a.name.localeCompare(b.name, "es", { sensitivity: "base" })
+        if (nameComparison !== 0) {
+          return nameComparison
+        }
+      }
+
+      const storageComparison = getStorageOrder(a.storage) - getStorageOrder(b.storage)
+      if (storageComparison !== 0) {
+        return storageComparison
+      }
+
+      return a.condition.localeCompare(b.condition, "es", { sensitivity: "base" })
+    })
 
   function handleDraftChange(id: string, field: keyof ProductDraft, value: string | boolean) {
     setDrafts((current) => ({

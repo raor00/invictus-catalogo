@@ -4,8 +4,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import { DEFAULT_CATALOG } from '@/data/catalog';
 import { normalizeProduct } from '@/lib/productAvailability';
 
-// Bump this version when the catalog data changes to force a reset of localStorage
-const CATALOG_VERSION = '2026-03-10-v4';
+const CATALOG_VERSION = '2026-03-13-v6';
 
 export type Product = {
   id: string;
@@ -33,32 +32,49 @@ type StoreContextType = {
 
 const StoreContext = createContext<StoreContextType | undefined>(undefined);
 
+function mergeCatalogProducts(savedProducts: Product[], preserveSavedCatalogValues: boolean) {
+  const normalizedDefaults = DEFAULT_CATALOG.map(normalizeProduct);
+  const mergedProducts = new Map<string, Product>();
+  const defaultIds = new Set(normalizedDefaults.map((product) => product.id));
+
+  normalizedDefaults.forEach((product) => {
+    mergedProducts.set(product.id, product);
+  });
+
+  savedProducts.map(normalizeProduct).forEach((product) => {
+    if (!preserveSavedCatalogValues && defaultIds.has(product.id)) {
+      return;
+    }
+    mergedProducts.set(product.id, product);
+  });
+
+  return Array.from(mergedProducts.values());
+}
+
 export const StoreProvider = ({ children }: { children: React.ReactNode }) => {
   const [products, setProducts] = useState<Product[]>([]);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
-    // If catalog version changed, wipe old data and reload fresh catalog
     const savedVersion = localStorage.getItem('invictus_catalog_version');
-    if (savedVersion !== CATALOG_VERSION) {
-      localStorage.removeItem('invictus_products');
-      localStorage.setItem('invictus_catalog_version', CATALOG_VERSION);
-    }
+    const preserveSavedCatalogValues = savedVersion === CATALOG_VERSION;
+    localStorage.setItem('invictus_catalog_version', CATALOG_VERSION);
 
     const savedProducts = localStorage.getItem('invictus_products');
     if (savedProducts) {
       try {
         const parsed = JSON.parse(savedProducts);
-        const migrated = parsed.map((p: Product) => normalizeProduct(p));
+        const migrated = mergeCatalogProducts(parsed, preserveSavedCatalogValues);
         setProducts(migrated);
+        localStorage.setItem('invictus_products', JSON.stringify(migrated));
       } catch {
-        const normalizedCatalog = DEFAULT_CATALOG.map(normalizeProduct);
+        const normalizedCatalog = mergeCatalogProducts([], preserveSavedCatalogValues);
         setProducts(normalizedCatalog);
         localStorage.setItem('invictus_products', JSON.stringify(normalizedCatalog));
       }
     } else {
-      const normalizedCatalog = DEFAULT_CATALOG.map(normalizeProduct);
+      const normalizedCatalog = mergeCatalogProducts([], preserveSavedCatalogValues);
       setProducts(normalizedCatalog);
       localStorage.setItem('invictus_products', JSON.stringify(normalizedCatalog));
     }

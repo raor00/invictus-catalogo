@@ -17,6 +17,7 @@ export default function PartsDashboardPage() {
             newButtonLabel="Nuevo repuesto"
             products={parts}
             searchPlaceholder="Buscar repuesto..."
+            statsFilter={(product) => product.category === "Repuestos"}
             title="Gestion de repuestos"
         />
     )
