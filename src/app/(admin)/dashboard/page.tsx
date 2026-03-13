@@ -1,3 +1,5 @@
+"use client"
+
 import { InventoryManagementView } from "@/components/admin/InventoryManagementView"
 import { useStore } from "@/lib/StoreContext"
 
@@ -12,7 +14,7 @@ export default function AdminDashboardPage() {
       emptyMessage="No se encontraron productos con esos filtros."
       newButtonLabel="Nuevo producto"
       products={products}
-      searchPlaceholder="Buscar por nombre o SKU..."
+      searchPlaceholder="Buscar por producto..."
       title="Dashboard de inventario con edicion rapida"
     />
   )

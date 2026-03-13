@@ -13,9 +13,11 @@ export default function PartsDashboardPage() {
             countLabel="Total repuestos"
             description="Los repuestos usan la misma lista compacta y editable del dashboard principal."
             emptyMessage="No se encontraron repuestos registrados."
+            newProductDetail={{ defaultCategory: "Repuestos" }}
             newButtonLabel="Nuevo repuesto"
             products={parts}
-            searchPlaceholder="Buscar repuesto o SKU..."
+            searchPlaceholder="Buscar repuesto..."
+            showCategory={false}
             title="Gestion de repuestos"
         />
     )

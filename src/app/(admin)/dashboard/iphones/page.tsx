@@ -4,7 +4,7 @@ import { InventoryManagementView } from "@/components/admin/InventoryManagementV
 import { useStore } from "@/lib/StoreContext"
 
 export default function IPhonesDashboardPage() {
-    const { products, deleteProduct } = useStore()
+    const { products } = useStore()
 
     // Filter only Smartphones
     const iphones = products.filter(p => p.category === 'Smartphones');
@@ -13,9 +13,11 @@ export default function IPhonesDashboardPage() {
             countLabel="Total equipos"
             description="Gestion centralizada de iPhones con la misma lista rapida del dashboard principal."
             emptyMessage="No se encontraron equipos registrados."
+            newProductDetail={{ defaultCategory: "Smartphones" }}
             newButtonLabel="Nuevo iPhone"
             products={iphones}
-            searchPlaceholder="Buscar por modelo o SKU..."
+            searchPlaceholder="Buscar por modelo..."
+            showCategory={false}
             title="Gestion de iPhones"
         />
     )

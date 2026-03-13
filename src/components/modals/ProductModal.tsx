@@ -8,6 +8,31 @@ import { useStore, Product } from "@/lib/StoreContext"
 import { motion, AnimatePresence } from "framer-motion"
 import { hasManualAvailability } from "@/lib/productAvailability"
 
+function generateSku({
+    category,
+    condition,
+    name,
+    storage,
+}: {
+    category: string
+    condition: Product["condition"]
+    name: string
+    storage: string
+}) {
+    const categoryCode = category.slice(0, 3).toUpperCase()
+    const conditionCode = condition.slice(0, 3).toUpperCase()
+    const nameCode = name
+        .trim()
+        .toUpperCase()
+        .replace(/[^A-Z0-9]+/g, "-")
+        .replace(/^-+|-+$/g, "")
+        .slice(0, 24)
+
+    return [categoryCode, nameCode || "PRODUCTO", storage.toUpperCase(), conditionCode]
+        .filter(Boolean)
+        .join("-")
+}
+
 export const ProductModal = () => {
     const { addProduct, updateProduct } = useStore()
     const [isOpen, setIsOpen] = useState(false)
@@ -16,7 +41,6 @@ export const ProductModal = () => {
 
     const [formData, setFormData] = useState({
         name: "",
-        sku: "",
         price: "",
         stock: "",
         image: "",
@@ -33,7 +57,6 @@ export const ProductModal = () => {
                 setCurrentId(e.detail.id)
                 setFormData({
                     name: e.detail.name,
-                    sku: e.detail.sku,
                     price: e.detail.price.toString(),
                     stock: e.detail.stock.toString(),
                     image: e.detail.image.startsWith('placeholder:') ? '' : e.detail.image,
@@ -47,7 +70,6 @@ export const ProductModal = () => {
                 setCurrentId("")
                 setFormData({
                     name: "",
-                    sku: "",
                     price: "",
                     stock: "",
                     image: "",
@@ -67,14 +89,14 @@ export const ProductModal = () => {
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault()
 
-        const stockNum = parseInt(formData.stock) || 0;
+        const stockNum = parseInt(formData.stock) || 0
         const status: 'Disponible' | 'No disponible' =
-            formData.isAvailable && stockNum > 0 ? 'Disponible' : 'No disponible';
+            formData.isAvailable && stockNum > 0 ? 'Disponible' : 'No disponible'
 
         const productData: Product = {
             id: isEditing ? currentId : Date.now().toString(),
             name: formData.name,
-            sku: formData.sku,
+            sku: generateSku(formData),
             price: parseFloat(formData.price) || 0,
             stock: stockNum,
             image: formData.image || `placeholder:${formData.name.toLowerCase().replace(/\s+/g, '-')}`,
@@ -118,23 +140,17 @@ export const ProductModal = () => {
                                 <label className="text-sm font-bold text-text-muted">Nombre del Producto</label>
                                 <Input required value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} />
                             </div>
-                            <div className="grid grid-cols-2 gap-4">
-                                <div className="flex flex-col gap-1.5">
-                                    <label className="text-sm font-bold text-text-muted">SKU</label>
-                                    <Input required value={formData.sku} onChange={(e) => setFormData({ ...formData, sku: e.target.value })} />
-                                </div>
-                                <div className="flex flex-col gap-1.5">
-                                    <label className="text-sm font-bold text-text-muted">Categoría</label>
-                                    <select
-                                        className={selectClass}
-                                        value={formData.category}
-                                        onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                                    >
-                                        <option value="Smartphones">Smartphones</option>
-                                        <option value="Repuestos">Repuestos</option>
-                                        <option value="Accesorios">Accesorios</option>
-                                    </select>
-                                </div>
+                            <div className="flex flex-col gap-1.5">
+                                <label className="text-sm font-bold text-text-muted">Categoría</label>
+                                <select
+                                    className={selectClass}
+                                    value={formData.category}
+                                    onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                                >
+                                    <option value="Smartphones">Smartphones</option>
+                                    <option value="Repuestos">Repuestos</option>
+                                    <option value="Accesorios">Accesorios</option>
+                                </select>
                             </div>
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="flex flex-col gap-1.5">
