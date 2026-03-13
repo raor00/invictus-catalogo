@@ -17,7 +17,6 @@ export default function IPhonesDashboardPage() {
             newButtonLabel="Nuevo iPhone"
             products={iphones}
             searchPlaceholder="Buscar por modelo..."
-            showCategory={false}
             title="Gestion de iPhones"
         />
     )

@@ -39,7 +39,6 @@ type InventoryManagementViewProps = {
   newButtonLabel: string
   products: Product[]
   searchPlaceholder: string
-  showCategory?: boolean
   title: string
 }
 
@@ -53,6 +52,11 @@ const conditionLabel: Record<Product["condition"], string> = {
   new: "Nuevo",
   refurbished: "Refurbished",
   used: "Usado",
+}
+
+function getDraftNumber(value: string) {
+  const parsed = Number.parseFloat(value)
+  return Number.isFinite(parsed) ? parsed : 0
 }
 
 function buildDraft(product: Product): ProductDraft {
@@ -69,17 +73,23 @@ function ProductQuickCard({
   onDelete,
   onSave,
   product,
-  showCategory,
 }: {
   draft: ProductDraft
   onChange: (id: string, field: keyof ProductDraft, value: string | boolean) => void
   onDelete: (product: Product) => void
   onSave: (product: Product) => void
   product: Product
-  showCategory: boolean
 }) {
-  const availableNow = isProductAvailable(product)
-  const currentStatus = getProductStatus(product)
+  const draftPrice = Math.max(0, getDraftNumber(draft.price))
+  const draftStock = Math.max(0, Math.floor(getDraftNumber(draft.stock)))
+  const previewProduct = {
+    ...product,
+    price: draftPrice,
+    stock: draftStock,
+    isAvailable: draft.isAvailable,
+  }
+  const availableNow = isProductAvailable(previewProduct)
+  const currentStatus = getProductStatus(previewProduct)
   const dirty =
     draft.price !== product.price.toString() ||
     draft.stock !== product.stock.toString() ||
@@ -87,11 +97,11 @@ function ProductQuickCard({
 
   return (
     <article className="group rounded-[1.3rem] border border-surface-highlight bg-surface px-4 py-3 shadow-glass transition-all duration-300 hover:border-text-muted">
-      <div className="grid gap-3 lg:grid-cols-[minmax(0,1.35fr)_repeat(4,minmax(100px,1fr))_auto] lg:items-center">
+      <div className="grid gap-3 lg:grid-cols-[minmax(260px,1.7fr)_repeat(4,minmax(100px,1fr))_auto] lg:items-center">
         <div className="min-w-0">
           <div className="mb-1 flex items-center gap-2">
             <h3
-              className={`truncate font-heading text-base font-bold ${
+              className={`font-heading text-base font-bold leading-tight ${
                 availableNow ? "text-foreground" : "text-text-muted"
               }`}
             >
@@ -101,9 +111,8 @@ function ProductQuickCard({
               {currentStatus}
             </Badge>
           </div>
-          <p className="truncate text-[11px] font-mono uppercase tracking-[0.18em] text-text-muted">
+          <p className="text-[11px] font-mono uppercase tracking-[0.18em] text-text-muted">
             {product.storage} · {conditionLabel[product.condition]}
-            {showCategory ? ` · ${product.category}` : ""}
           </p>
         </div>
 
@@ -140,7 +149,7 @@ function ProductQuickCard({
             Valor
           </p>
           <p className="mt-1.5 font-mono text-base font-bold text-foreground">
-            ${(product.price * product.stock).toLocaleString(undefined, {
+            ${(draftPrice * draftStock).toLocaleString(undefined, {
               minimumFractionDigits: 2,
               maximumFractionDigits: 2,
             })}
@@ -195,7 +204,6 @@ export function InventoryManagementView({
   newButtonLabel,
   products,
   searchPlaceholder,
-  showCategory = true,
   title,
 }: InventoryManagementViewProps) {
   const { deleteProduct, updateProduct } = useStore()
@@ -389,7 +397,6 @@ export function InventoryManagementView({
                   onChange={handleDraftChange}
                   onDelete={handleDelete}
                   onSave={handleSave}
-                  showCategory={showCategory}
                 />
               ))
             )}

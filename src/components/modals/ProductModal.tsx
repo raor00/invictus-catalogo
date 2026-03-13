@@ -165,6 +165,7 @@ export const ProductModal = () => {
                                         <option value="256GB">256GB</option>
                                         <option value="512GB">512GB</option>
                                         <option value="1TB">1TB</option>
+                                        <option value="2TB">2TB</option>
                                     </select>
                                 </div>
                                 <div className="flex flex-col gap-1.5">

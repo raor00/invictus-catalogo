@@ -17,7 +17,6 @@ export default function PartsDashboardPage() {
             newButtonLabel="Nuevo repuesto"
             products={parts}
             searchPlaceholder="Buscar repuesto..."
-            showCategory={false}
             title="Gestion de repuestos"
         />
     )
