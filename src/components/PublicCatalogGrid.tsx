@@ -5,6 +5,7 @@ import { ProductCard } from "@/components/ProductCard"
 import { MagnifyingGlass } from "@phosphor-icons/react"
 import { Input } from "@/components/ui/Input"
 import { useStore } from "@/lib/StoreContext"
+import { isProductAvailable } from "@/lib/productAvailability"
 
 type ConditionFilter = 'all' | 'new' | 'refurbished' | 'used'
 
@@ -18,7 +19,7 @@ const conditionOptions: { value: ConditionFilter; label: string }[] = [
 export const PublicCatalogGrid = ({ isParts }: { isParts: boolean }) => {
   const { products } = useStore()
   const [searchTerm, setSearchTerm] = useState("")
-  const [hideOutOfStock, setHideOutOfStock] = useState(false)
+  const [hideUnavailable, setHideUnavailable] = useState(false)
   const [conditionFilter, setConditionFilter] = useState<ConditionFilter>('all')
 
   const filteredProducts = products.filter((product) => {
@@ -29,14 +30,14 @@ export const PublicCatalogGrid = ({ isParts }: { isParts: boolean }) => {
       product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       product.sku.toLowerCase().includes(searchTerm.toLowerCase()) ||
       product.storage.toLowerCase().includes(searchTerm.toLowerCase())
-    const matchesStock = hideOutOfStock ? product.stock > 0 : true
+    const matchesAvailability = hideUnavailable ? isProductAvailable(product) : true
     const matchesCondition = conditionFilter === 'all' ? true : product.condition === conditionFilter
 
-    return matchesCategory && matchesSearch && matchesStock && matchesCondition
+    return matchesCategory && matchesSearch && matchesAvailability && matchesCondition
   })
 
-  const inStockCount = products.filter(p =>
-    (isParts ? p.category === 'Repuestos' : p.category !== 'Repuestos') && p.stock > 0
+  const availableCount = products.filter(p =>
+    (isParts ? p.category === 'Repuestos' : p.category !== 'Repuestos') && isProductAvailable(p)
   ).length
 
   return (
@@ -60,13 +61,13 @@ export const PublicCatalogGrid = ({ isParts }: { isParts: boolean }) => {
                 <input
                   className="sr-only peer"
                   type="checkbox"
-                  checked={hideOutOfStock}
-                  onChange={(e) => setHideOutOfStock(e.target.checked)}
+                  checked={hideUnavailable}
+                  onChange={(e) => setHideUnavailable(e.target.checked)}
                 />
                 <div className="w-8 h-4 bg-[#D2D2D7] dark:bg-[#333] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-primary" />
               </div>
               <span className="text-xs font-bold text-text-muted group-hover:text-foreground transition-colors uppercase hidden sm:inline">
-                Sin stock
+                No disponibles
               </span>
             </label>
           </div>
@@ -88,7 +89,7 @@ export const PublicCatalogGrid = ({ isParts }: { isParts: boolean }) => {
             ))}
             {!isParts && (
               <span className="ml-auto text-[10px] font-mono text-text-muted">
-                {inStockCount} en stock
+                {availableCount} disponibles
               </span>
             )}
           </div>

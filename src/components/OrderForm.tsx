@@ -6,7 +6,7 @@ import { X, User, IdentificationCard, Phone } from "@phosphor-icons/react"
 import { useCart } from "@/lib/CartContext"
 import { Button } from "@/components/ui/Button"
 import { Input } from "@/components/ui/Input"
-import { WHATSAPP_NUMBER, APP_NAME } from "@/lib/config"
+import { WHATSAPP_NUMBER, APP_NAME, MIN_ORDER_TOTAL_QUANTITY } from "@/lib/config"
 
 interface OrderFormProps {
   isOpen: boolean
@@ -23,6 +23,7 @@ interface FormErrors {
   nombre?: string
   cedula?: string
   telefono?: string
+  cart?: string
 }
 
 function generateWhatsAppMessage(
@@ -59,7 +60,7 @@ Fecha: ${date}`
 }
 
 export function OrderForm({ isOpen, onClose }: OrderFormProps) {
-  const { cartItems, cartTotal, clearCart, closeCart } = useCart()
+  const { cartItems, cartTotal, cartCount, clearCart, closeCart } = useCart()
   const [formData, setFormData] = useState<FormData>({
     nombre: "",
     cedula: "",
@@ -70,6 +71,9 @@ export function OrderForm({ isOpen, onClose }: OrderFormProps) {
 
   function validate(): boolean {
     const newErrors: FormErrors = {}
+    if (cartCount < MIN_ORDER_TOTAL_QUANTITY) {
+      newErrors.cart = `Debes seleccionar al menos ${MIN_ORDER_TOTAL_QUANTITY} equipos en total para hacer el pedido`
+    }
     if (!formData.nombre.trim()) newErrors.nombre = "El nombre es requerido"
     if (!formData.cedula.trim()) newErrors.cedula = "La cédula/RIF es requerida"
     if (!formData.telefono.trim()) newErrors.telefono = "El teléfono es requerido"
@@ -137,7 +141,7 @@ export function OrderForm({ isOpen, onClose }: OrderFormProps) {
                     Confirmar Pedido
                   </h2>
                   <p className="text-xs text-text-muted mt-0.5 font-mono">
-                    {cartItems.length} producto{cartItems.length !== 1 ? "s" : ""} · ${cartTotal.toLocaleString("es-VE", { minimumFractionDigits: 2 })} total
+                    {cartCount} equipo{cartCount !== 1 ? "s" : ""} · ${cartTotal.toLocaleString("es-VE", { minimumFractionDigits: 2 })} total
                   </p>
                 </div>
                 <button
@@ -153,6 +157,12 @@ export function OrderForm({ isOpen, onClose }: OrderFormProps) {
                 <p className="text-sm text-text-muted">
                   Ingresa tus datos para enviar el pedido vía WhatsApp.
                 </p>
+
+                {errors.cart && (
+                  <p className="rounded-xl border border-critical/30 bg-critical/10 px-3 py-2 text-xs font-mono text-critical">
+                    {errors.cart}
+                  </p>
+                )}
 
                 {/* Nombre */}
                 <div className="flex flex-col gap-1">

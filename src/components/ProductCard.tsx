@@ -2,19 +2,18 @@
 
 import React, { useRef, useState, useEffect } from "react"
 import { motion, useMotionTemplate, useMotionValue, useSpring } from "framer-motion"
-import { Prohibit, Plus, Minus, ShoppingBag, Cube, ArrowRight, X } from "@phosphor-icons/react"
+import { Plus, Minus, ShoppingBag, Cube, ArrowRight, X } from "@phosphor-icons/react"
 import { Badge } from "@/components/ui/Badge"
-import { Button } from "@/components/ui/Button"
 import type { Product } from "@/lib/StoreContext"
 import { useCart } from "@/lib/CartContext"
-import { MIN_ORDER_QUANTITY } from "@/lib/config"
+import { MIN_ITEM_QUANTITY } from "@/lib/config"
+import { getProductStatus, isProductAvailable } from "@/lib/productAvailability"
 
 import { PhoneModel3D } from "./PhoneModel3D"
 
 const statusConfig = {
   Disponible: { label: "Disponible", variant: "default" as const, pulse: true },
-  "Pocas Unidades": { label: "Pocas Unidades", variant: "warning" as const, pulse: false },
-  Agotado: { label: "Agotado", variant: "critical" as const, pulse: false },
+  "No disponible": { label: "No disponible", variant: "critical" as const, pulse: false },
 }
 
 const conditionLabel: Record<string, string> = {
@@ -26,7 +25,7 @@ const conditionLabel: Record<string, string> = {
 export function ProductCard({ product }: { product: Product }) {
   const ref = useRef<HTMLDivElement>(null)
   const { addToCart, openCart, openViewer3D } = useCart()
-  const [qty, setQty] = useState(MIN_ORDER_QUANTITY)
+  const [qty, setQty] = useState(MIN_ITEM_QUANTITY)
   const [showConfirm, setShowConfirm] = useState(false)
 
   // Mouse tracking for Spotlight effect only (no card tilt)
@@ -41,9 +40,9 @@ export function ProductCard({ product }: { product: Product }) {
     mouseY.set(clientY - top)
   }
 
-  const status = product.status as keyof typeof statusConfig
-  const { label, variant, pulse } = statusConfig[status] ?? statusConfig["Agotado"]
-  const isSoldOut = product.status === "Agotado"
+  const status = getProductStatus(product)
+  const { label, variant, pulse } = statusConfig[status]
+  const isUnavailable = !isProductAvailable(product)
 
   function handleAddToCart(e: React.MouseEvent) {
     e.preventDefault()
@@ -55,7 +54,7 @@ export function ProductCard({ product }: { product: Product }) {
   function handleQtyDecrease(e: React.MouseEvent) {
     e.preventDefault()
     e.stopPropagation()
-    setQty(q => Math.max(MIN_ORDER_QUANTITY, q - 1))
+    setQty(q => Math.max(MIN_ITEM_QUANTITY, q - 1))
   }
 
   function handleQtyIncrease(e: React.MouseEvent) {
@@ -157,7 +156,7 @@ export function ProductCard({ product }: { product: Product }) {
           </div>
 
           <motion.div
-            className={`relative z-10 w-full h-full flex items-center justify-center transition-transform duration-500 max-h-[140px] px-4 py-2 ${isSoldOut ? "opacity-50 grayscale" : ""}`}
+            className={`relative z-10 w-full h-full flex items-center justify-center transition-transform duration-500 max-h-[140px] px-4 py-2 ${isUnavailable ? "opacity-50 grayscale" : ""}`}
             whileHover={{ scale: 1.15 }}
           >
             <PhoneModel3D modelName={product.name} />
@@ -190,7 +189,7 @@ export function ProductCard({ product }: { product: Product }) {
           </div>
 
           {/* Model name */}
-          <h3 className={`font-heading text-[11px] font-bold leading-tight mb-1 ${isSoldOut ? "text-text-muted" : "text-foreground"}`}>
+          <h3 className={`font-heading text-[11px] font-bold leading-tight mb-1 ${isUnavailable ? "text-text-muted" : "text-foreground"}`}>
             {product.name}
           </h3>
 
@@ -199,7 +198,7 @@ export function ProductCard({ product }: { product: Product }) {
             {product.price > 0 ? (
               <div className="flex items-baseline justify-between mb-1">
                 <span className="text-[8px] font-bold uppercase text-text-muted">c/u</span>
-                <span className={`font-mono text-xs font-bold ${isSoldOut ? "text-text-muted" : "text-foreground"}`}>
+                <span className={`font-mono text-xs font-bold ${isUnavailable ? "text-text-muted" : "text-foreground"}`}>
                   ${product.price.toFixed(0)}
                 </span>
               </div>
@@ -211,9 +210,9 @@ export function ProductCard({ product }: { product: Product }) {
             )}
 
             {/* Actions */}
-            {isSoldOut ? (
+            {isUnavailable ? (
               <div className="w-full text-center text-[9px] font-bold text-red-400 py-1 border border-red-400/30 rounded-lg">
-                Agotado
+                No disponible
               </div>
             ) : (
               <div className="flex flex-col gap-1" onClick={e => e.preventDefault()}>

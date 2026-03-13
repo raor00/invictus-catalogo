@@ -6,7 +6,7 @@ import { ShoppingBag, X, Plus, Minus, Trash } from "@phosphor-icons/react"
 import { useCart, type CartItem } from "@/lib/CartContext"
 import { Button } from "@/components/ui/Button"
 import { OrderForm } from "@/components/OrderForm"
-import { MIN_ORDER_QUANTITY } from "@/lib/config"
+import { MIN_ITEM_QUANTITY, MIN_ORDER_TOTAL_QUANTITY } from "@/lib/config"
 
 function CartItemRow({ item }: { item: CartItem }) {
   const { removeFromCart, updateQuantity } = useCart()
@@ -41,7 +41,7 @@ function CartItemRow({ item }: { item: CartItem }) {
         <div className="flex items-center gap-1">
           <button
             onClick={() => updateQuantity(item.product.id, item.quantity - 1)}
-            disabled={item.quantity <= MIN_ORDER_QUANTITY}
+            disabled={item.quantity <= MIN_ITEM_QUANTITY}
             className="w-6 h-6 rounded border border-surface-highlight hover:border-primary flex items-center justify-center text-text-muted hover:text-primary transition-colors active:scale-95 disabled:opacity-30 disabled:cursor-not-allowed"
           >
             <Minus size={10} weight="bold" />
@@ -83,6 +83,7 @@ function EmptyCartState() {
 export function CartPanel() {
   const { cartItems, cartTotal, cartCount, isCartOpen, closeCart, clearCart } = useCart()
   const [orderFormOpen, setOrderFormOpen] = useState(false)
+  const missingItems = Math.max(0, MIN_ORDER_TOTAL_QUANTITY - cartCount)
 
   return (
     <>
@@ -152,9 +153,15 @@ export function CartPanel() {
                     </span>
                   </div>
 
+                  <p className="text-xs font-mono text-text-muted">
+                    Pedido mínimo: {MIN_ORDER_TOTAL_QUANTITY} equipos en total.
+                    {missingItems > 0 ? ` Te faltan ${missingItems}.` : " Listo para enviar."}
+                  </p>
+
                   {/* WhatsApp order button */}
                   <Button
                     className="w-full gap-2 h-12 text-sm font-bold uppercase tracking-wider"
+                    disabled={cartCount < MIN_ORDER_TOTAL_QUANTITY}
                     onClick={() => setOrderFormOpen(true)}
                   >
                     {/* WhatsApp icon */}

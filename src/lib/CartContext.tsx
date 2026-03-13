@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import type { Product } from '@/lib/StoreContext';
-import { MIN_ORDER_QUANTITY } from '@/lib/config';
+import { MIN_ITEM_QUANTITY } from '@/lib/config';
 
 export type CartItem = {
   product: Product;
@@ -70,7 +70,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const updateQuantity = (productId: string, qty: number) => {
-    const safeQty = Math.max(MIN_ORDER_QUANTITY, qty);
+    const safeQty = Math.max(MIN_ITEM_QUANTITY, qty);
     setCartItems(prev =>
       prev.map(item =>
         item.product.id === productId ? { ...item, quantity: safeQty } : item

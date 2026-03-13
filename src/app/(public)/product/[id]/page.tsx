@@ -5,6 +5,7 @@ import Link from "next/link"
 import { X, LockKey, ChatCircle } from "@phosphor-icons/react"
 import { motion } from "framer-motion"
 import { useStore } from "@/lib/StoreContext"
+import { isProductAvailable } from "@/lib/productAvailability"
 
 export default function ProductDetailPage({ params }: { params: Promise<{ id: string }> }) {
     const resolvedParams = use(params)
@@ -23,7 +24,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
         )
     }
 
-    const isAgotado = product.stock === 0;
+    const isUnavailable = !isProductAvailable(product)
 
     return (
         <div className="min-h-[calc(100dvh-145px)] w-full flex items-center justify-center py-8">
@@ -50,7 +51,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
                             layoutId={`product-image-${product.id}`}
                             src={product.image}
                             alt={product.name}
-                            className={`w-full h-full object-contain p-4 transition-transform duration-500 group-hover:scale-105 ${isAgotado ? 'grayscale opacity-70' : ''}`}
+                            className={`w-full h-full object-contain p-4 transition-transform duration-500 group-hover:scale-105 ${isUnavailable ? 'grayscale opacity-70' : ''}`}
                         />
                     </div>
                 </div>
@@ -58,13 +59,13 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
                 {/* Right: Info Section */}
                 <div className="w-full md:w-7/12 p-6 md:p-8 flex flex-col h-full bg-surface relative">
                     <div className="mb-6 pr-8">
-                        <h2 className={`font-heading text-3xl font-bold leading-tight mb-1 ${isAgotado ? 'text-text-muted' : 'text-foreground'}`}>{product.name}</h2>
+                        <h2 className={`font-heading text-3xl font-bold leading-tight mb-1 ${isUnavailable ? 'text-text-muted' : 'text-foreground'}`}>{product.name}</h2>
                         <p className="font-mono text-xs text-text-muted tracking-wide">REF: {product.sku}</p>
                     </div>
 
                     {/* Price */}
                     <div className="mb-8">
-                        <p className={`font-mono text-5xl tracking-tighter font-medium ${isAgotado ? 'text-text-muted' : 'text-foreground'}`}>${product.price.toLocaleString(undefined, { minimumFractionDigits: 2 })}</p>
+                        <p className={`font-mono text-5xl tracking-tighter font-medium ${isUnavailable ? 'text-text-muted' : 'text-foreground'}`}>${product.price.toLocaleString(undefined, { minimumFractionDigits: 2 })}</p>
                         <p className="text-text-muted text-sm mt-1">Precio por unidad (Mayorista)</p>
                     </div>
 
@@ -82,8 +83,8 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
 
                     {/* Stock Indicator */}
                     <div className="flex items-center gap-2 mb-6">
-                        {isAgotado ? (
-                             <span className="text-critical text-sm font-bold tracking-wide">AGOTADO</span>
+                        {isUnavailable ? (
+                             <span className="text-critical text-sm font-bold tracking-wide">NO DISPONIBLE</span>
                         ) : (
                             <>
                                 <span className="relative flex h-3 w-3">
@@ -97,7 +98,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
 
                     {/* Actions */}
                     <div className="mt-auto">
-                        {!isAgotado ? (
+                        {!isUnavailable ? (
                             <a
                                 href={`https://wa.me/1234567890?text=Me%20interesa%20el%20producto:%20${encodeURIComponent(product.name)}`}
                                 target="_blank"
@@ -112,7 +113,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
                                 disabled
                                 className="w-full h-14 bg-surface-highlight text-text-muted font-heading font-bold text-lg rounded-xl px-6 flex items-center justify-center gap-3 cursor-not-allowed"
                             >
-                                SIN STOCK
+                                NO DISPONIBLE
                             </button>
                         )}
                         <p className="text-center text-xs text-text-muted mt-4 flex items-center justify-center gap-1.5 font-medium">

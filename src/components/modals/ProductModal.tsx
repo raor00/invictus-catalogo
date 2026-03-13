@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/Button"
 import { Input } from "@/components/ui/Input"
 import { useStore, Product } from "@/lib/StoreContext"
 import { motion, AnimatePresence } from "framer-motion"
+import { hasManualAvailability } from "@/lib/productAvailability"
 
 export const ProductModal = () => {
     const { addProduct, updateProduct } = useStore()
@@ -22,6 +23,7 @@ export const ProductModal = () => {
         category: "Smartphones",
         storage: "128GB",
         condition: "used" as Product['condition'],
+        isAvailable: true,
     })
 
     useEffect(() => {
@@ -38,6 +40,7 @@ export const ProductModal = () => {
                     category: e.detail.category,
                     storage: e.detail.storage || '128GB',
                     condition: e.detail.condition || 'used',
+                    isAvailable: hasManualAvailability(e.detail),
                 })
             } else {
                 setIsEditing(false)
@@ -51,6 +54,7 @@ export const ProductModal = () => {
                     category: e.detail?.defaultCategory || "Smartphones",
                     storage: "128GB",
                     condition: "used",
+                    isAvailable: true,
                 })
             }
             setIsOpen(true)
@@ -64,9 +68,8 @@ export const ProductModal = () => {
         e.preventDefault()
 
         const stockNum = parseInt(formData.stock) || 0;
-        let status: 'Disponible' | 'Pocas Unidades' | 'Agotado' = 'Disponible';
-        if (stockNum === 0) status = 'Agotado';
-        else if (stockNum < 3) status = 'Pocas Unidades';
+        const status: 'Disponible' | 'No disponible' =
+            formData.isAvailable && stockNum > 0 ? 'Disponible' : 'No disponible';
 
         const productData: Product = {
             id: isEditing ? currentId : Date.now().toString(),
@@ -78,6 +81,7 @@ export const ProductModal = () => {
             category: formData.category,
             storage: formData.storage,
             condition: formData.condition,
+            isAvailable: formData.isAvailable,
             status
         }
 
@@ -173,6 +177,24 @@ export const ProductModal = () => {
                             <div className="flex flex-col gap-1.5">
                                 <label className="text-sm font-bold text-text-muted">URL de Imagen (opcional)</label>
                                 <Input value={formData.image} onChange={(e) => setFormData({ ...formData, image: e.target.value })} placeholder="https://... (dejar vacío para silhouette)" />
+                            </div>
+
+                            <div className="flex items-center justify-between rounded-xl border border-surface-highlight bg-background px-4 py-3">
+                                <div className="pr-4">
+                                    <p className="text-sm font-bold text-foreground">Disponible en catálogo</p>
+                                    <p className="text-xs text-text-muted">
+                                        Si lo desactivas, el modelo se mostrará como no disponible.
+                                    </p>
+                                </div>
+                                <label className="relative inline-flex cursor-pointer items-center">
+                                    <input
+                                        type="checkbox"
+                                        className="peer sr-only"
+                                        checked={formData.isAvailable}
+                                        onChange={(e) => setFormData({ ...formData, isAvailable: e.target.checked })}
+                                    />
+                                    <div className="relative h-6 w-11 rounded-full bg-surface-highlight transition-colors peer-checked:bg-primary after:absolute after:left-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:bg-white after:transition-transform peer-checked:after:translate-x-5" />
+                                </label>
                             </div>
 
                             <div className="mt-4 flex justify-end gap-3 pt-4 border-t border-surface-highlight">

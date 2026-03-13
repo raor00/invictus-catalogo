@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { DEFAULT_CATALOG } from '@/data/catalog';
+import { normalizeProduct } from '@/lib/productAvailability';
 
 // Bump this version when the catalog data changes to force a reset of localStorage
 const CATALOG_VERSION = '2026-03-10-v4';
@@ -16,7 +17,8 @@ export type Product = {
   stock: number;
   image: string;
   category: string;
-  status: 'Disponible' | 'Pocas Unidades' | 'Agotado';
+  status: 'Disponible' | 'No disponible' | 'Pocas Unidades' | 'Agotado';
+  isAvailable?: boolean;
 };
 
 type StoreContextType = {
@@ -48,19 +50,17 @@ export const StoreProvider = ({ children }: { children: React.ReactNode }) => {
     if (savedProducts) {
       try {
         const parsed = JSON.parse(savedProducts);
-        const migrated = parsed.map((p: Product) => ({
-          ...p,
-          storage: p.storage ?? '128GB',
-          condition: p.condition ?? ('used' as const),
-        }));
+        const migrated = parsed.map((p: Product) => normalizeProduct(p));
         setProducts(migrated);
       } catch {
-        setProducts(DEFAULT_CATALOG);
-        localStorage.setItem('invictus_products', JSON.stringify(DEFAULT_CATALOG));
+        const normalizedCatalog = DEFAULT_CATALOG.map(normalizeProduct);
+        setProducts(normalizedCatalog);
+        localStorage.setItem('invictus_products', JSON.stringify(normalizedCatalog));
       }
     } else {
-      setProducts(DEFAULT_CATALOG);
-      localStorage.setItem('invictus_products', JSON.stringify(DEFAULT_CATALOG));
+      const normalizedCatalog = DEFAULT_CATALOG.map(normalizeProduct);
+      setProducts(normalizedCatalog);
+      localStorage.setItem('invictus_products', JSON.stringify(normalizedCatalog));
     }
 
     const auth = localStorage.getItem('invictus_auth');
@@ -82,9 +82,9 @@ export const StoreProvider = ({ children }: { children: React.ReactNode }) => {
     }
   }, [isAuthenticated, loaded]);
 
-  const addProduct = (p: Product) => setProducts([...products, p]);
+  const addProduct = (p: Product) => setProducts([...products, normalizeProduct(p)]);
   const updateProduct = (id: string, updates: Partial<Product>) => {
-    setProducts(products.map(p => p.id === id ? { ...p, ...updates } : p));
+    setProducts(products.map(p => p.id === id ? normalizeProduct({ ...p, ...updates }) : p));
   };
   const deleteProduct = (id: string) => setProducts(products.filter(p => p.id !== id));
   const login = () => setIsAuthenticated(true);

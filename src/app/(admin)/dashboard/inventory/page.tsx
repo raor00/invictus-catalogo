@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/Button"
 import { Input } from "@/components/ui/Input"
 import { Badge } from "@/components/ui/Badge"
 import { useStore } from "@/lib/StoreContext"
+import { getProductStatus, isProductAvailable } from "@/lib/productAvailability"
 
 export default function InventoryDashboardPage() {
     const { products, deleteProduct } = useStore()
@@ -108,13 +109,13 @@ export default function InventoryDashboardPage() {
                                     </div>
                                 ) : (
                                     filteredProducts.map((product) => (
-                                        <div key={product.id} className={`grid grid-cols-12 gap-4 px-6 py-4 border-b border-surface-highlight items-center hover:bg-surface-highlight/20 group transition-all duration-200 ${product.stock === 0 ? 'opacity-70 hover:opacity-100' : ''}`}>
+                                        <div key={product.id} className={`grid grid-cols-12 gap-4 px-6 py-4 border-b border-surface-highlight items-center hover:bg-surface-highlight/20 group transition-all duration-200 ${!isProductAvailable(product) ? 'opacity-70 hover:opacity-100' : ''}`}>
                                             <div className="col-span-4 flex gap-4 items-center pl-2">
                                                 <div className="h-10 w-10 rounded bg-background border border-surface-highlight flex items-center justify-center overflow-hidden flex-shrink-0 p-1">
-                                                    <img src={product.image || 'https://via.placeholder.com/150'} alt="Product" className={`h-full w-full object-contain ${product.stock === 0 ? 'grayscale' : ''}`} />
+                                                    <img src={product.image || 'https://via.placeholder.com/150'} alt="Product" className={`h-full w-full object-contain ${!isProductAvailable(product) ? 'grayscale' : ''}`} />
                                                 </div>
                                                 <div className="flex flex-col min-w-0">
-                                                    <span className={`text-foreground font-bold truncate text-sm font-heading ${product.stock === 0 ? 'line-through decoration-surface-highlight text-text-muted' : ''}`}>{product.name}</span>
+                                                    <span className={`text-foreground font-bold truncate text-sm font-heading ${!isProductAvailable(product) ? 'line-through decoration-surface-highlight text-text-muted' : ''}`}>{product.name}</span>
                                                     <span className="text-text-muted text-[10px] font-mono truncate">SKU: {product.sku}</span>
                                                 </div>
                                             </div>
@@ -124,19 +125,18 @@ export default function InventoryDashboardPage() {
                                                 </span>
                                             </div>
                                             <div className="col-span-2 flex justify-end">
-                                                <span className={`font-mono font-bold text-sm ${product.stock === 0 ? 'text-text-muted' : 'text-foreground'}`}>${product.price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                                                <span className={`font-mono font-bold text-sm ${!isProductAvailable(product) ? 'text-text-muted' : 'text-foreground'}`}>${product.price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
                                             </div>
                                             <div className="col-span-1 flex justify-center">
-                                                <div className={`px-3 py-1 rounded font-mono text-xs tracking-wide font-bold ${product.stock === 0 ? 'bg-critical/10 border border-critical/30 text-critical' :
-                                                    product.stock < 3 ? 'bg-orange-500/10 border border-orange-500/30 text-orange-500' :
+                                                <div className={`px-3 py-1 rounded font-mono text-xs tracking-wide font-bold ${!isProductAvailable(product) ? 'bg-critical/10 border border-critical/30 text-critical' :
                                                         'bg-surface-highlight/50 border border-surface-highlight text-foreground'
                                                     }`}>
                                                     {product.stock}
                                                 </div>
                                             </div>
                                             <div className="col-span-2 flex justify-end">
-                                                <Badge variant={product.stock === 0 ? 'critical' : product.stock < 3 ? 'warning' : 'default'} pulse={product.stock > 0}>
-                                                    {product.stock === 0 ? 'Agotado' : product.stock < 3 ? 'Pocas Unidades' : 'Disponible'}
+                                                <Badge variant={!isProductAvailable(product) ? 'critical' : 'default'} pulse={isProductAvailable(product)}>
+                                                    {getProductStatus(product)}
                                                 </Badge>
                                             </div>
                                             <div className="col-span-1 flex justify-end gap-1 pr-2">
