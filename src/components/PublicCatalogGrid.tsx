@@ -5,6 +5,7 @@ import { ProductCard } from "@/components/ProductCard"
 import { MagnifyingGlass } from "@phosphor-icons/react"
 import { Input } from "@/components/ui/Input"
 import { useStore } from "@/lib/StoreContext"
+import { getSelectedColorOptions } from "@/lib/productColors"
 import { isProductAvailable } from "@/lib/productAvailability"
 
 type ConditionFilter = 'all' | 'new' | 'refurbished' | 'used'
@@ -29,7 +30,10 @@ export const PublicCatalogGrid = ({ isParts }: { isParts: boolean }) => {
     const matchesSearch =
       product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       product.sku.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      product.storage.toLowerCase().includes(searchTerm.toLowerCase())
+      product.storage.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      getSelectedColorOptions(product).some((colorOption) =>
+        colorOption.label.toLowerCase().includes(searchTerm.toLowerCase())
+      )
     const matchesAvailability = hideUnavailable ? isProductAvailable(product) : true
     const matchesCondition = conditionFilter === 'all' ? true : product.condition === conditionFilter
 

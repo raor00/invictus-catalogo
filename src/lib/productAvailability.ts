@@ -1,4 +1,5 @@
 import type { Product } from "@/lib/StoreContext"
+import { normalizeAvailableColors } from "@/lib/productColors"
 
 export function hasManualAvailability(product: Pick<Product, "isAvailable" | "status">) {
   if (typeof product.isAvailable === "boolean") {
@@ -12,6 +13,10 @@ export function isProductAvailable(
   product: Pick<Product, "isAvailable" | "status" | "stock">
 ) {
   return hasManualAvailability(product) && product.stock > 0
+}
+
+export function hasMissingPrice(product: Pick<Product, "price" | "stock">) {
+  return product.stock > 0 && product.price <= 0
 }
 
 export function getProductStatus(
@@ -28,6 +33,7 @@ export function normalizeProduct(product: Product): Product {
     storage: product.storage ?? "128GB",
     condition: product.condition ?? "used",
     isAvailable: manualAvailability,
+    availableColors: normalizeAvailableColors(product),
     status: getProductStatus({
       isAvailable: manualAvailability,
       status: product.status,

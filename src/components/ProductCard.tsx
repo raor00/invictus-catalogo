@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/Badge"
 import type { Product } from "@/lib/StoreContext"
 import { useCart } from "@/lib/CartContext"
 import { MIN_ITEM_QUANTITY } from "@/lib/config"
+import { getSelectedColorOptions } from "@/lib/productColors"
 import { getProductStatus, isProductAvailable } from "@/lib/productAvailability"
 
 import { PhoneModel3D } from "./PhoneModel3D"
@@ -43,6 +44,7 @@ export function ProductCard({ product }: { product: Product }) {
   const status = getProductStatus(product)
   const { label, variant, pulse } = statusConfig[status]
   const isUnavailable = !isProductAvailable(product)
+  const selectedColorOptions = getSelectedColorOptions(product)
 
   function handleAddToCart(e: React.MouseEvent) {
     e.preventDefault()
@@ -192,6 +194,24 @@ export function ProductCard({ product }: { product: Product }) {
           <h3 className={`font-heading text-[11px] font-bold leading-tight mb-1 ${isUnavailable ? "text-text-muted" : "text-foreground"}`}>
             {product.name}
           </h3>
+
+          {selectedColorOptions.length > 0 && (
+            <div className="mb-2 flex items-center gap-1.5">
+              {selectedColorOptions.slice(0, 4).map((colorOption) => (
+                <span
+                  key={colorOption.id}
+                  className="h-3.5 w-3.5 rounded-full border border-black/10"
+                  style={{ backgroundColor: colorOption.swatch }}
+                  title={colorOption.label}
+                />
+              ))}
+              {selectedColorOptions.length > 4 && (
+                <span className="text-[8px] font-mono font-bold uppercase text-text-muted">
+                  +{selectedColorOptions.length - 4}
+                </span>
+              )}
+            </div>
+          )}
 
           {/* Price */}
           <div className="mt-auto pt-1.5 border-t border-surface-highlight">

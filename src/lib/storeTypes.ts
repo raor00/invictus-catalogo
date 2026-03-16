@@ -1,5 +1,6 @@
 export type ProductStatus = "Disponible" | "No disponible" | "Pocas Unidades" | "Agotado"
 export type ProductCondition = "used" | "refurbished" | "new"
+export type ProductColorId = string
 
 export type Product = {
   id: string
@@ -13,6 +14,7 @@ export type Product = {
   category: string
   status: ProductStatus
   isAvailable?: boolean
+  availableColors?: ProductColorId[]
 }
 
 export type OrderCustomer = {
