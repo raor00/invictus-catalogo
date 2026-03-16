@@ -414,7 +414,7 @@ export function InventoryManagementView({
         }
       }
 
-      const storageComparison = getStorageOrder(a.storage) - getStorageOrder(b.storage)
+      const storageComparison = getStorageOrder(b.storage) - getStorageOrder(a.storage)
       if (storageComparison !== 0) {
         return storageComparison
       }
