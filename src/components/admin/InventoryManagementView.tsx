@@ -174,7 +174,7 @@ function ProductQuickCard({
 
   return (
     <article className="group rounded-[1.3rem] border border-surface-highlight bg-surface px-4 py-3 shadow-glass transition-all duration-300 hover:border-text-muted">
-      <div className="grid gap-3 lg:grid-cols-[minmax(260px,1.7fr)_repeat(4,minmax(100px,1fr))_auto] lg:items-center">
+      <div className="grid gap-3 lg:grid-cols-[minmax(260px,1.7fr)_minmax(110px,0.7fr)_minmax(110px,0.7fr)_minmax(120px,0.8fr)_minmax(190px,1.1fr)_auto] lg:items-start">
         <div className="min-w-0">
           <div className="mb-1 flex items-center gap-2">
             <h3
@@ -281,7 +281,7 @@ function ProductQuickCard({
           </p>
         </div>
 
-        <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 rounded-xl border border-surface-highlight bg-background px-3 py-2.5">
+        <div className="grid min-h-[96px] grid-cols-[minmax(0,1fr)_48px] items-start gap-4 rounded-xl border border-surface-highlight bg-background px-3 py-2.5">
           <div className="min-w-0">
             <p className="text-[10px] font-mono font-bold uppercase tracking-[0.18em] text-text-muted">
               Catalogo
@@ -297,7 +297,7 @@ function ProductQuickCard({
                   : "Sin stock: no disponible"}
             </p>
           </div>
-          <label className="relative inline-flex shrink-0 cursor-pointer items-center self-start">
+          <label className="relative inline-flex h-6 w-11 shrink-0 cursor-pointer items-center justify-self-end self-start">
             <input
               checked={draft.isAvailable}
               className="peer sr-only"

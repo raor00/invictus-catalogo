@@ -2,6 +2,7 @@ import {
   collection,
   deleteDoc,
   doc,
+  getDocs,
   onSnapshot,
   runTransaction,
   setDoc,
@@ -37,8 +38,17 @@ export async function seedCatalogInFirestore() {
   const db = getFirestoreDb()
 
   const batch = writeBatch(db)
+  const defaultProducts = DEFAULT_CATALOG.map(normalizeProduct)
+  const defaultIds = new Set(defaultProducts.map((product) => product.id))
+  const existingProducts = await getDocs(getProductsCollection())
 
-  DEFAULT_CATALOG.map(normalizeProduct).forEach((product) => {
+  existingProducts.docs.forEach((snapshotDoc) => {
+    if (!defaultIds.has(snapshotDoc.id)) {
+      batch.delete(snapshotDoc.ref)
+    }
+  })
+
+  defaultProducts.forEach((product) => {
     batch.set(doc(db, PRODUCTS_COLLECTION, product.id), serializeProduct(product))
   })
 
