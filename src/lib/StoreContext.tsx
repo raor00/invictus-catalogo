@@ -15,7 +15,7 @@ import {
 import { normalizeProduct } from "@/lib/productAvailability"
 import type { PlaceOrderInput, Product, StoredOrder } from "@/lib/storeTypes"
 
-const CATALOG_VERSION = "2026-03-13-v6"
+const CATALOG_VERSION = "2026-03-17-v7"
 
 export type { PlaceOrderInput, Product, StoredOrder } from "@/lib/storeTypes"
 
