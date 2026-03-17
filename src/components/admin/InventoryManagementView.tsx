@@ -360,7 +360,8 @@ export function InventoryManagementView({
   )
   const previewProducts = products.map((product) => getPreviewProduct(product, resolvedDrafts[product.id]))
   const statProducts = statsFilter ? previewProducts.filter(statsFilter) : previewProducts
-  const totalCount = statProducts.reduce((acc, product) => acc + product.stock, 0)
+  const totalCount = statProducts.length
+  const totalUnits = statProducts.reduce((acc, product) => acc + product.stock, 0)
   const availableCount = statProducts
     .filter((product) => isProductAvailable(product))
     .reduce((acc, product) => acc + product.stock, 0)
@@ -525,7 +526,7 @@ export function InventoryManagementView({
                 </div>
               </div>
               <p className="text-sm text-text-muted">
-                La lista inferior permite editar sin abrir formularios adicionales.
+                {totalUnits} unidades en stock entre todas las variantes cargadas.
               </p>
             </div>
 
