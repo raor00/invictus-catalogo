@@ -112,7 +112,7 @@ export default function LoginPage() {
                                 className="w-full bg-white text-black font-mono text-base focus:outline-none placeholder-gray-300"
                                 id="username"
                                 name="username"
-                                placeholder={isFirebaseEnabled ? "admin@empresa.com" : "admin@mayorista.com"}
+                                placeholder="admin@mayorista.com"
                                 required
                                 type="text"
                                 autoComplete={isFirebaseEnabled ? "email" : "username"}
