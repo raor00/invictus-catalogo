@@ -91,7 +91,7 @@ function ViewerContent({ product, onClose }: ViewerContentProps) {
       <div className="flex items-center justify-between w-full">
         <div>
           <h3 className="font-heading font-bold text-white text-xl">{product.name}</h3>
-          <p className="font-mono text-xs text-[#CCFF00] mt-0.5">
+          <p className="mt-0.5 font-mono text-xs text-primary">
             {product.storage} · {product.condition === 'new' ? 'Nuevo' : product.condition === 'refurbished' ? 'Refurbished' : 'Usado'}
           </p>
         </div>
@@ -125,7 +125,7 @@ function ViewerContent({ product, onClose }: ViewerContentProps) {
         onTouchMove={handleTouchMove}
       >
         {/* Floor reflection */}
-        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-48 h-12 rounded-full bg-[#CCFF00]/10 blur-3xl" />
+        <div className="absolute bottom-0 left-1/2 h-12 w-48 -translate-x-1/2 rounded-full bg-primary/12 blur-3xl" />
 
         {/* Shadow */}
         <motion.div
@@ -168,9 +168,9 @@ function ViewerContent({ product, onClose }: ViewerContentProps) {
                   springRotateY,
                   [-60, 0, 60],
                   [
-                    "inset -4px 0 16px rgba(204,255,0,0.15), -8px 0 32px rgba(204,255,0,0.1)",
-                    "inset 0 0 0 rgba(204,255,0,0)",
-                    "inset 4px 0 16px rgba(204,255,0,0.15), 8px 0 32px rgba(204,255,0,0.1)",
+                    "inset -4px 0 16px rgba(79,167,116,0.16), -8px 0 32px rgba(79,167,116,0.1)",
+                    "inset 0 0 0 rgba(79,167,116,0)",
+                    "inset 4px 0 16px rgba(79,167,116,0.16), 8px 0 32px rgba(79,167,116,0.1)",
                   ]
                 ),
               }}
@@ -199,7 +199,7 @@ function ViewerContent({ product, onClose }: ViewerContentProps) {
           </div>
           <div className="text-right">
             <p className="text-white/50 text-[10px] font-mono uppercase tracking-wider">Mínimo 3 unidades</p>
-            <p className="text-[#CCFF00] font-mono font-bold text-2xl mt-1">
+            <p className="mt-1 font-mono text-2xl font-bold text-primary">
               ${(product.price * 3).toFixed(2)}
             </p>
           </div>

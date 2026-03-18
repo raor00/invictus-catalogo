@@ -84,7 +84,7 @@ export const PublicCatalogGrid = ({ isParts }: { isParts: boolean }) => {
                 onClick={() => setConditionFilter(opt.value)}
                 className={`px-2.5 py-1 rounded-full text-[10px] sm:text-xs font-bold uppercase tracking-wider border transition-all active:scale-95 ${
                   conditionFilter === opt.value
-                    ? 'bg-primary text-black border-primary shadow-neon'
+                    ? 'bg-primary text-white border-primary shadow-neon'
                     : 'bg-surface text-text-muted border-surface-highlight hover:border-text-muted hover:text-foreground'
                 }`}
               >

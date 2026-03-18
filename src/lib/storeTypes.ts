@@ -17,6 +17,30 @@ export type Product = {
   availableColors?: ProductColorId[]
 }
 
+export type InventoryHistoryAction = "create" | "update" | "sale" | "delete"
+
+export type InventoryHistoryEntry = {
+  id: string
+  productId: string
+  productName: string
+  sku: string
+  storage: string
+  category: string
+  action: InventoryHistoryAction
+  createdAt: string
+  timezone: "America/Caracas"
+  userEmail: string | null
+  previousStock: number
+  nextStock: number
+  stockDelta: number
+  previousPrice: number
+  nextPrice: number
+  priceDelta: number
+  previousIsAvailable: boolean
+  nextIsAvailable: boolean
+  note: string
+}
+
 export type OrderCustomer = {
   nombre: string
   cedula: string

@@ -9,18 +9,21 @@ import {
   deleteProductInFirestore,
   registerSaleInFirestore,
   seedCatalogInFirestore,
+  subscribeToInventoryHistory,
   subscribeToProducts,
   updateProductInFirestore,
 } from "@/lib/firebaseFirestore"
+import { createInventoryHistoryEntry } from "@/lib/inventoryHistory"
 import { normalizeProduct } from "@/lib/productAvailability"
-import type { PlaceOrderInput, Product, StoredOrder } from "@/lib/storeTypes"
+import type { InventoryHistoryEntry, PlaceOrderInput, Product, StoredOrder } from "@/lib/storeTypes"
 
-const CATALOG_VERSION = "2026-03-17-v7"
+const CATALOG_VERSION = "2026-03-18-wholesale-refresh-v1"
 
 export type { PlaceOrderInput, Product, StoredOrder } from "@/lib/storeTypes"
 
 type StoreContextType = {
   products: Product[]
+  inventoryHistory: InventoryHistoryEntry[]
   addProduct: (p: Product) => Promise<void>
   updateProduct: (id: string, p: Partial<Product>) => Promise<void>
   deleteProduct: (id: string) => Promise<void>
@@ -85,8 +88,23 @@ function saveLocalOrder(order: StoredOrder) {
   localStorage.setItem("invictus_orders", JSON.stringify([order, ...parsedOrders]))
 }
 
+function readLocalInventoryHistory() {
+  const savedHistory = localStorage.getItem("invictus_inventory_history")
+
+  if (!savedHistory) {
+    return [] as InventoryHistoryEntry[]
+  }
+
+  try {
+    return JSON.parse(savedHistory) as InventoryHistoryEntry[]
+  } catch {
+    return []
+  }
+}
+
 export const StoreProvider = ({ children }: { children: React.ReactNode }) => {
   const [products, setProducts] = useState<Product[]>([])
+  const [inventoryHistory, setInventoryHistory] = useState<InventoryHistoryEntry[]>([])
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [isReady, setIsReady] = useState(false)
   const [userEmail, setUserEmail] = useState<string | null>(null)
@@ -97,6 +115,7 @@ export const StoreProvider = ({ children }: { children: React.ReactNode }) => {
       queueMicrotask(() => {
         const auth = localStorage.getItem("invictus_auth")
         setProducts(readLocalProducts())
+        setInventoryHistory(readLocalInventoryHistory())
         setIsAuthenticated(auth === "true")
         setUserEmail(auth === "true" ? "admin@mayorista.com" : null)
         setIsReady(true)
@@ -107,10 +126,12 @@ export const StoreProvider = ({ children }: { children: React.ReactNode }) => {
     let cancelled = false
     let authResolved = false
     let productsResolved = false
+    let historyResolved = false
     let unsubscribeProducts: () => void = () => {}
+    let unsubscribeHistory: () => void = () => {}
 
     const markReady = () => {
-      if (!cancelled && authResolved && productsResolved) {
+      if (!cancelled && authResolved && productsResolved && historyResolved) {
         setIsReady(true)
       }
     }
@@ -136,9 +157,23 @@ export const StoreProvider = ({ children }: { children: React.ReactNode }) => {
             markReady()
           }
         )
+
+        unsubscribeHistory = await subscribeToInventoryHistory(
+          (nextHistory) => {
+            historyResolved = true
+            setInventoryHistory(nextHistory)
+            markReady()
+          },
+          (error) => {
+            console.error("No se pudo sincronizar historial de inventario", error)
+            historyResolved = true
+            markReady()
+          }
+        )
       } catch (error) {
         console.error("No se pudo inicializar la suscripcion de productos", error)
         productsResolved = true
+        historyResolved = true
         markReady()
       }
     })()
@@ -147,6 +182,7 @@ export const StoreProvider = ({ children }: { children: React.ReactNode }) => {
       cancelled = true
       unsubscribeAuth()
       unsubscribeProducts()
+      unsubscribeHistory()
     }
   }, [])
 
@@ -165,6 +201,14 @@ export const StoreProvider = ({ children }: { children: React.ReactNode }) => {
 
     localStorage.setItem("invictus_auth", isAuthenticated ? "true" : "false")
   }, [isAuthenticated, isReady])
+
+  useEffect(() => {
+    if (!isReady || isFirebaseConfigured) {
+      return
+    }
+
+    localStorage.setItem("invictus_inventory_history", JSON.stringify(inventoryHistory))
+  }, [inventoryHistory, isReady])
 
   useEffect(() => {
     if (
@@ -188,54 +232,113 @@ export const StoreProvider = ({ children }: { children: React.ReactNode }) => {
 
     if (!isFirebaseConfigured) {
       setProducts((currentProducts) => [...currentProducts, nextProduct])
+      setInventoryHistory((currentHistory) => [
+        createInventoryHistoryEntry({
+          action: "create",
+          nextProduct,
+          previousProduct: null,
+          userEmail,
+        }),
+        ...currentHistory,
+      ])
       return
     }
 
-    await createProductInFirestore(nextProduct)
+    await createProductInFirestore(nextProduct, userEmail)
   }
 
   const updateProduct = async (id: string, updates: Partial<Product>) => {
     if (!isFirebaseConfigured) {
-      setProducts((currentProducts) =>
-        currentProducts.map((product) =>
-          product.id === id ? normalizeProduct({ ...product, ...updates }) : product
-        )
-      )
+      setProducts((currentProducts) => {
+        const previousProduct = currentProducts.find((product) => product.id === id)
+
+        if (!previousProduct) {
+          return currentProducts
+        }
+
+        const nextProduct = normalizeProduct({ ...previousProduct, ...updates })
+
+        setInventoryHistory((currentHistory) => [
+          createInventoryHistoryEntry({
+            action: "update",
+            previousProduct,
+            nextProduct,
+            userEmail,
+          }),
+          ...currentHistory,
+        ])
+
+        return currentProducts.map((product) => (product.id === id ? nextProduct : product))
+      })
       return
     }
 
-    await updateProductInFirestore(id, updates)
+    await updateProductInFirestore(id, updates, userEmail)
   }
 
   const deleteProduct = async (id: string) => {
     if (!isFirebaseConfigured) {
-      setProducts((currentProducts) => currentProducts.filter((product) => product.id !== id))
+      setProducts((currentProducts) => {
+        const previousProduct = currentProducts.find((product) => product.id === id)
+
+        if (previousProduct) {
+          setInventoryHistory((currentHistory) => [
+            createInventoryHistoryEntry({
+              action: "delete",
+              previousProduct,
+              nextProduct: null,
+              userEmail,
+            }),
+            ...currentHistory,
+          ])
+        }
+
+        return currentProducts.filter((product) => product.id !== id)
+      })
       return
     }
 
-    await deleteProductInFirestore(id)
+    await deleteProductInFirestore(id, userEmail)
   }
 
   const registerSale = async (items: Array<{ productId: string; quantity: number }>) => {
     if (!isFirebaseConfigured) {
-      setProducts((currentProducts) =>
-        currentProducts.map((product) => {
+      setProducts((currentProducts) => {
+        const historyEntries: InventoryHistoryEntry[] = []
+        const nextProducts = currentProducts.map((product) => {
           const saleItem = items.find((item) => item.productId === product.id)
 
           if (!saleItem) {
             return product
           }
 
-          return normalizeProduct({
+          const nextProduct = normalizeProduct({
             ...product,
             stock: Math.max(0, product.stock - saleItem.quantity),
           })
+
+          historyEntries.push(
+            createInventoryHistoryEntry({
+              action: "sale",
+              previousProduct: product,
+              nextProduct,
+              userEmail,
+            })
+          )
+
+          return nextProduct
         })
-      )
+
+        if (historyEntries.length > 0) {
+          setInventoryHistory((currentHistory) => [...historyEntries.reverse(), ...currentHistory])
+        }
+
+        return nextProducts
+      })
       return
     }
 
-    await registerSaleInFirestore(items)
+    await registerSaleInFirestore(items, userEmail)
   }
 
   const placeOrder = async (payload: PlaceOrderInput) => {
@@ -325,6 +428,7 @@ export const StoreProvider = ({ children }: { children: React.ReactNode }) => {
     <StoreContext.Provider
       value={{
         products,
+        inventoryHistory,
         addProduct,
         updateProduct,
         deleteProduct,

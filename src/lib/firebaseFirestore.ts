@@ -4,16 +4,20 @@ import {
   doc,
   getDocs,
   onSnapshot,
+  query,
   runTransaction,
   setDoc,
   writeBatch,
+  orderBy,
 } from "firebase/firestore"
 import { DEFAULT_CATALOG } from "@/data/catalog"
 import { firebaseDb } from "@/lib/firebaseClient"
+import { createInventoryHistoryEntry } from "@/lib/inventoryHistory"
 import { getProductStatus, normalizeProduct } from "@/lib/productAvailability"
-import type { Product } from "@/lib/storeTypes"
+import type { InventoryHistoryEntry, Product } from "@/lib/storeTypes"
 
 const PRODUCTS_COLLECTION = "products"
+const INVENTORY_HISTORY_COLLECTION = "inventoryHistory"
 
 function getFirestoreDb() {
   if (!firebaseDb) {
@@ -25,6 +29,10 @@ function getFirestoreDb() {
 
 function getProductsCollection() {
   return collection(getFirestoreDb(), PRODUCTS_COLLECTION)
+}
+
+function getInventoryHistoryCollection() {
+  return collection(getFirestoreDb(), INVENTORY_HISTORY_COLLECTION)
 }
 
 function serializeProduct(product: Product) {
@@ -75,16 +83,49 @@ export async function subscribeToProducts(
   )
 }
 
-export async function createProductInFirestore(product: Product) {
+export async function subscribeToInventoryHistory(
+  onHistory: (history: InventoryHistoryEntry[]) => void,
+  onError: (error: Error) => void
+) {
+  if (!firebaseDb) {
+    return () => undefined
+  }
+
+  return onSnapshot(
+    query(getInventoryHistoryCollection(), orderBy("createdAt", "desc")),
+    (snapshot) => {
+      const history = snapshot.docs.map((snapshotDoc) => snapshotDoc.data() as InventoryHistoryEntry)
+      onHistory(history)
+    },
+    (error) => onError(error)
+  )
+}
+
+export async function createProductInFirestore(product: Product, userEmail: string | null = null) {
   if (!firebaseDb) {
     throw new Error("Firebase no esta configurado")
   }
 
   const db = getFirestoreDb()
-  await setDoc(doc(db, PRODUCTS_COLLECTION, product.id), serializeProduct(product))
+  const nextProduct = normalizeProduct(product)
+  const historyEntry = createInventoryHistoryEntry({
+    action: "create",
+    nextProduct,
+    previousProduct: null,
+    userEmail,
+  })
+
+  await runTransaction(db, async (transaction) => {
+    transaction.set(doc(db, PRODUCTS_COLLECTION, product.id), serializeProduct(nextProduct))
+    transaction.set(doc(db, INVENTORY_HISTORY_COLLECTION, historyEntry.id), historyEntry)
+  })
 }
 
-export async function updateProductInFirestore(id: string, updates: Partial<Product>) {
+export async function updateProductInFirestore(
+  id: string,
+  updates: Partial<Product>,
+  userEmail: string | null = null
+) {
   if (!firebaseDb) {
     throw new Error("Firebase no esta configurado")
   }
@@ -104,21 +145,50 @@ export async function updateProductInFirestore(id: string, updates: Partial<Prod
       ...updates,
       id,
     })
+    const previousProduct = normalizeProduct(snapshot.data() as Product)
+    const historyEntry = createInventoryHistoryEntry({
+      action: "update",
+      nextProduct,
+      previousProduct,
+      userEmail,
+    })
 
     transaction.set(productRef, serializeProduct(nextProduct))
+    transaction.set(doc(db, INVENTORY_HISTORY_COLLECTION, historyEntry.id), historyEntry)
   })
 }
 
-export async function deleteProductInFirestore(id: string) {
+export async function deleteProductInFirestore(id: string, userEmail: string | null = null) {
   if (!firebaseDb) {
     throw new Error("Firebase no esta configurado")
   }
 
   const db = getFirestoreDb()
-  await deleteDoc(doc(db, PRODUCTS_COLLECTION, id))
+  await runTransaction(db, async (transaction) => {
+    const productRef = doc(db, PRODUCTS_COLLECTION, id)
+    const snapshot = await transaction.get(productRef)
+
+    if (!snapshot.exists()) {
+      throw new Error("El producto ya no existe")
+    }
+
+    const previousProduct = normalizeProduct(snapshot.data() as Product)
+    const historyEntry = createInventoryHistoryEntry({
+      action: "delete",
+      nextProduct: null,
+      previousProduct,
+      userEmail,
+    })
+
+    transaction.delete(productRef)
+    transaction.set(doc(db, INVENTORY_HISTORY_COLLECTION, historyEntry.id), historyEntry)
+  })
 }
 
-export async function registerSaleInFirestore(items: Array<{ productId: string; quantity: number }>) {
+export async function registerSaleInFirestore(
+  items: Array<{ productId: string; quantity: number }>,
+  userEmail: string | null = null
+) {
   if (!firebaseDb) {
     throw new Error("Firebase no esta configurado")
   }
@@ -141,16 +211,26 @@ export async function registerSaleInFirestore(items: Array<{ productId: string; 
       }
 
       const nextStock = Math.max(0, product.stock - item.quantity)
-
-      transaction.set(productRef, {
+      const nextProduct = normalizeProduct({
         ...product,
         stock: nextStock,
+      })
+      const historyEntry = createInventoryHistoryEntry({
+        action: "sale",
+        previousProduct: product,
+        nextProduct,
+        userEmail,
+      })
+
+      transaction.set(productRef, {
+        ...nextProduct,
         status: getProductStatus({
-          isAvailable: product.isAvailable,
-          status: product.status,
-          stock: nextStock,
+          isAvailable: nextProduct.isAvailable,
+          status: nextProduct.status,
+          stock: nextProduct.stock,
         }),
       })
+      transaction.set(doc(db, INVENTORY_HISTORY_COLLECTION, historyEntry.id), historyEntry)
     }
   })
 }

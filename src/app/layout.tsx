@@ -38,7 +38,7 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${spaceGrotesk.variable} ${interTight.variable} ${jetbrainsMono.variable} antialiased min-h-[100dvh] font-body bg-[var(--background)] text-[var(--foreground)] selection:bg-primary selection:text-black flex flex-col`}
+        className={`${spaceGrotesk.variable} ${interTight.variable} ${jetbrainsMono.variable} antialiased min-h-[100dvh] font-body bg-[var(--background)] text-[var(--foreground)] selection:bg-primary selection:text-white flex flex-col`}
       >
         <StoreProvider>
           <CartProvider>

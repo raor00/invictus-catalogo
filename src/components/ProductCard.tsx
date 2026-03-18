@@ -93,8 +93,8 @@ export function ProductCard({ product }: { product: Product }) {
       {showConfirm && (
         <div className="absolute inset-0 z-30 flex items-center justify-center rounded-2xl bg-black/80 backdrop-blur-sm">
           <div className="flex flex-col items-center gap-4 p-6 text-center">
-            <div className="w-12 h-12 rounded-full bg-[#CCFF00]/20 border border-[#CCFF00]/40 flex items-center justify-center">
-              <ShoppingBag size={22} weight="fill" className="text-[#CCFF00]" />
+            <div className="flex h-12 w-12 items-center justify-center rounded-full border border-primary/30 bg-primary/15">
+              <ShoppingBag size={22} weight="fill" className="text-primary" />
             </div>
             <div>
               <p className="text-white font-bold text-sm">¡Añadido al carrito!</p>
@@ -103,7 +103,7 @@ export function ProductCard({ product }: { product: Product }) {
             <div className="flex flex-col gap-2 w-full">
               <button
                 onClick={handleGoToCart}
-                className="w-full flex items-center justify-center gap-2 bg-[#CCFF00] text-black text-sm font-bold py-2.5 px-4 rounded-xl hover:bg-[#d4ff33] transition-colors"
+                className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-bold text-white transition-colors hover:bg-primary-strong"
               >
                 Ir al Carrito
                 <ArrowRight size={16} weight="bold" />
@@ -140,7 +140,7 @@ export function ProductCard({ product }: { product: Product }) {
             background: useMotionTemplate`
               radial-gradient(
                 600px circle at ${springX}px ${springY}px,
-                rgba(204, 255, 0, 0.07),
+                rgba(47, 91, 255, 0.08),
                 transparent 80%
               )
             `,
@@ -167,7 +167,7 @@ export function ProductCard({ product }: { product: Product }) {
           {/* 3D hint — shows on hover */}
           <div className="absolute inset-0 flex items-end justify-center pb-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-150 z-20 pointer-events-none">
             <div className="bg-black/70 backdrop-blur-sm rounded px-1.5 py-0.5 flex items-center gap-1 text-white text-[9px] font-bold">
-              <Cube size={9} weight="fill" className="text-[#CCFF00]" />
+              <Cube size={9} weight="fill" className="text-primary" />
               3D
             </div>
           </div>
@@ -235,21 +235,21 @@ export function ProductCard({ product }: { product: Product }) {
                 No disponible
               </div>
             ) : (
-              <div className="flex flex-col gap-1" onClick={e => e.preventDefault()}>
+              <div className="flex flex-col gap-2" onClick={e => e.preventDefault()}>
                 {/* Qty selector */}
-                <div className="flex items-center justify-between">
-                  <span className="text-[8px] text-text-muted font-bold uppercase">Cant.</span>
-                  <div className="flex items-center gap-0.5">
+                <div className="grid grid-cols-[auto_1fr] items-center gap-2">
+                  <span className="text-[8px] font-bold uppercase text-text-muted">Cant.</span>
+                  <div className="flex items-center justify-end gap-1">
                     <button
                       onClick={handleQtyDecrease}
-                      className="w-5 h-5 rounded border border-surface-highlight hover:border-primary flex items-center justify-center text-text-muted hover:text-primary transition-colors"
+                      className="flex h-6 w-6 items-center justify-center rounded-md border border-surface-highlight text-text-muted transition-colors hover:border-primary hover:text-primary"
                     >
                       <Minus size={8} weight="bold" />
                     </button>
-                    <span className="w-5 text-center font-mono text-[10px] font-bold text-foreground">{qty}</span>
+                    <span className="w-6 text-center font-mono text-[11px] font-bold text-foreground">{qty}</span>
                     <button
                       onClick={handleQtyIncrease}
-                      className="w-5 h-5 rounded border border-surface-highlight hover:border-primary flex items-center justify-center text-text-muted hover:text-primary transition-colors"
+                      className="flex h-6 w-6 items-center justify-center rounded-md border border-surface-highlight text-text-muted transition-colors hover:border-primary hover:text-primary"
                     >
                       <Plus size={8} weight="bold" />
                     </button>
@@ -258,7 +258,7 @@ export function ProductCard({ product }: { product: Product }) {
 
                 <button
                   onClick={handleAddToCart}
-                  className="w-full flex items-center justify-center gap-1 bg-primary text-black text-[9px] font-bold py-1.5 rounded-lg hover:bg-[#d4ff33] transition-colors active:scale-95"
+                  className="inline-flex h-10 w-full items-center justify-center gap-1.5 rounded-xl bg-primary px-3 text-[10px] font-bold text-white transition-colors hover:bg-primary-strong active:scale-95 sm:text-[11px]"
                 >
                   <ShoppingBag size={10} weight="fill" />
                   Añadir

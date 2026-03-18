@@ -116,7 +116,7 @@ export function CartPanel() {
                   <ShoppingBag size={22} weight="fill" className="text-primary" />
                   <h2 className="font-heading font-bold text-lg text-foreground">Carrito</h2>
                   {cartCount > 0 && (
-                    <span className="bg-primary text-black text-[10px] font-mono font-bold px-1.5 py-0.5 rounded-full min-w-[20px] text-center shadow-neon">
+                    <span className="min-w-[20px] rounded-full bg-primary px-1.5 py-0.5 text-center text-[10px] font-mono font-bold text-white shadow-neon">
                       {cartCount > 99 ? "99+" : cartCount}
                     </span>
                   )}

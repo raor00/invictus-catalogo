@@ -1,8 +1,9 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary: #CCFF00; /* Neon Lime */
-  --color-primary-dim: rgba(204, 255, 0, 0.1);
+  --color-primary: #2F5BFF; /* Royal Blue */
+  --color-primary-strong: #2447CC; /* Deep Royal Blue */
+  --color-primary-dim: rgba(47, 91, 255, 0.12);
   --color-secondary: #0066CC; /* Refined Blue */
   --color-background-light: #F5F5F7; /* Light Grey/White */
   --color-background-dark: #050505; /* Void Black */
@@ -19,10 +20,10 @@
   --font-body: var(--font-inter-tight), sans-serif;
   --font-mono: var(--font-jetbrains-mono), monospace;
 
-  --shadow-neon: 0 4px 14px 0 rgba(204, 255, 0, 0.39);
+  --shadow-neon: 0 10px 28px 0 rgba(47, 91, 255, 0.24);
   --shadow-glass: 0 4px 30px rgba(0, 0, 0, 0.05);
   --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.04);
-  --shadow-glow: 0 0 15px rgba(204, 255, 0, 0.15);
+  --shadow-glow: 0 0 18px rgba(47, 91, 255, 0.2);
 }
 
 :root {

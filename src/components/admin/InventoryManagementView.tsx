@@ -364,7 +364,6 @@ export function InventoryManagementView({
   )
   const previewProducts = products.map((product) => getPreviewProduct(product, resolvedDrafts[product.id]))
   const statProducts = statsFilter ? previewProducts.filter(statsFilter) : previewProducts
-  const totalCount = statProducts.length
   const totalUnits = statProducts.reduce((acc, product) => acc + product.stock, 0)
   const availableCount = statProducts
     .filter((product) => isProductAvailable(product))
@@ -526,12 +525,9 @@ export function InventoryManagementView({
                   <p className="text-[10px] font-mono font-bold uppercase tracking-[0.18em] text-text-muted">
                     {countLabel}
                   </p>
-                  <p className="font-mono text-4xl font-bold text-foreground">{totalCount}</p>
+                  <p className="font-mono text-4xl font-bold text-foreground">{totalUnits}</p>
                 </div>
               </div>
-              <p className="text-sm text-text-muted">
-                {totalUnits} unidades en stock entre todas las variantes cargadas.
-              </p>
             </div>
 
             <div className="rounded-[1.6rem] border border-surface-highlight bg-background p-3">
@@ -584,7 +580,7 @@ export function InventoryManagementView({
                   key={filter.value}
                   className={`rounded-full border px-4 py-2 text-xs font-mono font-bold uppercase tracking-[0.18em] transition-all ${
                     availabilityFilter === filter.value
-                      ? "border-primary bg-primary text-black shadow-neon"
+                      ? "border-primary bg-primary text-white shadow-neon"
                       : "border-surface-highlight bg-background text-text-muted hover:border-text-muted hover:text-foreground"
                   }`}
                   onClick={() => setAvailabilityFilter(filter.value)}

@@ -21,7 +21,7 @@ export function PublicHeader() {
 
                     {/* Logo */}
                     <Link href="/" className="flex items-center gap-2 sm:gap-3 group">
-                        <div className="w-8 h-8 bg-primary rounded flex items-center justify-center text-black shadow-neon transition-transform group-hover:scale-105">
+                        <div className="flex h-8 w-8 items-center justify-center rounded bg-primary text-white shadow-neon transition-transform group-hover:scale-105">
                             <Lightning weight="fill" size={20} />
                         </div>
                         <div className="flex flex-col leading-none">
@@ -51,7 +51,7 @@ export function PublicHeader() {
                         >
                             <ShoppingBag size={24} weight={cartCount > 0 ? "fill" : "regular"} className={cartCount > 0 ? "text-primary" : ""} />
                             {cartCount > 0 && (
-                                <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] bg-primary text-black rounded-full text-[9px] font-mono font-bold flex items-center justify-center px-1 shadow-neon">
+                                <span className="absolute -top-0.5 -right-0.5 flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-primary px-1 text-[9px] font-mono font-bold text-white shadow-neon">
                                     {cartCount > 99 ? "99+" : cartCount}
                                 </span>
                             )}
