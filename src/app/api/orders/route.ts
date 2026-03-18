@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server"
 import { randomUUID } from "node:crypto"
 import { adminDb, isFirebaseAdminConfigured } from "@/lib/firebaseAdmin"
+import { createInventoryHistoryEntry } from "@/lib/inventoryHistory"
 import { getProductStatus, normalizeProduct } from "@/lib/productAvailability"
 import type { PlaceOrderInput, Product, StoredOrder } from "@/lib/storeTypes"
 
@@ -73,16 +74,26 @@ export async function POST(request: Request) {
         }
 
         const nextStock = Math.max(0, product.stock - item.quantity)
-
-        transaction.set(productRef, {
+        const nextProduct = normalizeProduct({
           ...product,
           stock: nextStock,
+        })
+        const historyEntry = createInventoryHistoryEntry({
+          action: "sale",
+          previousProduct: product,
+          nextProduct,
+          userEmail: "pedido-web",
+        })
+
+        transaction.set(productRef, {
+          ...nextProduct,
           status: getProductStatus({
-            isAvailable: product.isAvailable,
-            status: product.status,
-            stock: nextStock,
+            isAvailable: nextProduct.isAvailable,
+            status: nextProduct.status,
+            stock: nextProduct.stock,
           }),
         })
+        transaction.set(database.collection("inventoryHistory").doc(historyEntry.id), historyEntry)
       }
 
       const order = buildStoredOrder(payload, orderId)

@@ -1,14 +1,12 @@
 import {
   collection,
-  deleteDoc,
   doc,
   getDocs,
   onSnapshot,
+  orderBy,
   query,
   runTransaction,
-  setDoc,
   writeBatch,
-  orderBy,
 } from "firebase/firestore"
 import { DEFAULT_CATALOG } from "@/data/catalog"
 import { firebaseDb } from "@/lib/firebaseClient"

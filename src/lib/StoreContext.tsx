@@ -17,7 +17,7 @@ import { createInventoryHistoryEntry } from "@/lib/inventoryHistory"
 import { normalizeProduct } from "@/lib/productAvailability"
 import type { InventoryHistoryEntry, PlaceOrderInput, Product, StoredOrder } from "@/lib/storeTypes"
 
-const CATALOG_VERSION = "2026-03-18-wholesale-refresh-v1"
+const CATALOG_VERSION = "2026-03-18-wholesale-refresh-v2"
 
 export type { PlaceOrderInput, Product, StoredOrder } from "@/lib/storeTypes"
 

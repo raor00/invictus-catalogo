@@ -365,11 +365,19 @@ export function InventoryManagementView({
   const previewProducts = products.map((product) => getPreviewProduct(product, resolvedDrafts[product.id]))
   const statProducts = statsFilter ? previewProducts.filter(statsFilter) : previewProducts
   const totalUnits = statProducts.reduce((acc, product) => acc + product.stock, 0)
+  const totalVariants = statProducts.length
+  const totalModels = new Set(statProducts.map((product) => product.name)).size
   const availableCount = statProducts
     .filter((product) => isProductAvailable(product))
     .reduce((acc, product) => acc + product.stock, 0)
   const unavailableCount = statProducts.filter((product) => !isProductAvailable(product)).length
   const inventoryValue = statProducts.reduce((acc, product) => acc + product.price * product.stock, 0)
+  const topModelByUnits = Object.entries(
+    statProducts.reduce<Record<string, number>>((acc, product) => {
+      acc[product.name] = (acc[product.name] ?? 0) + product.stock
+      return acc
+    }, {})
+  ).sort((a, b) => b[1] - a[1])[0]
 
   const normalizedSearch = normalizeSearchValue(searchTerm)
   const searchTerms = normalizedSearch.split(" ").filter(Boolean)
@@ -517,7 +525,7 @@ export function InventoryManagementView({
 
           <div className="mt-8 grid gap-4 xl:grid-cols-[minmax(0,1fr)_380px]">
             <div className="rounded-[1.6rem] border border-surface-highlight bg-background px-5 py-5">
-              <div className="mb-4 flex items-center gap-3">
+              <div className="mb-5 flex items-center gap-3">
                 <div className="rounded-2xl bg-primary/15 p-3 text-primary">
                   <Package size={20} weight="fill" />
                 </div>
@@ -526,6 +534,33 @@ export function InventoryManagementView({
                     {countLabel}
                   </p>
                   <p className="font-mono text-4xl font-bold text-foreground">{totalUnits}</p>
+                </div>
+              </div>
+              <div className="grid gap-3 sm:grid-cols-3">
+                <div className="rounded-2xl border border-surface-highlight bg-surface px-4 py-4">
+                  <p className="text-[10px] font-mono font-bold uppercase tracking-[0.18em] text-text-muted">
+                    Variantes
+                  </p>
+                  <p className="mt-2 font-mono text-2xl font-bold text-foreground">{totalVariants}</p>
+                  <p className="mt-1 text-xs text-text-muted">SKUs visibles dentro del inventario.</p>
+                </div>
+                <div className="rounded-2xl border border-surface-highlight bg-surface px-4 py-4">
+                  <p className="text-[10px] font-mono font-bold uppercase tracking-[0.18em] text-text-muted">
+                    Modelos
+                  </p>
+                  <p className="mt-2 font-mono text-2xl font-bold text-foreground">{totalModels}</p>
+                  <p className="mt-1 text-xs text-text-muted">Modelos distintos cargados actualmente.</p>
+                </div>
+                <div className="rounded-2xl border border-surface-highlight bg-surface px-4 py-4">
+                  <p className="text-[10px] font-mono font-bold uppercase tracking-[0.18em] text-text-muted">
+                    Mayor stock
+                  </p>
+                  <p className="mt-2 truncate font-heading text-base font-bold text-foreground">
+                    {topModelByUnits?.[0] ?? "Sin datos"}
+                  </p>
+                  <p className="mt-1 text-xs text-text-muted">
+                    {topModelByUnits ? `${topModelByUnits[1]} unidades acumuladas.` : "Sin inventario registrado."}
+                  </p>
                 </div>
               </div>
             </div>

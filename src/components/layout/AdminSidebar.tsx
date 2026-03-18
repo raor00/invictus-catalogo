@@ -5,13 +5,14 @@ import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import { useStore } from "@/lib/StoreContext"
 import { cn } from "@/components/ui/Button"
-import { Lightning, SquaresFour, DeviceMobile, Wrench, Package, GearSix, SignOut, X } from "@phosphor-icons/react"
+import { Lightning, SquaresFour, DeviceMobile, Wrench, Package, ChartBar, GearSix, SignOut, X } from "@phosphor-icons/react"
 
 const navLinks = [
     { name: "Dashboard", href: "/dashboard", icon: SquaresFour },
     { name: "iPhones", href: "/dashboard/iphones", icon: DeviceMobile },
     { name: "Repuestos", href: "/dashboard/parts", icon: Wrench },
     { name: "Inventario", href: "/dashboard/inventory", icon: Package },
+    { name: "Reportes", href: "/dashboard/reports", icon: ChartBar },
 ]
 
 interface AdminSidebarProps {
