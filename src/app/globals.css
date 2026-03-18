@@ -30,6 +30,12 @@
   --foreground: var(--color-text-main);
 }
 
+html,
+body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
 .dark {
   --background: var(--color-background-dark);
   --foreground: var(--color-text-main-dark);

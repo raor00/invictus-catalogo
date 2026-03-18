@@ -29,7 +29,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 onClose={() => setIsSidebarOpen(false)}
             />
 
-            <main className="flex-1 flex flex-col h-full overflow-hidden bg-background relative w-full">
+            <main className="relative flex h-full min-w-0 flex-1 flex-col overflow-hidden bg-background">
                 {/* Mobile Header */}
                 <header className="lg:hidden h-16 flex items-center justify-between px-6 bg-background border-b border-surface-highlight z-50 flex-shrink-0">
                     <div className="flex gap-2 items-center">
@@ -47,7 +47,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 {/* Header Background Pattern */}
                 <div className="absolute top-0 left-0 w-full h-64 bg-gradient-to-b from-surface-highlight/30 to-transparent pointer-events-none z-0"></div>
 
-                <div className="flex-1 flex flex-col overflow-hidden relative z-10 w-full">
+                <div className="relative z-10 flex min-w-0 flex-1 flex-col overflow-hidden">
                     {children}
                 </div>
             </main>

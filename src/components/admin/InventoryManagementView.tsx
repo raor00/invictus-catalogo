@@ -173,9 +173,9 @@ function ProductQuickCard({
       serializeColorSelection(product.availableColors ?? [])
 
   return (
-    <article className="group rounded-[1.3rem] border border-surface-highlight bg-surface px-4 py-3 shadow-glass transition-all duration-300 hover:border-text-muted">
-      <div className="grid gap-3 lg:grid-cols-[minmax(260px,1.7fr)_minmax(110px,0.7fr)_minmax(110px,0.7fr)_minmax(120px,0.8fr)_minmax(190px,1.1fr)_auto] lg:items-start">
-        <div className="min-w-0">
+    <article className="group overflow-hidden rounded-[1.3rem] border border-surface-highlight bg-surface px-4 py-3 shadow-glass transition-all duration-300 hover:border-text-muted">
+      <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-[minmax(260px,1.7fr)_minmax(110px,0.7fr)_minmax(110px,0.7fr)_minmax(120px,0.8fr)_minmax(190px,1.1fr)_auto] xl:items-start">
+        <div className="min-w-0 md:col-span-2 xl:col-span-1">
           <div className="mb-1 flex items-center gap-2">
             <h3
               className={`font-heading text-base font-bold leading-tight ${
@@ -308,16 +308,20 @@ function ProductQuickCard({
           </label>
         </div>
 
-        <div className="flex items-center justify-end gap-2">
+        <div className="flex min-w-0 flex-col-reverse gap-2 md:col-span-2 sm:flex-row sm:items-center sm:justify-end xl:col-span-1">
           <Button
             variant="ghost"
             size="icon"
-            className="text-critical hover:bg-critical/10"
+            className="self-end text-critical hover:bg-critical/10 sm:self-auto"
             onClick={() => void onDelete(product)}
           >
             <Trash size={16} />
           </Button>
-          <Button className="gap-2" disabled={!dirty} onClick={() => void onSave(product)}>
+          <Button
+            className="w-full gap-2 sm:w-auto sm:min-w-[148px]"
+            disabled={!dirty}
+            onClick={() => void onSave(product)}
+          >
             <FloppyDisk size={16} weight="fill" />
             Guardar
           </Button>
@@ -477,7 +481,7 @@ export function InventoryManagementView({
   }
 
   return (
-    <div className="flex-1 overflow-y-auto">
+    <div className="flex-1 overflow-y-auto overflow-x-hidden">
       <div className="mx-auto flex w-full max-w-[1520px] flex-col gap-6 px-4 py-6 sm:px-8 sm:py-8">
         <section className="rounded-[2rem] border border-surface-highlight bg-surface p-6 shadow-glass sm:p-8">
           <div className="flex flex-col gap-6 xl:flex-row xl:items-start xl:justify-between">
