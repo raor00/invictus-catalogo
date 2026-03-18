@@ -2,7 +2,7 @@ import React from "react"
 import { PublicHeader } from "@/components/layout/PublicHeader"
 import { CartPanel } from "@/components/CartPanel"
 import { PhoneViewer3DGlobal } from "@/components/PhoneViewer3D"
-import { WHATSAPP_NUMBER } from "@/lib/config"
+import { getWhatsAppUrl } from "@/lib/config"
 
 export default function PublicLayout({ children }: { children: React.ReactNode }) {
     return (
@@ -20,7 +20,7 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
 
             {/* Floating WhatsApp Support */}
             <a
-                href={`https://wa.me/${WHATSAPP_NUMBER}`}
+                href={getWhatsAppUrl()}
                 target="_blank"
                 rel="noreferrer"
                 className="fixed bottom-8 right-8 z-40 group drop-shadow-2xl"

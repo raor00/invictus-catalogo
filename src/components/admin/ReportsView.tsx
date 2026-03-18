@@ -37,43 +37,132 @@ export function ReportsView() {
 
     try {
       const pdf = new jsPDF({ unit: "pt", format: "a4" })
+      const pageWidth = pdf.internal.pageSize.getWidth()
+      const pageHeight = pdf.internal.pageSize.getHeight()
+      const margin = 40
+      const contentWidth = pageWidth - margin * 2
+      const blue: [number, number, number] = [47, 91, 255]
+      const blueDark: [number, number, number] = [36, 71, 204]
+      const blueSoft: [number, number, number] = [236, 241, 255]
+      const textDark: [number, number, number] = [24, 24, 27]
+      const textMuted: [number, number, number] = [107, 114, 128]
+      const border: [number, number, number] = [222, 226, 230]
       const generatedAt = new Intl.DateTimeFormat("es-VE", {
         dateStyle: "long",
         timeStyle: "short",
         timeZone: "America/Caracas",
       }).format(new Date())
+      const topModels = modelTotals.slice(0, 5)
 
-      pdf.setFontSize(22)
-      pdf.text("Reporte de inventario mayorista", 40, 48)
+      const drawMetricCard = (
+        x: number,
+        y: number,
+        width: number,
+        height: number,
+        label: string,
+        value: string,
+        detail?: string
+      ) => {
+        pdf.setFillColor(...blueSoft)
+        pdf.setDrawColor(...border)
+        pdf.roundedRect(x, y, width, height, 16, 16, "FD")
+        pdf.setTextColor(...textMuted)
+        pdf.setFont("helvetica", "bold")
+        pdf.setFontSize(9)
+        pdf.text(label.toUpperCase(), x + 16, y + 20)
+        pdf.setTextColor(...textDark)
+        pdf.setFontSize(22)
+        pdf.text(value, x + 16, y + 48)
+
+        if (detail) {
+          pdf.setTextColor(...textMuted)
+          pdf.setFont("helvetica", "normal")
+          pdf.setFontSize(9)
+          pdf.text(detail, x + 16, y + 66)
+        }
+      }
+
+      const drawSectionTitle = (title: string, subtitle: string, y: number) => {
+        pdf.setTextColor(...textDark)
+        pdf.setFont("helvetica", "bold")
+        pdf.setFontSize(16)
+        pdf.text(title, margin, y)
+        pdf.setTextColor(...textMuted)
+        pdf.setFont("helvetica", "normal")
+        pdf.setFontSize(10)
+        pdf.text(subtitle, margin, y + 16)
+      }
+
+      pdf.setFillColor(...blue)
+      pdf.rect(0, 0, pageWidth, 132, "F")
+      pdf.setTextColor(255, 255, 255)
+      pdf.setFont("helvetica", "bold")
+      pdf.setFontSize(26)
+      pdf.text("Reporte de inventario mayorista", margin, 50)
+      pdf.setFont("helvetica", "normal")
+      pdf.setFontSize(11)
+      pdf.text("KPIs, cambios recientes y trazabilidad del stock", margin, 72)
       pdf.setFontSize(10)
-      pdf.setTextColor(110)
-      pdf.text(`Generado: ${generatedAt} (Venezuela)`, 40, 68)
+      pdf.text(`Generado: ${generatedAt} (Venezuela)`, margin, 92)
+      pdf.setFillColor(255, 255, 255)
+      pdf.roundedRect(margin, 106, contentWidth, 56, 18, 18, "F")
+      pdf.setTextColor(...textDark)
+      pdf.setFont("helvetica", "bold")
+      pdf.setFontSize(12)
+      pdf.text("Resumen ejecutivo", margin + 18, 128)
+      pdf.setFont("helvetica", "normal")
+      pdf.setFontSize(10)
+      pdf.setTextColor(...textMuted)
+      pdf.text(
+        "Este documento resume el estado actual del inventario, los modelos con mayor presencia y los ultimos movimientos registrados.",
+        margin + 18,
+        146,
+        { maxWidth: contentWidth - 36 }
+      )
 
-      const kpis = [
-        ["Total equipos", `${totalUnits}`],
-        ["Variantes disponibles", `${availableVariants}`],
-        ["Modelo con mayor stock", topModel ? `${topModel[0]} (${topModel[1]})` : "Sin datos"],
-        [
-          "Valor inventario",
-          `$${totalInventoryValue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
-        ],
-      ]
+      const cardY = 188
+      const cardGap = 12
+      const cardWidth = (contentWidth - cardGap) / 2
+      drawMetricCard(margin, cardY, cardWidth, 82, "Total equipos", `${totalUnits}`, "Unidades sumadas en todo el inventario")
+      drawMetricCard(margin + cardWidth + cardGap, cardY, cardWidth, 82, "Variantes activas", `${availableVariants}`, "SKUs con stock y disponibilidad")
+      drawMetricCard(
+        margin,
+        cardY + 94,
+        cardWidth,
+        82,
+        "Modelo con mayor stock",
+        topModel ? `${topModel[1]}` : "0",
+        topModel?.[0] ?? "Sin datos"
+      )
+      drawMetricCard(
+        margin + cardWidth + cardGap,
+        cardY + 94,
+        cardWidth,
+        82,
+        "Valor inventario",
+        `$${totalInventoryValue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
+        "Valorizacion actual del stock"
+      )
 
+      drawSectionTitle("Modelos con mayor stock", "Ranking resumido por unidades acumuladas", 310)
       autoTable(pdf, {
-        startY: 88,
-        body: kpis,
+        startY: 336,
+        head: [["Posicion", "Modelo", "Unidades"]],
+        body: topModels.map(([name, units], index) => [`#${index + 1}`, name, `${units}`]),
         theme: "grid",
-        styles: { fontSize: 10, cellPadding: 8 },
+        styles: { fontSize: 9, cellPadding: 7, textColor: textDark },
+        headStyles: { fillColor: blue, textColor: 255, fontStyle: "bold" },
+        alternateRowStyles: { fillColor: [248, 250, 252] },
         columnStyles: {
-          0: { fontStyle: "bold", cellWidth: 170 },
-          1: { cellWidth: 330 },
+          0: { cellWidth: 70 },
+          1: { cellWidth: 300 },
+          2: { halign: "right" },
         },
       })
 
+      drawSectionTitle("Movimientos recientes", "Ultimos cambios guardados en el historial interno", 500)
       autoTable(pdf, {
-        startY: (pdf as jsPDF & { lastAutoTable?: { finalY: number } }).lastAutoTable?.finalY
-          ? (pdf as jsPDF & { lastAutoTable: { finalY: number } }).lastAutoTable.finalY + 26
-          : 220,
+        startY: 526,
         head: [["Fecha", "Producto", "Cambio", "Usuario"]],
         body: recentChanges.map((entry) => [
           formatInventoryHistoryDate(entry.createdAt),
@@ -81,14 +170,25 @@ export function ReportsView() {
           `${entry.previousStock} -> ${entry.nextStock} (${formatInventoryHistoryDelta(entry.stockDelta)})`,
           entry.userEmail ?? "sistema",
         ]),
-        styles: { fontSize: 9, cellPadding: 6 },
-        headStyles: { fillColor: [47, 91, 255] },
+        styles: { fontSize: 8.5, cellPadding: 6, textColor: textDark },
+        headStyles: { fillColor: blue, textColor: 255, fontStyle: "bold" },
+        alternateRowStyles: { fillColor: [248, 250, 252] },
+        margin: { left: margin, right: margin },
       })
 
+      pdf.addPage()
+      pdf.setFillColor(...blueDark)
+      pdf.rect(0, 0, pageWidth, 86, "F")
+      pdf.setTextColor(255, 255, 255)
+      pdf.setFont("helvetica", "bold")
+      pdf.setFontSize(22)
+      pdf.text("Analisis de reducciones", margin, 48)
+      pdf.setFont("helvetica", "normal")
+      pdf.setFontSize(10)
+      pdf.text("Comparativo de stock antes y despues de cada ajuste a la baja", margin, 66)
+
       autoTable(pdf, {
-        startY: (pdf as jsPDF & { lastAutoTable?: { finalY: number } }).lastAutoTable?.finalY
-          ? (pdf as jsPDF & { lastAutoTable: { finalY: number } }).lastAutoTable.finalY + 26
-          : 430,
+        startY: 108,
         head: [["Fecha", "Producto", "Antes", "Ahora", "Delta"]],
         body: stockReductions.map((entry) => [
           formatInventoryHistoryDate(entry.createdAt),
@@ -97,9 +197,28 @@ export function ReportsView() {
           `${entry.nextStock}`,
           formatInventoryHistoryDelta(entry.stockDelta),
         ]),
-        styles: { fontSize: 9, cellPadding: 6 },
-        headStyles: { fillColor: [36, 71, 204] },
+        styles: { fontSize: 9, cellPadding: 7, textColor: textDark },
+        headStyles: { fillColor: blueDark, textColor: 255, fontStyle: "bold" },
+        alternateRowStyles: { fillColor: [248, 250, 252] },
+        columnStyles: {
+          2: { halign: "right" },
+          3: { halign: "right" },
+          4: { halign: "right" },
+        },
+        margin: { left: margin, right: margin },
       })
+
+      const pageCount = pdf.getNumberOfPages()
+      for (let page = 1; page <= pageCount; page += 1) {
+        pdf.setPage(page)
+        pdf.setDrawColor(...border)
+        pdf.line(margin, pageHeight - 28, pageWidth - margin, pageHeight - 28)
+        pdf.setFont("helvetica", "normal")
+        pdf.setFontSize(9)
+        pdf.setTextColor(...textMuted)
+        pdf.text("Invictus Mayorista", margin, pageHeight - 12)
+        pdf.text(`Pagina ${page} de ${pageCount}`, pageWidth - margin - 58, pageHeight - 12)
+      }
 
       pdf.save("reporte-inventario-mayorista.pdf")
     } finally {

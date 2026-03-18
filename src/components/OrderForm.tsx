@@ -6,7 +6,7 @@ import { X, User, IdentificationCard, Phone } from "@phosphor-icons/react"
 import { useCart } from "@/lib/CartContext"
 import { Button } from "@/components/ui/Button"
 import { Input } from "@/components/ui/Input"
-import { WHATSAPP_NUMBER, APP_NAME, MIN_ORDER_TOTAL_QUANTITY } from "@/lib/config"
+import { APP_NAME, MIN_ORDER_TOTAL_QUANTITY, getWhatsAppUrl } from "@/lib/config"
 import { useStore } from "@/lib/StoreContext"
 import { isProductAvailable } from "@/lib/productAvailability"
 
@@ -110,7 +110,7 @@ export function OrderForm({ isOpen, onClose }: OrderFormProps) {
 
     setSubmitting(true)
     const message = generateWhatsAppMessage(formData, cartItems, cartTotal)
-    const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`
+    const url = getWhatsAppUrl(message)
 
     const whatsappWindow = window.open("", "_blank", "noreferrer")
 
@@ -123,6 +123,19 @@ export function OrderForm({ isOpen, onClose }: OrderFormProps) {
     }
 
     try {
+      whatsappWindow.document.write(`
+        <html>
+          <head><title>Redirigiendo a WhatsApp...</title></head>
+          <body style="font-family: Arial, sans-serif; display:flex; align-items:center; justify-content:center; min-height:100vh; margin:0; background:#f6f8ff; color:#18181b;">
+            <div style="text-align:center; padding:24px;">
+              <h2 style="margin:0 0 8px;">Preparando tu pedido</h2>
+              <p style="margin:0; color:#6b7280;">Te estamos redirigiendo a WhatsApp...</p>
+            </div>
+          </body>
+        </html>
+      `)
+      whatsappWindow.document.close()
+
       await placeOrder({
         customer: formData,
         items: cartItems.map((item) => ({
@@ -134,7 +147,7 @@ export function OrderForm({ isOpen, onClose }: OrderFormProps) {
         channel: "whatsapp",
       })
 
-      whatsappWindow.location.href = url
+      whatsappWindow.location.replace(url)
       clearCart()
       closeCart()
       onClose()

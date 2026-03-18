@@ -4,6 +4,7 @@ import React, { use } from "react"
 import Link from "next/link"
 import { X, LockKey, ChatCircle } from "@phosphor-icons/react"
 import { motion } from "framer-motion"
+import { getWhatsAppUrl } from "@/lib/config"
 import { useStore } from "@/lib/StoreContext"
 import { getSelectedColorOptions } from "@/lib/productColors"
 import { isProductAvailable } from "@/lib/productAvailability"
@@ -124,7 +125,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
                     <div className="mt-auto">
                         {!isUnavailable ? (
                             <a
-                                href={`https://wa.me/1234567890?text=Me%20interesa%20el%20producto:%20${encodeURIComponent(product.name)}`}
+                                href={getWhatsAppUrl(`Me interesa el producto: ${product.name} ${product.storage}`)}
                                 target="_blank"
                                 rel="noreferrer"
                                 className="flex h-14 w-full items-center justify-center gap-3 rounded-xl bg-primary px-6 font-heading text-lg font-bold text-white transition-all duration-300 hover:scale-[1.02] hover:bg-primary-strong hover:shadow-neon active:scale-[0.98] group"
