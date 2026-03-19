@@ -61,13 +61,7 @@ export default function LoginPage() {
                     </p>
 
                     <div className="mt-14 flex gap-6">
-                        <div className="flex items-center gap-4 px-6 py-4 bg-white shadow-sm w-fit min-w-[160px]">
-                            <Package weight="fill" className="text-black text-2xl" />
-                            <div className="flex flex-col">
-                                <span className="text-[10px] text-[#999] font-bold uppercase tracking-wider mb-1">SKUS ACTIVOS</span>
-                                <span className="font-mono text-black text-2xl font-bold leading-none">2,450+</span>
-                            </div>
-                        </div>
+
                         <div className="flex items-center gap-4 px-6 py-4 bg-white shadow-sm w-fit min-w-[160px]">
                             <ArrowsClockwise weight="bold" className="text-black text-2xl" />
                             <div className="flex flex-col">
