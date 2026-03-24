@@ -112,30 +112,7 @@ export function OrderForm({ isOpen, onClose }: OrderFormProps) {
     const message = generateWhatsAppMessage(formData, cartItems, cartTotal)
     const url = getWhatsAppUrl(message)
 
-    const whatsappWindow = window.open("", "_blank", "noreferrer")
-
-    if (!whatsappWindow) {
-      setSubmitting(false)
-      setErrors({
-        cart: "Debes permitir ventanas emergentes para continuar con WhatsApp",
-      })
-      return
-    }
-
     try {
-      whatsappWindow.document.write(`
-        <html>
-          <head><title>Redirigiendo a WhatsApp...</title></head>
-          <body style="font-family: Arial, sans-serif; display:flex; align-items:center; justify-content:center; min-height:100vh; margin:0; background:#f6f8ff; color:#18181b;">
-            <div style="text-align:center; padding:24px;">
-              <h2 style="margin:0 0 8px;">Preparando tu pedido</h2>
-              <p style="margin:0; color:#6b7280;">Te estamos redirigiendo a WhatsApp...</p>
-            </div>
-          </body>
-        </html>
-      `)
-      whatsappWindow.document.close()
-
       await placeOrder({
         customer: formData,
         items: cartItems.map((item) => ({
@@ -147,14 +124,18 @@ export function OrderForm({ isOpen, onClose }: OrderFormProps) {
         channel: "whatsapp",
       })
 
-      whatsappWindow.location.replace(url)
       clearCart()
       closeCart()
       onClose()
       setFormData({ nombre: "", cedula: "", telefono: "" })
       setErrors({})
+
+      const openedWindow = window.open(url, "_blank", "noopener,noreferrer")
+
+      if (!openedWindow) {
+        window.location.assign(url)
+      }
     } catch (error) {
-      whatsappWindow.close()
       setErrors({
         cart:
           error instanceof Error

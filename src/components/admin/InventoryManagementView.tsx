@@ -17,10 +17,6 @@ import { Input } from "@/components/ui/Input"
 import { Badge } from "@/components/ui/Badge"
 import { useStore, type Product } from "@/lib/StoreContext"
 import {
-  getColorOptionsForProduct,
-  getSelectedColorOptions,
-} from "@/lib/productColors"
-import {
   getProductStatus,
   hasMissingPrice,
   hasManualAvailability,
@@ -33,7 +29,6 @@ type ProductDraft = {
   price: string
   stock: string
   isAvailable: boolean
-  availableColors: string[]
 }
 
 type InventoryManagementViewProps = {
@@ -121,7 +116,6 @@ function buildDraft(product: Product): ProductDraft {
     price: product.price.toString(),
     stock: product.stock.toString(),
     isAvailable: hasManualAvailability(product),
-    availableColors: product.availableColors ?? [],
   }
 }
 
@@ -135,12 +129,7 @@ function getPreviewProduct(product: Product, draft?: ProductDraft): Product {
     price: Math.max(0, getDraftNumber(draft.price)),
     stock: Math.max(0, Math.floor(getDraftNumber(draft.stock))),
     isAvailable: draft.isAvailable,
-    availableColors: draft.availableColors,
   }
-}
-
-function serializeColorSelection(colorIds: string[]) {
-  return [...colorIds].sort().join("|")
 }
 
 function ProductQuickCard({
@@ -151,14 +140,12 @@ function ProductQuickCard({
   product,
 }: {
   draft: ProductDraft
-  onChange: (id: string, field: keyof ProductDraft, value: string | boolean | string[]) => void
+  onChange: (id: string, field: keyof ProductDraft, value: string | boolean) => void
   onDelete: (product: Product) => Promise<void> | void
   onSave: (product: Product) => Promise<void> | void
   product: Product
 }) {
   const previewProduct = getPreviewProduct(product, draft)
-  const colorOptions = getColorOptionsForProduct(product)
-  const selectedColorIds = new Set(draft.availableColors)
   const draftPrice = previewProduct.price
   const draftStock = previewProduct.stock
   const availableNow = isProductAvailable(previewProduct)
@@ -168,9 +155,7 @@ function ProductQuickCard({
   const dirty =
     draft.price !== product.price.toString() ||
     draft.stock !== product.stock.toString() ||
-    draft.isAvailable !== hasManualAvailability(product) ||
-    serializeColorSelection(draft.availableColors) !==
-      serializeColorSelection(product.availableColors ?? [])
+    draft.isAvailable !== hasManualAvailability(product)
 
   return (
     <article className="group overflow-hidden rounded-[1.3rem] border border-surface-highlight bg-surface px-4 py-3 shadow-glass transition-all duration-300 hover:border-text-muted">
@@ -192,48 +177,6 @@ function ProductQuickCard({
           <p className="text-[11px] font-mono uppercase tracking-[0.18em] text-text-muted">
             {product.storage} · {conditionLabel[product.condition]}
           </p>
-          <div className="mt-3">
-            <p className="text-[10px] font-mono font-bold uppercase tracking-[0.18em] text-text-muted">
-              Colores visibles
-            </p>
-            <div className="mt-2 flex flex-wrap gap-2">
-              {colorOptions.map((colorOption) => {
-                const selected = selectedColorIds.has(colorOption.id)
-
-                return (
-                  <button
-                    key={colorOption.id}
-                    type="button"
-                    className={`inline-flex items-center gap-2 rounded-full border px-2.5 py-1 text-[10px] font-mono font-bold uppercase tracking-[0.14em] transition-all ${
-                      selected
-                        ? "border-foreground bg-foreground text-background"
-                        : "border-surface-highlight bg-background text-text-muted hover:border-text-muted hover:text-foreground"
-                    }`}
-                    onClick={() =>
-                      onChange(
-                        product.id,
-                        "availableColors",
-                        selected
-                          ? draft.availableColors.filter((colorId) => colorId !== colorOption.id)
-                          : [...draft.availableColors, colorOption.id]
-                      )
-                    }
-                  >
-                    <span
-                      className="h-3 w-3 rounded-full border border-black/10"
-                      style={{ backgroundColor: colorOption.swatch }}
-                    />
-                    {colorOption.label}
-                  </button>
-                )
-              })}
-            </div>
-            {draft.availableColors.length === 0 && (
-              <p className="mt-2 text-xs text-text-muted">
-                Sin colores seleccionados. No se mostraran chips de color en el catalogo.
-              </p>
-            )}
-          </div>
           {missingPrice && (
             <p className="mt-1 text-xs font-medium text-orange-500">
               Tiene stock disponible, pero falta asignar precio.
@@ -391,7 +334,6 @@ export function InventoryManagementView({
           product.storage,
           conditionLabel[product.condition],
           product.category,
-          ...getSelectedColorOptions(product).map((option) => option.label),
         ].join(" ")
       )
       const matchesSearch =
@@ -437,7 +379,7 @@ export function InventoryManagementView({
   function handleDraftChange(
     id: string,
     field: keyof ProductDraft,
-    value: string | boolean | string[]
+    value: string | boolean
   ) {
     setDrafts((current) => ({
       ...current,
@@ -460,7 +402,6 @@ export function InventoryManagementView({
         price: Math.max(0, Number.parseFloat(draft.price) || 0),
         stock: Math.max(0, Number.parseInt(draft.stock, 10) || 0),
         isAvailable: draft.isAvailable,
-        availableColors: draft.availableColors,
       })
       setDrafts((current) => {
         const nextDrafts = { ...current }

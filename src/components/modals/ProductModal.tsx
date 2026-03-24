@@ -7,7 +7,6 @@ import { Input } from "@/components/ui/Input"
 import { useStore, Product } from "@/lib/StoreContext"
 import { motion, AnimatePresence } from "framer-motion"
 import { hasManualAvailability } from "@/lib/productAvailability"
-import { getColorOptionsForProduct, normalizeAvailableColors } from "@/lib/productColors"
 
 function isProductDetail(detail: Product | { defaultCategory?: string } | undefined): detail is Product {
     return Boolean(detail && "id" in detail)
@@ -54,10 +53,7 @@ export const ProductModal = () => {
         storage: "128GB",
         condition: "used" as Product['condition'],
         isAvailable: true,
-        availableColors: [] as string[],
     })
-
-    const colorOptions = getColorOptionsForProduct(formData.name)
 
     useEffect(() => {
         const handleOpen = (event: Event) => {
@@ -75,7 +71,6 @@ export const ProductModal = () => {
                     storage: e.detail.storage || '128GB',
                     condition: e.detail.condition || 'used',
                     isAvailable: hasManualAvailability(e.detail),
-                    availableColors: normalizeAvailableColors(e.detail),
                 })
             } else {
                 const defaultCategory = isProductDetail(e.detail) ? undefined : e.detail?.defaultCategory
@@ -91,7 +86,6 @@ export const ProductModal = () => {
                     storage: "128GB",
                     condition: "used",
                     isAvailable: true,
-                    availableColors: normalizeAvailableColors({ name: "" }),
                 })
             }
             setIsOpen(true)
@@ -120,7 +114,6 @@ export const ProductModal = () => {
             storage: formData.storage,
             condition: formData.condition,
             isAvailable: formData.isAvailable,
-            availableColors: formData.availableColors,
             status
         }
 
@@ -138,23 +131,6 @@ export const ProductModal = () => {
     }
 
     const selectClass = "h-10 w-full rounded-lg border border-surface-highlight bg-surface px-3 text-sm text-foreground focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all"
-    const updateName = (name: string) => {
-        const nextColorIds = new Set(getColorOptionsForProduct(name).map((option) => option.id))
-
-        setFormData((current) => {
-            const availableColors = current.availableColors.filter((colorId) => nextColorIds.has(colorId))
-
-            return {
-                ...current,
-                name,
-                availableColors:
-                    availableColors.length > 0
-                        ? availableColors
-                        : normalizeAvailableColors({ name }),
-            }
-        })
-    }
-
     return (
         <AnimatePresence>
             {isOpen && (
@@ -175,7 +151,11 @@ export const ProductModal = () => {
                         <form onSubmit={handleSubmit} className="p-6 flex flex-col gap-4 overflow-y-auto max-h-[70vh] custom-scrollbar">
                             <div className="flex flex-col gap-1.5">
                                 <label className="text-sm font-bold text-text-muted">Nombre del Producto</label>
-                                <Input required value={formData.name} onChange={(e) => updateName(e.target.value)} />
+                                <Input
+                                    required
+                                    value={formData.name}
+                                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                                />
                             </div>
                             <div className="flex flex-col gap-1.5">
                                 <label className="text-sm font-bold text-text-muted">Categoría</label>
@@ -231,46 +211,6 @@ export const ProductModal = () => {
                             <div className="flex flex-col gap-1.5">
                                 <label className="text-sm font-bold text-text-muted">URL de Imagen (opcional)</label>
                                 <Input value={formData.image} onChange={(e) => setFormData({ ...formData, image: e.target.value })} placeholder="https://... (dejar vacío para silhouette)" />
-                            </div>
-
-                            <div className="flex flex-col gap-2 rounded-xl border border-surface-highlight bg-background px-4 py-4">
-                                <div>
-                                    <p className="text-sm font-bold text-foreground">Colores visibles en catálogo</p>
-                                    <p className="text-xs text-text-muted">
-                                        Selecciona los colores que quieres mostrar para este modelo.
-                                    </p>
-                                </div>
-                                <div className="flex flex-wrap gap-2">
-                                    {colorOptions.map((colorOption) => {
-                                        const selected = formData.availableColors.includes(colorOption.id)
-
-                                        return (
-                                            <button
-                                                key={colorOption.id}
-                                                type="button"
-                                                className={`inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-mono font-bold uppercase tracking-[0.14em] transition-all ${
-                                                    selected
-                                                        ? "border-foreground bg-foreground text-background"
-                                                        : "border-surface-highlight bg-surface text-text-muted hover:border-text-muted hover:text-foreground"
-                                                }`}
-                                                onClick={() =>
-                                                    setFormData((current) => ({
-                                                        ...current,
-                                                        availableColors: selected
-                                                            ? current.availableColors.filter((colorId) => colorId !== colorOption.id)
-                                                            : [...current.availableColors, colorOption.id],
-                                                    }))
-                                                }
-                                            >
-                                                <span
-                                                    className="h-3 w-3 rounded-full border border-black/10"
-                                                    style={{ backgroundColor: colorOption.swatch }}
-                                                />
-                                                {colorOption.label}
-                                            </button>
-                                        )
-                                    })}
-                                </div>
                             </div>
 
                             <div className="flex items-center justify-between rounded-xl border border-surface-highlight bg-background px-4 py-3">
