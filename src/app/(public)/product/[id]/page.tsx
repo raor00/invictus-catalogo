@@ -6,7 +6,6 @@ import { X, LockKey, ChatCircle } from "@phosphor-icons/react"
 import { motion } from "framer-motion"
 import { getWhatsAppUrl } from "@/lib/config"
 import { useStore } from "@/lib/StoreContext"
-import { getSelectedColorOptions } from "@/lib/productColors"
 import { isProductAvailable } from "@/lib/productAvailability"
 
 export default function ProductDetailPage({ params }: { params: Promise<{ id: string }> }) {
@@ -27,8 +26,6 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
     }
 
     const isUnavailable = !isProductAvailable(product)
-    const selectedColorOptions = getSelectedColorOptions(product)
-
     return (
         <div className="min-h-[calc(100dvh-145px)] w-full flex items-center justify-center py-8">
             <motion.div
@@ -65,28 +62,6 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
                         <h2 className={`font-heading text-3xl font-bold leading-tight mb-1 ${isUnavailable ? 'text-text-muted' : 'text-foreground'}`}>{product.name}</h2>
                         <p className="font-mono text-xs text-text-muted tracking-wide">REF: {product.sku}</p>
                     </div>
-
-                    {selectedColorOptions.length > 0 && (
-                        <div className="mb-8">
-                            <p className="mb-3 text-xs font-mono font-bold uppercase tracking-[0.18em] text-text-muted">
-                                Colores disponibles
-                            </p>
-                            <div className="flex flex-wrap gap-2">
-                                {selectedColorOptions.map((colorOption) => (
-                                    <span
-                                        key={colorOption.id}
-                                        className="inline-flex items-center gap-2 rounded-full border border-surface-highlight bg-background px-3 py-1.5 text-xs font-semibold text-foreground"
-                                    >
-                                        <span
-                                            className="h-3 w-3 rounded-full border border-black/10"
-                                            style={{ backgroundColor: colorOption.swatch }}
-                                        />
-                                        {colorOption.label}
-                                    </span>
-                                ))}
-                            </div>
-                        </div>
-                    )}
 
                     {/* Price */}
                     <div className="mb-8">

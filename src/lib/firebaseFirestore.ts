@@ -194,8 +194,22 @@ export async function registerSaleInFirestore(
   const db = getFirestoreDb()
 
   await runTransaction(db, async (transaction) => {
+    const quantityByProduct = new Map<string, number>()
     for (const item of items) {
-      const productRef = doc(db, PRODUCTS_COLLECTION, item.productId)
+      quantityByProduct.set(
+        item.productId,
+        (quantityByProduct.get(item.productId) ?? 0) + item.quantity
+      )
+    }
+
+    const pendingWrites: Array<{
+      historyEntry: ReturnType<typeof createInventoryHistoryEntry>
+      nextProduct: Product
+      productRef: ReturnType<typeof doc>
+    }> = []
+
+    for (const [productId, quantity] of quantityByProduct.entries()) {
+      const productRef = doc(db, PRODUCTS_COLLECTION, productId)
       const snapshot = await transaction.get(productRef)
 
       if (!snapshot.exists()) {
@@ -204,11 +218,11 @@ export async function registerSaleInFirestore(
 
       const product = normalizeProduct(snapshot.data() as Product)
 
-      if (!product.isAvailable || product.stock < item.quantity) {
+      if (!product.isAvailable || product.stock < quantity) {
         throw new Error(`Stock insuficiente para ${product.name}`)
       }
 
-      const nextStock = Math.max(0, product.stock - item.quantity)
+      const nextStock = Math.max(0, product.stock - quantity)
       const nextProduct = normalizeProduct({
         ...product,
         stock: nextStock,
@@ -220,6 +234,14 @@ export async function registerSaleInFirestore(
         userEmail,
       })
 
+      pendingWrites.push({
+        productRef,
+        nextProduct,
+        historyEntry,
+      })
+    }
+
+    for (const { productRef, nextProduct, historyEntry } of pendingWrites) {
       transaction.set(productRef, {
         ...nextProduct,
         status: getProductStatus({

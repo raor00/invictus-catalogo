@@ -59,21 +59,39 @@ export async function POST(request: Request) {
 
   try {
     await database.runTransaction(async (transaction) => {
+      const itemByProduct = new Map<
+        string,
+        { productName: string; quantity: number }
+      >()
       for (const item of payload.items) {
-        const productRef = database.collection("products").doc(item.productId)
+        const existing = itemByProduct.get(item.productId)
+        itemByProduct.set(item.productId, {
+          productName: item.product.name,
+          quantity: (existing?.quantity ?? 0) + item.quantity,
+        })
+      }
+
+      const pendingWrites: Array<{
+        historyEntry: ReturnType<typeof createInventoryHistoryEntry>
+        nextProduct: Product
+        productRef: FirebaseFirestore.DocumentReference
+      }> = []
+
+      for (const [productId, itemData] of itemByProduct.entries()) {
+        const productRef = database.collection("products").doc(productId)
         const snapshot = await transaction.get(productRef)
 
         if (!snapshot.exists) {
-          throw new Error(`El producto ${item.product.name} ya no existe`)
+          throw new Error(`El producto ${itemData.productName} ya no existe`)
         }
 
         const product = normalizeProduct(snapshot.data() as Product)
 
-        if (!product.isAvailable || product.stock < item.quantity) {
+        if (!product.isAvailable || product.stock < itemData.quantity) {
           throw new Error(`Stock insuficiente para ${product.name}`)
         }
 
-        const nextStock = Math.max(0, product.stock - item.quantity)
+        const nextStock = Math.max(0, product.stock - itemData.quantity)
         const nextProduct = normalizeProduct({
           ...product,
           stock: nextStock,
@@ -85,6 +103,14 @@ export async function POST(request: Request) {
           userEmail: "pedido-web",
         })
 
+        pendingWrites.push({
+          productRef,
+          nextProduct,
+          historyEntry,
+        })
+      }
+
+      for (const { productRef, nextProduct, historyEntry } of pendingWrites) {
         transaction.set(productRef, {
           ...nextProduct,
           status: getProductStatus({
