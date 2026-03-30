@@ -20,8 +20,8 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Ventas al Mayor | Catálogo Mayorista",
-  description: "Catálogo mayorista de iPhone y repuestos.",
+  title: "Invictus | Catálogo Mayorista",
+  description: "Catálogo mayorista de iPhone y repuestos de Invictus.",
 };
 
 export default function RootLayout({
@@ -31,12 +31,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es" className="light" suppressHydrationWarning>
-      <head>
-        <link
-          rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
-        />
-      </head>
       <body
         className={`${spaceGrotesk.variable} ${interTight.variable} ${jetbrainsMono.variable} antialiased min-h-[100dvh] font-body bg-[var(--background)] text-[var(--foreground)] selection:bg-primary selection:text-white flex flex-col`}
       >

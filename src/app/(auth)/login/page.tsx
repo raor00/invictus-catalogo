@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { useStore } from "@/lib/StoreContext"
-import { Lightning, Package, ArrowsClockwise, Eye, EyeSlash } from "@phosphor-icons/react"
+import { Lightning, ArrowsClockwise, Eye, EyeSlash } from "@phosphor-icons/react"
 
 export default function LoginPage() {
     const [username, setUsername] = useState("")
@@ -44,7 +44,7 @@ export default function LoginPage() {
                     <div className="flex items-center gap-2">
                         <Lightning weight="fill" className="text-black text-4xl" />
                         <div className="flex flex-col">
-                            <span className="font-heading font-bold text-3xl tracking-tight leading-none text-black">MAYORISTA</span>
+                            <span className="font-heading font-bold text-3xl tracking-tight leading-none text-black">INVICTUS</span>
                         </div>
                     </div>
                 </div>
@@ -84,7 +84,7 @@ export default function LoginPage() {
                 {/* Mobile Logo */}
                 <div className="lg:hidden flex items-center gap-2 mb-8 self-start">
                     <Lightning weight="fill" className="text-white text-3xl" />
-                    <span className="font-heading font-bold text-2xl tracking-tight text-white">MAYORISTA</span>
+                    <span className="font-heading font-bold text-2xl tracking-tight text-white">INVICTUS</span>
                 </div>
 
                 <div className="w-full max-w-md flex flex-col gap-10 z-10">
@@ -184,7 +184,7 @@ export default function LoginPage() {
 
                     <div className="mt-8">
                         <p className="text-[10px] text-[#333] font-mono leading-relaxed font-bold">
-                            © {new Date().getFullYear()} MAYORISTA. TODOS LOS DERECHOS RESERVADOS.
+                            © {new Date().getFullYear()} INVICTUS. TODOS LOS DERECHOS RESERVADOS.
                             <br />ACCESO PROTEGIDO POR 2FA.
                         </p>
                     </div>

@@ -4,7 +4,6 @@ import React from "react"
 import Link from "next/link"
 import { useSearchParams } from "next/navigation"
 import { Lightning, UserCircle, ShoppingBag } from "@phosphor-icons/react"
-import { motion } from "framer-motion"
 import { useCart } from "@/lib/CartContext"
 
 export function PublicHeader() {
@@ -25,7 +24,7 @@ export function PublicHeader() {
                             <Lightning weight="fill" size={20} />
                         </div>
                         <div className="flex flex-col leading-none">
-                            <h1 className="font-heading font-bold text-lg sm:text-xl tracking-wide text-text-main">VENTAS</h1>
+                            <h1 className="font-heading font-bold text-lg sm:text-xl tracking-wide text-text-main">INVICTUS</h1>
                             <span className="font-mono text-[9px] sm:text-[10px] text-primary tracking-[0.2em] uppercase">Al Mayor</span>
                         </div>
                     </Link>
@@ -64,8 +63,8 @@ export function PublicHeader() {
                     <Link
                         href="/?category=iphones"
                         className={`flex-1 py-3 sm:py-4 text-center font-heading font-bold text-sm sm:text-lg transition-colors ${!isPartsActive
-                                ? "text-text-main border-b-2 border-primary bg-primary/10"
-                                : "text-text-muted border-b-2 border-transparent hover:text-text-main hover:border-secondary hover:bg-secondary/5"
+                                ? "text-primary border-b-2 border-primary bg-primary/10"
+                                : "text-text-muted border-b-2 border-transparent hover:text-primary hover:border-secondary hover:bg-secondary/5"
                             }`}
                     >
                         IPHONES AL MAYOR
@@ -73,8 +72,8 @@ export function PublicHeader() {
                     <Link
                         href="/?category=parts"
                         className={`flex-1 py-3 sm:py-4 text-center font-heading font-bold text-sm sm:text-lg transition-colors ${isPartsActive
-                                ? "text-text-main border-b-2 border-primary bg-primary/10"
-                                : "text-text-muted border-b-2 border-transparent hover:text-text-main hover:border-secondary hover:bg-secondary/5"
+                                ? "text-primary border-b-2 border-primary bg-primary/10"
+                                : "text-text-muted border-b-2 border-transparent hover:text-primary hover:border-secondary hover:bg-secondary/5"
                             }`}
                     >
                         REPUESTOS & PARTES

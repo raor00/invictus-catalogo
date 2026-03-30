@@ -1,6 +1,6 @@
 "use client"
 
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useEffect, useState, useSyncExternalStore } from 'react';
 import type { Product } from '@/lib/StoreContext';
 import { MIN_ITEM_QUANTITY } from '@/lib/config';
 
@@ -27,29 +27,38 @@ type CartContextType = {
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
+function getInitialCartItems(): CartItem[] {
+  if (typeof window === 'undefined') {
+    return [];
+  }
+
+  const saved = localStorage.getItem('invictus_cart');
+  if (!saved) {
+    return [];
+  }
+
+  try {
+    return JSON.parse(saved) as CartItem[];
+  } catch {
+    return [];
+  }
+}
+
 export const CartProvider = ({ children }: { children: React.ReactNode }) => {
-  const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  const [cartItems, setCartItems] = useState<CartItem[]>(getInitialCartItems);
   const [isCartOpen, setIsCartOpen] = useState(false);
-  const [loaded, setLoaded] = useState(false);
   const [viewer3DProduct, setViewer3DProduct] = useState<Product | null>(null);
+  const isHydrated = useSyncExternalStore(
+    () => () => undefined,
+    () => true,
+    () => false
+  );
 
   useEffect(() => {
-    const saved = localStorage.getItem('invictus_cart');
-    if (saved) {
-      try {
-        setCartItems(JSON.parse(saved));
-      } catch {
-        setCartItems([]);
-      }
-    }
-    setLoaded(true);
-  }, []);
-
-  useEffect(() => {
-    if (loaded) {
+    if (isHydrated) {
       localStorage.setItem('invictus_cart', JSON.stringify(cartItems));
     }
-  }, [cartItems, loaded]);
+  }, [cartItems, isHydrated]);
 
   const addToCart = (product: Product, quantity: number) => {
     setCartItems(prev => {
@@ -80,12 +89,14 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
 
   const clearCart = () => setCartItems([]);
 
-  const cartTotal = cartItems.reduce(
+  const visibleCartItems = isHydrated ? cartItems : [];
+
+  const cartTotal = visibleCartItems.reduce(
     (sum, item) => sum + item.product.price * item.quantity,
     0
   );
 
-  const cartCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+  const cartCount = visibleCartItems.reduce((sum, item) => sum + item.quantity, 0);
 
   const openCart = () => setIsCartOpen(true);
   const closeCart = () => setIsCartOpen(false);
@@ -95,7 +106,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   return (
     <CartContext.Provider
       value={{
-        cartItems,
+        cartItems: visibleCartItems,
         addToCart,
         removeFromCart,
         updateQuantity,
