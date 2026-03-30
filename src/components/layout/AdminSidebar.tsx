@@ -50,7 +50,7 @@ export function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
                         <div className="flex gap-3 items-center">
                             <Lightning weight="fill" className="text-black text-4xl" />
                             <div className="flex flex-col">
-                                <span className="font-heading font-bold text-xl tracking-tight leading-none text-black">INVICTUS</span>
+                                <span className="font-heading font-bold text-xl tracking-tight leading-none text-black">INVICTUS PHONE</span>
                             </div>
                         </div>
                         <button

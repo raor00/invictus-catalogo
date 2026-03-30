@@ -34,7 +34,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 <header className="lg:hidden h-16 flex items-center justify-between px-6 bg-background border-b border-surface-highlight z-50 flex-shrink-0">
                     <div className="flex gap-2 items-center">
                         <Lightning weight="fill" className="text-black text-2xl" />
-                        <span className="font-heading font-bold text-sm tracking-tight text-black">INVICTUS</span>
+                        <span className="font-heading font-bold text-sm tracking-tight text-black">INVICTUS PHONE</span>
                     </div>
                     <button
                         onClick={() => setIsSidebarOpen(true)}

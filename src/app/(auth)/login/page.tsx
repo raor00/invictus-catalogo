@@ -44,7 +44,7 @@ export default function LoginPage() {
                     <div className="flex items-center gap-2">
                         <Lightning weight="fill" className="text-black text-4xl" />
                         <div className="flex flex-col">
-                            <span className="font-heading font-bold text-3xl tracking-tight leading-none text-black">INVICTUS</span>
+                            <span className="font-heading font-bold text-3xl tracking-tight leading-none text-black">INVICTUS PHONE</span>
                         </div>
                     </div>
                 </div>
@@ -84,7 +84,7 @@ export default function LoginPage() {
                 {/* Mobile Logo */}
                 <div className="lg:hidden flex items-center gap-2 mb-8 self-start">
                     <Lightning weight="fill" className="text-white text-3xl" />
-                    <span className="font-heading font-bold text-2xl tracking-tight text-white">INVICTUS</span>
+                    <span className="font-heading font-bold text-2xl tracking-tight text-white">INVICTUS PHONE</span>
                 </div>
 
                 <div className="w-full max-w-md flex flex-col gap-10 z-10">
