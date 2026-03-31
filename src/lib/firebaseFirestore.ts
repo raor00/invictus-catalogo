@@ -1,21 +1,26 @@
 import {
   collection,
   doc,
+  getDoc,
   getDocs,
   onSnapshot,
   orderBy,
   query,
   runTransaction,
+  setDoc,
   writeBatch,
 } from "firebase/firestore"
+import { DEFAULT_APP_SETTINGS, normalizeAppSettings } from "@/lib/appSettings"
 import { DEFAULT_CATALOG } from "@/data/catalog"
 import { firebaseDb } from "@/lib/firebaseClient"
 import { createInventoryHistoryEntry } from "@/lib/inventoryHistory"
 import { getProductStatus, normalizeProduct } from "@/lib/productAvailability"
-import type { InventoryHistoryEntry, Product } from "@/lib/storeTypes"
+import type { AppSettings, InventoryHistoryEntry, Product } from "@/lib/storeTypes"
 
 const PRODUCTS_COLLECTION = "products"
 const INVENTORY_HISTORY_COLLECTION = "inventoryHistory"
+const APP_SETTINGS_COLLECTION = "appSettings"
+const PUBLIC_HEADER_SETTINGS_ID = "publicHeader"
 
 function getFirestoreDb() {
   if (!firebaseDb) {
@@ -31,6 +36,10 @@ function getProductsCollection() {
 
 function getInventoryHistoryCollection() {
   return collection(getFirestoreDb(), INVENTORY_HISTORY_COLLECTION)
+}
+
+function getAppSettingsRef() {
+  return doc(getFirestoreDb(), APP_SETTINGS_COLLECTION, PUBLIC_HEADER_SETTINGS_ID)
 }
 
 function serializeProduct(product: Product) {
@@ -81,6 +90,17 @@ export async function ensureDefaultCatalogProductsInFirestore() {
   await batch.commit()
 }
 
+export async function ensureAppSettingsInFirestore() {
+  const settingsRef = getAppSettingsRef()
+  const snapshot = await getDoc(settingsRef)
+
+  if (snapshot.exists()) {
+    return
+  }
+
+  await setDoc(settingsRef, DEFAULT_APP_SETTINGS)
+}
+
 export async function subscribeToProducts(
   onProducts: (products: Product[]) => void,
   onError: (error: Error) => void
@@ -117,6 +137,36 @@ export async function subscribeToInventoryHistory(
     },
     (error) => onError(error)
   )
+}
+
+export async function subscribeToAppSettings(
+  onSettings: (settings: AppSettings) => void,
+  onError: (error: Error) => void
+) {
+  if (!firebaseDb) {
+    return () => undefined
+  }
+
+  return onSnapshot(
+    getAppSettingsRef(),
+    (snapshot) => {
+      if (!snapshot.exists()) {
+        onSettings(DEFAULT_APP_SETTINGS)
+        return
+      }
+
+      onSettings(normalizeAppSettings(snapshot.data() as Partial<AppSettings>))
+    },
+    (error) => onError(error)
+  )
+}
+
+export async function updateAppSettingsInFirestore(settings: AppSettings) {
+  if (!firebaseDb) {
+    throw new Error("Firebase no esta configurado")
+  }
+
+  await setDoc(getAppSettingsRef(), normalizeAppSettings(settings))
 }
 
 export async function createProductInFirestore(product: Product, userEmail: string | null = null) {

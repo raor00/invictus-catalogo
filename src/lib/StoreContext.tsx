@@ -3,20 +3,24 @@
 import React, { createContext, useContext, useEffect, useRef, useState } from "react"
 import { onAuthStateChanged, signInWithEmailAndPassword, signOut } from "firebase/auth"
 import { DEFAULT_CATALOG } from "@/data/catalog"
+import { DEFAULT_APP_SETTINGS, normalizeAppSettings } from "@/lib/appSettings"
 import { firebaseAuth, isFirebaseConfigured } from "@/lib/firebaseClient"
 import {
   ensureDefaultCatalogProductsInFirestore,
+  ensureAppSettingsInFirestore,
   createProductInFirestore,
   deleteProductInFirestore,
   registerSaleInFirestore,
+  subscribeToAppSettings,
   seedCatalogInFirestore,
   subscribeToInventoryHistory,
   subscribeToProducts,
+  updateAppSettingsInFirestore,
   updateProductInFirestore,
 } from "@/lib/firebaseFirestore"
 import { createInventoryHistoryEntry } from "@/lib/inventoryHistory"
 import { normalizeProduct } from "@/lib/productAvailability"
-import type { InventoryHistoryEntry, PlaceOrderInput, Product, StoredOrder } from "@/lib/storeTypes"
+import type { AppSettings, InventoryHistoryEntry, PlaceOrderInput, Product, StoredOrder } from "@/lib/storeTypes"
 
 const CATALOG_VERSION = "2026-03-18-wholesale-refresh-v2"
 
@@ -25,8 +29,10 @@ export type { PlaceOrderInput, Product, StoredOrder } from "@/lib/storeTypes"
 type StoreContextType = {
   products: Product[]
   inventoryHistory: InventoryHistoryEntry[]
+  appSettings: AppSettings
   addProduct: (p: Product) => Promise<void>
   updateProduct: (id: string, p: Partial<Product>) => Promise<void>
+  updateAppSettings: (settings: Partial<AppSettings>) => Promise<void>
   deleteProduct: (id: string) => Promise<void>
   registerSale: (items: Array<{ productId: string; quantity: number }>) => Promise<void>
   placeOrder: (payload: PlaceOrderInput) => Promise<{ orderId?: string }>
@@ -103,14 +109,32 @@ function readLocalInventoryHistory() {
   }
 }
 
+function readLocalAppSettings() {
+  const savedSettings = localStorage.getItem("invictus_app_settings")
+
+  if (!savedSettings) {
+    localStorage.setItem("invictus_app_settings", JSON.stringify(DEFAULT_APP_SETTINGS))
+    return DEFAULT_APP_SETTINGS
+  }
+
+  try {
+    return normalizeAppSettings(JSON.parse(savedSettings) as Partial<AppSettings>)
+  } catch {
+    localStorage.setItem("invictus_app_settings", JSON.stringify(DEFAULT_APP_SETTINGS))
+    return DEFAULT_APP_SETTINGS
+  }
+}
+
 export const StoreProvider = ({ children }: { children: React.ReactNode }) => {
   const [products, setProducts] = useState<Product[]>([])
   const [inventoryHistory, setInventoryHistory] = useState<InventoryHistoryEntry[]>([])
+  const [appSettings, setAppSettings] = useState<AppSettings>(DEFAULT_APP_SETTINGS)
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [isReady, setIsReady] = useState(false)
   const [userEmail, setUserEmail] = useState<string | null>(null)
   const didBootstrapFirebaseCatalog = useRef(false)
   const didEnsureDefaultCatalogProducts = useRef(false)
+  const didEnsureAppSettings = useRef(false)
 
   useEffect(() => {
     if (!isFirebaseConfigured || !firebaseAuth) {
@@ -118,6 +142,7 @@ export const StoreProvider = ({ children }: { children: React.ReactNode }) => {
         const auth = localStorage.getItem("invictus_auth")
         setProducts(readLocalProducts())
         setInventoryHistory(readLocalInventoryHistory())
+        setAppSettings(readLocalAppSettings())
         setIsAuthenticated(auth === "true")
         setUserEmail(auth === "true" ? "admin@mayorista.com" : null)
         setIsReady(true)
@@ -129,11 +154,13 @@ export const StoreProvider = ({ children }: { children: React.ReactNode }) => {
     let authResolved = false
     let productsResolved = false
     let historyResolved = false
+    let settingsResolved = false
     let unsubscribeProducts: () => void = () => {}
     let unsubscribeHistory: () => void = () => {}
+    let unsubscribeSettings: () => void = () => {}
 
     const markReady = () => {
-      if (!cancelled && authResolved && productsResolved && historyResolved) {
+      if (!cancelled && authResolved && productsResolved && historyResolved && settingsResolved) {
         setIsReady(true)
       }
     }
@@ -172,10 +199,25 @@ export const StoreProvider = ({ children }: { children: React.ReactNode }) => {
             markReady()
           }
         )
+
+        unsubscribeSettings = await subscribeToAppSettings(
+          (nextSettings) => {
+            settingsResolved = true
+            setAppSettings(nextSettings)
+            markReady()
+          },
+          (error) => {
+            console.error("No se pudo sincronizar configuracion publica", error)
+            settingsResolved = true
+            setAppSettings(DEFAULT_APP_SETTINGS)
+            markReady()
+          }
+        )
       } catch (error) {
         console.error("No se pudo inicializar la suscripcion de productos", error)
         productsResolved = true
         historyResolved = true
+        settingsResolved = true
         markReady()
       }
     })()
@@ -185,6 +227,7 @@ export const StoreProvider = ({ children }: { children: React.ReactNode }) => {
       unsubscribeAuth()
       unsubscribeProducts()
       unsubscribeHistory()
+      unsubscribeSettings()
     }
   }, [])
 
@@ -213,6 +256,14 @@ export const StoreProvider = ({ children }: { children: React.ReactNode }) => {
   }, [inventoryHistory, isReady])
 
   useEffect(() => {
+    if (!isReady || isFirebaseConfigured) {
+      return
+    }
+
+    localStorage.setItem("invictus_app_settings", JSON.stringify(appSettings))
+  }, [appSettings, isReady])
+
+  useEffect(() => {
     if (
       !isFirebaseConfigured ||
       !isAuthenticated ||
@@ -228,6 +279,19 @@ export const StoreProvider = ({ children }: { children: React.ReactNode }) => {
       didBootstrapFirebaseCatalog.current = false
     })
   }, [isAuthenticated, products])
+
+  useEffect(() => {
+    if (!isFirebaseConfigured || didEnsureAppSettings.current) {
+      return
+    }
+
+    didEnsureAppSettings.current = true
+
+    void ensureAppSettingsInFirestore().catch((error) => {
+      console.error("No se pudo crear la configuracion publica inicial", error)
+      didEnsureAppSettings.current = false
+    })
+  }, [])
 
   useEffect(() => {
     if (
@@ -319,6 +383,22 @@ export const StoreProvider = ({ children }: { children: React.ReactNode }) => {
     }
 
     await deleteProductInFirestore(id, userEmail)
+  }
+
+  const updateAppSettings = async (settings: Partial<AppSettings>) => {
+    const nextSettings = normalizeAppSettings({
+      ...appSettings,
+      ...settings,
+      updatedAt: new Date().toISOString(),
+      updatedBy: userEmail,
+    })
+
+    if (!isFirebaseConfigured) {
+      setAppSettings(nextSettings)
+      return
+    }
+
+    await updateAppSettingsInFirestore(nextSettings)
   }
 
   const registerSale = async (items: Array<{ productId: string; quantity: number }>) => {
@@ -449,8 +529,10 @@ export const StoreProvider = ({ children }: { children: React.ReactNode }) => {
       value={{
         products,
         inventoryHistory,
+        appSettings,
         addProduct,
         updateProduct,
+        updateAppSettings,
         deleteProduct,
         registerSale,
         placeOrder,

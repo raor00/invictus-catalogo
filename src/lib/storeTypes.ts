@@ -41,6 +41,14 @@ export type InventoryHistoryEntry = {
   note: string
 }
 
+export type AppSettings = {
+  tickerMessage: string
+  dailyRate: number
+  autoLastInventoryChange: boolean
+  updatedAt: string
+  updatedBy: string | null
+}
+
 export type OrderCustomer = {
   nombre: string
   cedula: string

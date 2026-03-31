@@ -6,6 +6,8 @@ import Image from "next/image"
 import { useSearchParams } from "next/navigation"
 import { UserCircle, ShoppingBag } from "@phosphor-icons/react"
 import { useCart } from "@/lib/CartContext"
+import { buildTickerMessage } from "@/lib/appSettings"
+import { useStore } from "@/lib/StoreContext"
 import { ThemeSwitch } from "@/components/ui/ThemeSwitch"
 
 export function PublicHeader() {
@@ -13,6 +15,14 @@ export function PublicHeader() {
     const currentCategory = searchParams.get("category") || "iphones"
     const isPartsActive = currentCategory === "parts"
     const { cartCount, openCart } = useCart()
+    const { appSettings, inventoryHistory } = useStore()
+    const tickerMessage = buildTickerMessage({
+        baseMessage: appSettings.tickerMessage,
+        dailyRate: appSettings.dailyRate,
+        inventoryHistory,
+        includeLastChange: appSettings.autoLastInventoryChange,
+        updatedAt: appSettings.updatedAt,
+    })
 
     return (
         <header className="fixed top-0 left-0 right-0 z-50 glass-panel">
@@ -45,7 +55,7 @@ export function PublicHeader() {
                     {/* Ticker (Hidden on mobile) */}
                     <div className="hidden md:flex flex-1 mx-10 overflow-hidden relative h-6 rounded border border-[var(--glass-border)] items-center liquid-glass">
                         <div className="whitespace-nowrap animate-ticker font-mono text-xs text-[var(--text-muted)]">
-                            PRECIOS SUJETOS A CAMBIO // ACTUALIZADO HOY 09:00 AM // USD TASA DEL DÍA: 36.5 // NUEVO STOCK DE IPHONE 15 PRO MAX // ENVIOS A TODO EL PAÍS
+                            {`${tickerMessage} // ${tickerMessage}`}
                         </div>
                     </div>
 
