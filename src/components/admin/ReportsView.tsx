@@ -229,7 +229,7 @@ export function ReportsView() {
   return (
     <div className="flex-1 overflow-y-auto overflow-x-hidden">
       <div className="mx-auto flex w-full max-w-[1520px] flex-col gap-6 px-4 py-6 sm:px-8 sm:py-8">
-        <section className="rounded-[2rem] border border-surface-highlight bg-surface p-6 shadow-glass sm:p-8">
+        <section className="rounded-[2rem] border border-[var(--surface-highlight)] bg-[var(--surface)] p-6 shadow-glass sm:p-8">
           <div className="flex flex-col gap-6 xl:flex-row xl:items-start xl:justify-between">
             <div className="max-w-3xl">
               <p className="mb-3 font-mono text-[11px] font-bold uppercase tracking-[0.24em] text-text-muted">
@@ -251,7 +251,7 @@ export function ReportsView() {
           </div>
 
           <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-            <article className="rounded-[1.6rem] border border-surface-highlight bg-background px-5 py-5">
+            <article className="rounded-[1.6rem] border border-[var(--surface-highlight)] bg-[var(--background)] px-5 py-5">
               <div className="flex items-center gap-3">
                 <div className="rounded-2xl bg-primary/15 p-3 text-primary">
                   <Package size={20} weight="fill" />
@@ -264,7 +264,7 @@ export function ReportsView() {
                 </div>
               </div>
             </article>
-            <article className="rounded-[1.6rem] border border-surface-highlight bg-background px-5 py-5">
+            <article className="rounded-[1.6rem] border border-[var(--surface-highlight)] bg-[var(--background)] px-5 py-5">
               <div className="flex items-center gap-3">
                 <div className="rounded-2xl bg-primary/15 p-3 text-primary">
                   <ChartBar size={20} weight="fill" />
@@ -277,7 +277,7 @@ export function ReportsView() {
                 </div>
               </div>
             </article>
-            <article className="rounded-[1.6rem] border border-surface-highlight bg-background px-5 py-5">
+            <article className="rounded-[1.6rem] border border-[var(--surface-highlight)] bg-[var(--background)] px-5 py-5">
               <div className="flex items-center gap-3">
                 <div className="rounded-2xl bg-primary/15 p-3 text-primary">
                   <TrendUp size={20} weight="bold" />
@@ -293,7 +293,7 @@ export function ReportsView() {
                 </div>
               </div>
             </article>
-            <article className="rounded-[1.6rem] border border-surface-highlight bg-background px-5 py-5">
+            <article className="rounded-[1.6rem] border border-[var(--surface-highlight)] bg-[var(--background)] px-5 py-5">
               <div className="flex items-center gap-3">
                 <div className="rounded-2xl bg-primary/15 p-3 text-primary">
                   <ClockCounterClockwise size={20} weight="bold" />
@@ -310,19 +310,19 @@ export function ReportsView() {
         </section>
 
         <section className="grid gap-6 xl:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
-          <article className="rounded-[2rem] border border-surface-highlight bg-surface p-5 shadow-glass sm:p-6">
+          <article className="rounded-[2rem] border border-[var(--surface-highlight)] bg-[var(--surface)] p-5 shadow-glass sm:p-6">
             <div className="mb-4 flex items-center gap-3">
               <TrendDown size={18} className="text-critical" weight="bold" />
               <h3 className="font-heading text-xl font-bold text-foreground">Reducciones recientes</h3>
             </div>
             <div className="space-y-3">
               {stockReductions.length === 0 ? (
-                <p className="rounded-2xl border border-dashed border-surface-highlight bg-background px-4 py-8 text-sm text-text-muted">
+                <p className="rounded-2xl border border-dashed border-[var(--surface-highlight)] bg-[var(--background)] px-4 py-8 text-sm text-text-muted">
                   Aun no hay reducciones registradas.
                 </p>
               ) : (
                 stockReductions.map((entry) => (
-                  <div key={entry.id} className="rounded-2xl border border-surface-highlight bg-background px-4 py-4">
+                  <div key={entry.id} className="rounded-2xl border border-[var(--surface-highlight)] bg-[var(--background)] px-4 py-4">
                     <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
                       <div>
                         <p className="font-heading text-base font-bold text-foreground">
@@ -345,19 +345,19 @@ export function ReportsView() {
             </div>
           </article>
 
-          <article className="rounded-[2rem] border border-surface-highlight bg-surface p-5 shadow-glass sm:p-6">
+          <article className="rounded-[2rem] border border-[var(--surface-highlight)] bg-[var(--surface)] p-5 shadow-glass sm:p-6">
             <div className="mb-4 flex items-center gap-3">
               <ClockCounterClockwise size={18} className="text-primary" weight="bold" />
               <h3 className="font-heading text-xl font-bold text-foreground">Historial interno</h3>
             </div>
             <div className="space-y-3">
               {recentChanges.length === 0 ? (
-                <p className="rounded-2xl border border-dashed border-surface-highlight bg-background px-4 py-8 text-sm text-text-muted">
+                <p className="rounded-2xl border border-dashed border-[var(--surface-highlight)] bg-[var(--background)] px-4 py-8 text-sm text-text-muted">
                   Todavia no hay movimientos guardados.
                 </p>
               ) : (
                 recentChanges.map((entry) => (
-                  <div key={entry.id} className="rounded-2xl border border-surface-highlight bg-background px-4 py-4">
+                  <div key={entry.id} className="rounded-2xl border border-[var(--surface-highlight)] bg-[var(--background)] px-4 py-4">
                     <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
                       <div>
                         <p className="font-heading text-base font-bold text-foreground">
