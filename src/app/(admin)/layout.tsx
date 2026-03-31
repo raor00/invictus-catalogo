@@ -1,10 +1,11 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import Image from "next/image"
 import { useRouter } from "next/navigation"
 import { AdminSidebar } from "@/components/layout/AdminSidebar"
 import { ProductModal } from "@/components/modals/ProductModal"
-import { Lightning, List } from "@phosphor-icons/react"
+import { List } from "@phosphor-icons/react"
 import { useStore } from "@/lib/StoreContext"
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
@@ -33,7 +34,14 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 {/* Mobile Header */}
                 <header className="lg:hidden h-16 flex items-center justify-between px-6 bg-background border-b border-surface-highlight z-50 flex-shrink-0">
                     <div className="flex gap-2 items-center">
-                        <Lightning weight="fill" className="text-black text-2xl" />
+                        <Image
+                            src="/logo-invictus.png"
+                            alt="Invictus Phone"
+                            width={28}
+                            height={28}
+                            className="object-contain"
+                            priority
+                        />
                         <span className="font-heading font-bold text-sm tracking-tight text-black">INVICTUS PHONE</span>
                     </div>
                     <button

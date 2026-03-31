@@ -23,6 +23,11 @@ const jetbrainsMono = JetBrains_Mono({
 export const metadata: Metadata = {
   title: "Invictus | Catálogo Mayorista",
   description: "Catálogo mayorista de iPhone y repuestos de Invictus.",
+  icons: {
+    icon: "/logo-invictus.png",
+    shortcut: "/logo-invictus.png",
+    apple: "/logo-invictus.png",
+  },
 };
 
 export default function RootLayout({

@@ -168,7 +168,7 @@ const providedInventoryMap = new Map(
   PROVIDED_INVENTORY.map((row) => [`${row.name}|${row.storage}`, row] as const)
 )
 
-export const DEFAULT_CATALOG: Product[] = MODEL_DEFINITIONS.flatMap((model) =>
+const DEFAULT_IPHONE_CATALOG: Product[] = MODEL_DEFINITIONS.flatMap((model) =>
   model.storages.map((storage) => {
     const providedRow = providedInventoryMap.get(`${model.name}|${storage}`)
     const price = providedRow?.price ?? 0
@@ -189,3 +189,89 @@ export const DEFAULT_CATALOG: Product[] = MODEL_DEFINITIONS.flatMap((model) =>
     }
   })
 )
+
+const DEFAULT_PARTS_CATALOG: Product[] = [
+  {
+    id: "part-display-iphone-14-pro",
+    name: "Pantalla iPhone 14 Pro",
+    sku: "INV-REP-14P-DISPLAY",
+    storage: "Repuesto",
+    condition: "new",
+    price: 0,
+    stock: 0,
+    image: img("part-display-iphone-14-pro"),
+    category: "Repuestos",
+    status: deriveStatus(0),
+    isAvailable: false,
+  },
+  {
+    id: "part-battery-iphone-13",
+    name: "Bateria iPhone 13",
+    sku: "INV-REP-13-BATTERY",
+    storage: "Repuesto",
+    condition: "new",
+    price: 0,
+    stock: 0,
+    image: img("part-battery-iphone-13"),
+    category: "Repuestos",
+    status: deriveStatus(0),
+    isAvailable: false,
+  },
+  {
+    id: "part-camera-iphone-15-pro-max",
+    name: "Camara iPhone 15 Pro Max",
+    sku: "INV-REP-15PM-CAMERA",
+    storage: "Repuesto",
+    condition: "new",
+    price: 0,
+    stock: 0,
+    image: img("part-camera-iphone-15-pro-max"),
+    category: "Repuestos",
+    status: deriveStatus(0),
+    isAvailable: false,
+  },
+  {
+    id: "part-backglass-iphone-12",
+    name: "Tapa trasera iPhone 12",
+    sku: "INV-REP-12-BACKGLASS",
+    storage: "Repuesto",
+    condition: "new",
+    price: 0,
+    stock: 0,
+    image: img("part-backglass-iphone-12"),
+    category: "Repuestos",
+    status: deriveStatus(0),
+    isAvailable: false,
+  },
+  {
+    id: "part-charging-flex-iphone-11",
+    name: "Flex de carga iPhone 11",
+    sku: "INV-REP-11-CHARGE",
+    storage: "Repuesto",
+    condition: "new",
+    price: 0,
+    stock: 0,
+    image: img("part-charging-flex-iphone-11"),
+    category: "Repuestos",
+    status: deriveStatus(0),
+    isAvailable: false,
+  },
+  {
+    id: "part-speaker-iphone-14",
+    name: "Altavoz iPhone 14",
+    sku: "INV-REP-14-SPEAKER",
+    storage: "Repuesto",
+    condition: "new",
+    price: 0,
+    stock: 0,
+    image: img("part-speaker-iphone-14"),
+    category: "Repuestos",
+    status: deriveStatus(0),
+    isAvailable: false,
+  },
+]
+
+export const DEFAULT_CATALOG: Product[] = [
+  ...DEFAULT_IPHONE_CATALOG,
+  ...DEFAULT_PARTS_CATALOG,
+]

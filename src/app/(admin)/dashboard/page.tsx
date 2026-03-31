@@ -8,13 +8,13 @@ export default function AdminDashboardPage() {
 
   return (
     <InventoryManagementView
-      countLabel="Total equipos"
-      description="Ajusta precio, stock y disponibilidad directo desde la lista principal. El catalogo publico solo muestra disponible o no disponible."
+      countLabel="Total inventario"
+      description="Administra iPhones y repuestos desde el dashboard principal con filtros por categoria, disponibilidad y edicion rapida."
+      enableCategoryFilter
       emptyMessage="No se encontraron productos con esos filtros."
       newButtonLabel="Nuevo producto"
       products={products}
-      searchPlaceholder="Buscar por producto..."
-      statsFilter={(product) => product.category !== "Repuestos"}
+      searchPlaceholder="Buscar iPhone o repuesto..."
       title="Dashboard de inventario con edicion rapida"
     />
   )

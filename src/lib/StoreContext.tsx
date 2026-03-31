@@ -5,6 +5,7 @@ import { onAuthStateChanged, signInWithEmailAndPassword, signOut } from "firebas
 import { DEFAULT_CATALOG } from "@/data/catalog"
 import { firebaseAuth, isFirebaseConfigured } from "@/lib/firebaseClient"
 import {
+  ensureDefaultCatalogProductsInFirestore,
   createProductInFirestore,
   deleteProductInFirestore,
   registerSaleInFirestore,
@@ -109,6 +110,7 @@ export const StoreProvider = ({ children }: { children: React.ReactNode }) => {
   const [isReady, setIsReady] = useState(false)
   const [userEmail, setUserEmail] = useState<string | null>(null)
   const didBootstrapFirebaseCatalog = useRef(false)
+  const didEnsureDefaultCatalogProducts = useRef(false)
 
   useEffect(() => {
     if (!isFirebaseConfigured || !firebaseAuth) {
@@ -224,6 +226,24 @@ export const StoreProvider = ({ children }: { children: React.ReactNode }) => {
     void seedCatalogInFirestore().catch((error) => {
       console.error("No se pudo sembrar el catalogo inicial en Firebase", error)
       didBootstrapFirebaseCatalog.current = false
+    })
+  }, [isAuthenticated, products])
+
+  useEffect(() => {
+    if (
+      !isFirebaseConfigured ||
+      !isAuthenticated ||
+      didEnsureDefaultCatalogProducts.current ||
+      products.length === 0
+    ) {
+      return
+    }
+
+    didEnsureDefaultCatalogProducts.current = true
+
+    void ensureDefaultCatalogProductsInFirestore().catch((error) => {
+      console.error("No se pudieron sincronizar productos base faltantes en Firebase", error)
+      didEnsureDefaultCatalogProducts.current = false
     })
   }, [isAuthenticated, products])
 

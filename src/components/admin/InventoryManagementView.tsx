@@ -24,6 +24,7 @@ import {
 } from "@/lib/productAvailability"
 
 type AvailabilityFilter = "all" | "available" | "unavailable"
+type CategoryFilter = "all" | "smartphones" | "parts"
 
 type ProductDraft = {
   price: string
@@ -34,6 +35,7 @@ type ProductDraft = {
 type InventoryManagementViewProps = {
   countLabel: string
   description: string
+  enableCategoryFilter?: boolean
   emptyMessage: string
   newProductDetail?: { defaultCategory?: string }
   newButtonLabel: string
@@ -47,6 +49,12 @@ const availabilityFilters: { value: AvailabilityFilter; label: string }[] = [
   { value: "all", label: "Todos" },
   { value: "available", label: "Disponibles" },
   { value: "unavailable", label: "No disponibles" },
+]
+
+const categoryFilters: { value: CategoryFilter; label: string }[] = [
+  { value: "all", label: "Todo" },
+  { value: "smartphones", label: "iPhones" },
+  { value: "parts", label: "Repuestos" },
 ]
 
 const conditionLabel: Record<Product["condition"], string> = {
@@ -282,6 +290,7 @@ function ProductQuickCard({
 export function InventoryManagementView({
   countLabel,
   description,
+  enableCategoryFilter = false,
   emptyMessage,
   newProductDetail,
   newButtonLabel,
@@ -293,6 +302,7 @@ export function InventoryManagementView({
   const { deleteProduct, updateProduct } = useStore()
   const [searchTerm, setSearchTerm] = useState("")
   const [availabilityFilter, setAvailabilityFilter] = useState<AvailabilityFilter>("all")
+  const [categoryFilter, setCategoryFilter] = useState<CategoryFilter>("all")
   const [drafts, setDrafts] = useState<Record<string, ProductDraft>>({})
   const productMap = useMemo(
     () =>
@@ -311,10 +321,25 @@ export function InventoryManagementView({
     [drafts, products]
   )
   const previewProducts = products.map((product) => getPreviewProduct(product, resolvedDrafts[product.id]))
-  const statProducts = statsFilter ? previewProducts.filter(statsFilter) : previewProducts
+  const categoryScopedProducts = enableCategoryFilter
+    ? previewProducts.filter((product) => {
+        if (categoryFilter === "smartphones") {
+          return product.category !== "Repuestos"
+        }
+
+        if (categoryFilter === "parts") {
+          return product.category === "Repuestos"
+        }
+
+        return true
+      })
+    : previewProducts
+  const statProducts = statsFilter ? categoryScopedProducts.filter(statsFilter) : categoryScopedProducts
   const totalUnits = statProducts.reduce((acc, product) => acc + product.stock, 0)
   const totalVariants = statProducts.length
   const totalModels = new Set(statProducts.map((product) => product.name)).size
+  const iphoneVariants = statProducts.filter((product) => product.category !== "Repuestos").length
+  const partsVariants = statProducts.filter((product) => product.category === "Repuestos").length
   const availableCount = statProducts
     .filter((product) => isProductAvailable(product))
     .reduce((acc, product) => acc + product.stock, 0)
@@ -330,7 +355,7 @@ export function InventoryManagementView({
   const normalizedSearch = normalizeSearchValue(searchTerm)
   const searchTerms = normalizedSearch.split(" ").filter(Boolean)
 
-  const filteredProducts = previewProducts
+  const filteredProducts = categoryScopedProducts
     .filter((product) => {
       const searchableValue = normalizeSearchValue(
         [
@@ -482,13 +507,27 @@ export function InventoryManagementView({
                   <p className="font-mono text-3xl font-bold text-foreground sm:text-[2rem]">{totalUnits}</p>
                 </div>
               </div>
-              <div className="grid gap-2.5 sm:grid-cols-3">
+              <div className="grid gap-2.5 sm:grid-cols-2 xl:grid-cols-5">
                 <div className="rounded-xl border border-surface-highlight bg-surface px-3 py-3">
                   <p className="text-[9px] font-mono font-bold uppercase tracking-[0.16em] text-text-muted">
                     Variantes
                   </p>
                   <p className="mt-1.5 font-mono text-xl font-bold text-foreground">{totalVariants}</p>
                   <p className="mt-0.5 text-[11px] text-text-muted">SKUs visibles dentro del inventario.</p>
+                </div>
+                <div className="rounded-xl border border-surface-highlight bg-surface px-3 py-3">
+                  <p className="text-[9px] font-mono font-bold uppercase tracking-[0.16em] text-text-muted">
+                    iPhones
+                  </p>
+                  <p className="mt-1.5 font-mono text-xl font-bold text-foreground">{iphoneVariants}</p>
+                  <p className="mt-0.5 text-[11px] text-text-muted">Variantes de equipos visibles con el filtro actual.</p>
+                </div>
+                <div className="rounded-xl border border-surface-highlight bg-surface px-3 py-3">
+                  <p className="text-[9px] font-mono font-bold uppercase tracking-[0.16em] text-text-muted">
+                    Repuestos
+                  </p>
+                  <p className="mt-1.5 font-mono text-xl font-bold text-foreground">{partsVariants}</p>
+                  <p className="mt-0.5 text-[11px] text-text-muted">Variantes de repuestos visibles aunque el stock sea 0.</p>
                 </div>
                 <div className="rounded-xl border border-surface-highlight bg-surface px-3 py-3">
                   <p className="text-[9px] font-mono font-bold uppercase tracking-[0.16em] text-text-muted">
@@ -556,7 +595,35 @@ export function InventoryManagementView({
               />
             </div>
 
-          <div className="flex flex-wrap justify-center gap-1.5 lg:justify-end">
+            <div className="flex flex-wrap items-center justify-center gap-3 lg:justify-end">
+              {enableCategoryFilter && (
+                <div className="flex flex-col items-center gap-1.5 lg:items-end">
+                  <span className="text-[9px] font-mono font-bold uppercase tracking-[0.16em] text-text-muted">
+                    Categoria
+                  </span>
+                  <div className="flex flex-wrap justify-center gap-1.5 lg:justify-end">
+                  {categoryFilters.map((filter) => (
+                    <button
+                      key={filter.value}
+                      className={`rounded-full border px-3 py-1.5 text-[10px] font-mono font-bold uppercase tracking-[0.16em] transition-all ${
+                        categoryFilter === filter.value
+                          ? "border-primary bg-primary text-white shadow-neon"
+                          : "border-surface-highlight bg-background text-text-muted hover:border-text-muted hover:text-foreground"
+                      }`}
+                      onClick={() => setCategoryFilter(filter.value)}
+                    >
+                      {filter.label}
+                    </button>
+                  ))}
+                  </div>
+                </div>
+              )}
+
+              <div className="flex flex-col items-center gap-1.5 lg:items-end">
+                <span className="text-[9px] font-mono font-bold uppercase tracking-[0.16em] text-text-muted">
+                  Disponibilidad
+                </span>
+                <div className="flex flex-wrap justify-center gap-1.5 lg:justify-end">
               {availabilityFilters.map((filter) => (
                 <button
                   key={filter.value}
@@ -570,6 +637,8 @@ export function InventoryManagementView({
                   {filter.label}
                 </button>
               ))}
+                </div>
+              </div>
             </div>
           </div>
 

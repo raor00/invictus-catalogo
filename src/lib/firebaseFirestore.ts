@@ -61,6 +61,26 @@ export async function seedCatalogInFirestore() {
   await batch.commit()
 }
 
+export async function ensureDefaultCatalogProductsInFirestore() {
+  const db = getFirestoreDb()
+  const defaultProducts = DEFAULT_CATALOG.map(normalizeProduct)
+  const existingProducts = await getDocs(getProductsCollection())
+  const existingIds = new Set(existingProducts.docs.map((snapshotDoc) => snapshotDoc.id))
+  const missingProducts = defaultProducts.filter((product) => !existingIds.has(product.id))
+
+  if (missingProducts.length === 0) {
+    return
+  }
+
+  const batch = writeBatch(db)
+
+  missingProducts.forEach((product) => {
+    batch.set(doc(db, PRODUCTS_COLLECTION, product.id), serializeProduct(product))
+  })
+
+  await batch.commit()
+}
+
 export async function subscribeToProducts(
   onProducts: (products: Product[]) => void,
   onError: (error: Error) => void
