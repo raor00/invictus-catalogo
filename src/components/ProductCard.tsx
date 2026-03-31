@@ -43,6 +43,8 @@ export function ProductCard({ product }: { product: Product }) {
   const status = getProductStatus(product)
   const { label, variant, pulse } = statusConfig[status]
   const isUnavailable = !isProductAvailable(product)
+  const metaTextClass = isUnavailable ? "text-text-muted dark:text-zinc-400" : "text-text-muted"
+  const primaryTextClass = isUnavailable ? "text-foreground/75 dark:text-zinc-200" : "text-foreground"
 
   function handleAddToCart(e: React.MouseEvent) {
     e.preventDefault()
@@ -147,7 +149,7 @@ export function ProductCard({ product }: { product: Product }) {
 
         {/* Image Area — clickable to open 3D viewer */}
         <div
-          className="relative flex h-[110px] items-center justify-center bg-gradient-to-b from-[#F2F2F7] to-surface p-2 dark:from-[#111] dark:to-surface overflow-hidden cursor-pointer"
+          className="relative flex h-[110px] items-center justify-center bg-gradient-to-b from-[#F2F2F7] to-surface p-2 dark:from-[#1a1a1a] dark:to-[#161616] overflow-hidden cursor-pointer"
           onClick={handleImageClick}
         >
           {/* Glow */}
@@ -172,14 +174,14 @@ export function ProductCard({ product }: { product: Product }) {
         </div>
 
         {/* Content */}
-        <div className="flex flex-grow flex-col p-2 z-10 bg-surface">
+        <div className="flex flex-grow flex-col p-2 z-10 bg-surface dark:bg-[#161616]">
           <div className="flex items-center justify-between mb-1">
             <div className="flex items-center gap-1 flex-wrap">
-              <span className="text-[8px] font-mono font-bold uppercase tracking-wide text-text-muted">
+              <span className={`text-[8px] font-mono font-bold uppercase tracking-wide ${metaTextClass}`}>
                 {conditionLabel[product.condition] ?? product.condition}
               </span>
-              <span className="text-text-muted/30">·</span>
-              <span className="font-mono text-[8px] text-text-muted">{product.storage}</span>
+              <span className="text-text-muted/30 dark:text-zinc-500">·</span>
+              <span className={`font-mono text-[8px] ${metaTextClass}`}>{product.storage}</span>
             </div>
             <div className="scale-90 origin-right">
               <Badge variant={variant} pulse={pulse}>
@@ -189,7 +191,7 @@ export function ProductCard({ product }: { product: Product }) {
           </div>
 
           {/* Model name */}
-          <h3 className={`font-heading text-[11px] font-bold leading-tight mb-1 ${isUnavailable ? "text-text-muted" : "text-foreground"}`}>
+          <h3 className={`font-heading text-[11px] font-bold leading-tight mb-1 ${primaryTextClass}`}>
             {product.name}
           </h3>
 
@@ -198,20 +200,20 @@ export function ProductCard({ product }: { product: Product }) {
             {product.price > 0 ? (
               <div className="flex items-baseline justify-between mb-1">
                 <span className="text-[8px] font-bold uppercase text-text-muted">c/u</span>
-                <span className={`font-mono text-xs font-bold ${isUnavailable ? "text-text-muted" : "text-foreground"}`}>
+                <span className={`font-mono text-xs font-bold ${primaryTextClass}`}>
                   ${product.price.toFixed(0)}
                 </span>
               </div>
             ) : (
               <div className="flex items-baseline justify-between mb-1">
                 <span className="text-[8px] font-bold uppercase text-text-muted">Precio</span>
-                <span className="font-mono text-xs font-bold text-text-muted">—</span>
+                <span className="font-mono text-xs font-bold text-text-muted dark:text-zinc-300">—</span>
               </div>
             )}
 
             {/* Actions */}
             {isUnavailable ? (
-              <div className="w-full text-center text-[9px] font-bold text-red-400 py-1 border border-red-400/30 rounded-lg">
+              <div className="w-full rounded-lg border border-red-400/30 py-1 text-center text-[9px] font-bold text-red-500 dark:text-red-300">
                 No disponible
               </div>
             ) : (
