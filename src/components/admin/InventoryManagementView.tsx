@@ -158,38 +158,42 @@ function ProductQuickCard({
     draft.isAvailable !== hasManualAvailability(product)
 
   return (
-    <article className="group overflow-hidden rounded-[1.3rem] border border-surface-highlight bg-surface px-4 py-3 shadow-glass transition-all duration-300 hover:border-text-muted">
-      <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-[minmax(260px,1.7fr)_minmax(110px,0.7fr)_minmax(110px,0.7fr)_minmax(120px,0.8fr)_minmax(190px,1.1fr)_auto] xl:items-start">
-        <div className="min-w-0 md:col-span-2 xl:col-span-1">
-          <div className="mb-1 flex items-center gap-2">
+    <article className="group w-full overflow-hidden rounded-[1.05rem] border border-surface-highlight bg-surface px-3 py-2 shadow-glass transition-all duration-300 hover:border-text-muted sm:px-3.5 sm:py-2.5">
+      <div className="grid gap-2 md:grid-cols-2 xl:grid-cols-[minmax(240px,1.65fr)_minmax(92px,0.62fr)_minmax(92px,0.62fr)_minmax(108px,0.72fr)_minmax(168px,0.95fr)_auto] xl:items-center">
+        <div className="min-w-0 text-center md:col-span-2 xl:col-span-1 xl:text-left">
+          <div className="mb-0.5 flex flex-wrap items-center justify-center gap-1.5 xl:justify-start">
             <h3
-              className={`font-heading text-base font-bold leading-tight ${
+              className={`font-heading text-[15px] font-bold leading-tight ${
                 availableNow ? "text-foreground" : "text-text-muted"
               }`}
             >
               {product.name}
             </h3>
-            <Badge variant={availableNow ? "default" : "critical"} pulse={availableNow}>
+            <Badge
+              className="min-h-[18px] px-2 py-0.5 text-[8px] tracking-[0.16em]"
+              variant={availableNow ? "default" : "critical"}
+              pulse={availableNow}
+            >
               {currentStatus}
             </Badge>
-            {missingPrice && <Badge variant="warning">Sin precio</Badge>}
+            {missingPrice && <Badge className="min-h-[18px] px-2 py-0.5 text-[8px] tracking-[0.16em]" variant="warning">Sin precio</Badge>}
           </div>
-          <p className="text-[11px] font-mono uppercase tracking-[0.18em] text-text-muted">
+          <p className="text-[9px] font-mono uppercase tracking-[0.14em] text-text-muted">
             {product.storage} · {conditionLabel[product.condition]}
           </p>
           {missingPrice && (
-            <p className="mt-1 text-xs font-medium text-orange-500">
+            <p className="mt-0.5 text-[10px] font-medium text-orange-500 xl:max-w-[28ch]">
               Tiene stock disponible, pero falta asignar precio.
             </p>
           )}
         </div>
 
-        <div className="rounded-xl border border-surface-highlight bg-background px-3 py-2.5">
-          <label className="mb-1.5 block text-[10px] font-mono font-bold uppercase tracking-[0.18em] text-text-muted">
+        <div className="flex min-h-[68px] flex-col justify-center rounded-lg border border-surface-highlight bg-background px-2.5 py-1.5 text-center xl:text-left">
+          <label className="mb-0.5 block text-[8px] font-mono font-bold uppercase tracking-[0.14em] text-text-muted">
             Precio
           </label>
           <input
-            className="w-full bg-transparent font-mono text-base font-bold text-foreground outline-none"
+            className="w-full bg-transparent text-center font-mono text-sm font-bold text-foreground outline-none xl:text-left"
             min="0"
             step="0.01"
             type="number"
@@ -198,12 +202,12 @@ function ProductQuickCard({
           />
         </div>
 
-        <div className="rounded-xl border border-surface-highlight bg-background px-3 py-2.5">
-          <label className="mb-1.5 block text-[10px] font-mono font-bold uppercase tracking-[0.18em] text-text-muted">
+        <div className="flex min-h-[68px] flex-col justify-center rounded-lg border border-surface-highlight bg-background px-2.5 py-1.5 text-center xl:text-left">
+          <label className="mb-0.5 block text-[8px] font-mono font-bold uppercase tracking-[0.14em] text-text-muted">
             Stock
           </label>
           <input
-            className="w-full bg-transparent font-mono text-base font-bold text-foreground outline-none"
+            className="w-full bg-transparent text-center font-mono text-sm font-bold text-foreground outline-none xl:text-left"
             min="0"
             step="1"
             type="number"
@@ -212,11 +216,11 @@ function ProductQuickCard({
           />
         </div>
 
-        <div className="rounded-xl border border-surface-highlight bg-background px-3 py-2.5">
-          <p className="text-[10px] font-mono font-bold uppercase tracking-[0.18em] text-text-muted">
+        <div className="flex min-h-[68px] flex-col justify-center rounded-lg border border-surface-highlight bg-background px-2.5 py-1.5 text-center xl:text-left">
+          <p className="text-[8px] font-mono font-bold uppercase tracking-[0.14em] text-text-muted">
             Valor
           </p>
-          <p className="mt-1.5 font-mono text-base font-bold text-foreground">
+          <p className="mt-0.5 font-mono text-sm font-bold text-foreground">
             ${(draftPrice * draftStock).toLocaleString(undefined, {
               minimumFractionDigits: 2,
               maximumFractionDigits: 2,
@@ -224,15 +228,15 @@ function ProductQuickCard({
           </p>
         </div>
 
-        <div className="grid min-h-[96px] grid-cols-[minmax(0,1fr)_48px] items-start gap-4 rounded-xl border border-surface-highlight bg-background px-3 py-2.5">
+        <div className="grid min-h-[68px] grid-cols-[minmax(0,1fr)_44px] items-center gap-2 rounded-lg border border-surface-highlight bg-background px-2.5 py-1.5 text-center xl:text-left">
           <div className="min-w-0">
-            <p className="text-[10px] font-mono font-bold uppercase tracking-[0.18em] text-text-muted">
+            <p className="text-[8px] font-mono font-bold uppercase tracking-[0.14em] text-text-muted">
               Catalogo
             </p>
-            <p className="mt-1 text-sm font-semibold text-foreground">
+            <p className="mt-0.5 text-[13px] font-semibold text-foreground">
               {manualCatalogEnabled ? "Visible" : "Oculto"}
             </p>
-            <p className="mt-0.5 text-xs text-text-muted">
+            <p className="mt-0.5 text-[10px] text-text-muted">
               {availableNow
                 ? "Estado actual: disponible"
                 : draftStock > 0
@@ -240,7 +244,7 @@ function ProductQuickCard({
                   : "Sin stock: no disponible"}
             </p>
           </div>
-          <label className="relative inline-flex h-6 w-11 shrink-0 cursor-pointer items-center justify-self-end self-start">
+          <label className="relative inline-flex h-6 w-11 shrink-0 cursor-pointer items-center justify-self-center xl:justify-self-end">
             <input
               checked={draft.isAvailable}
               className="peer sr-only"
@@ -251,21 +255,22 @@ function ProductQuickCard({
           </label>
         </div>
 
-        <div className="flex min-w-0 flex-col-reverse gap-2 md:col-span-2 sm:flex-row sm:items-center sm:justify-end xl:col-span-1">
+        <div className="flex min-w-0 flex-col-reverse gap-1 md:col-span-2 sm:flex-row sm:items-center sm:justify-center xl:col-span-1 xl:justify-end">
           <Button
             variant="ghost"
             size="icon"
-            className="self-end text-critical hover:bg-critical/10 sm:self-auto"
+            className="h-8 w-8 self-end text-critical hover:bg-critical/10 sm:self-auto"
             onClick={() => void onDelete(product)}
           >
-            <Trash size={16} />
+            <Trash size={14} />
           </Button>
           <Button
-            className="w-full gap-2 sm:w-auto sm:min-w-[148px]"
+            size="sm"
+            className="w-full gap-1.5 rounded-lg sm:w-auto sm:min-w-[118px]"
             disabled={!dirty}
             onClick={() => void onSave(product)}
           >
-            <FloppyDisk size={16} weight="fill" />
+            <FloppyDisk size={14} weight="fill" />
             Guardar
           </Button>
         </div>
@@ -464,70 +469,70 @@ export function InventoryManagementView({
             </div>
           </div>
 
-          <div className="mt-8 grid gap-4 xl:grid-cols-[minmax(0,1fr)_380px]">
-            <div className="rounded-[1.6rem] border border-surface-highlight bg-background px-5 py-5">
-              <div className="mb-5 flex items-center gap-3">
-                <div className="rounded-2xl bg-primary/15 p-3 text-primary">
+          <div className="mt-6 grid gap-3 xl:grid-cols-[minmax(0,1fr)_340px]">
+            <div className="rounded-[1.4rem] border border-surface-highlight bg-background px-4 py-4 sm:px-5 sm:py-4">
+              <div className="mb-4 flex items-center gap-2.5">
+                <div className="rounded-xl bg-primary/15 p-2.5 text-primary">
                   <Package size={20} weight="fill" />
                 </div>
                 <div>
-                  <p className="text-[10px] font-mono font-bold uppercase tracking-[0.18em] text-text-muted">
+                  <p className="text-[9px] font-mono font-bold uppercase tracking-[0.16em] text-text-muted">
                     {countLabel}
                   </p>
-                  <p className="font-mono text-4xl font-bold text-foreground">{totalUnits}</p>
+                  <p className="font-mono text-3xl font-bold text-foreground sm:text-[2rem]">{totalUnits}</p>
                 </div>
               </div>
-              <div className="grid gap-3 sm:grid-cols-3">
-                <div className="rounded-2xl border border-surface-highlight bg-surface px-4 py-4">
-                  <p className="text-[10px] font-mono font-bold uppercase tracking-[0.18em] text-text-muted">
+              <div className="grid gap-2.5 sm:grid-cols-3">
+                <div className="rounded-xl border border-surface-highlight bg-surface px-3 py-3">
+                  <p className="text-[9px] font-mono font-bold uppercase tracking-[0.16em] text-text-muted">
                     Variantes
                   </p>
-                  <p className="mt-2 font-mono text-2xl font-bold text-foreground">{totalVariants}</p>
-                  <p className="mt-1 text-xs text-text-muted">SKUs visibles dentro del inventario.</p>
+                  <p className="mt-1.5 font-mono text-xl font-bold text-foreground">{totalVariants}</p>
+                  <p className="mt-0.5 text-[11px] text-text-muted">SKUs visibles dentro del inventario.</p>
                 </div>
-                <div className="rounded-2xl border border-surface-highlight bg-surface px-4 py-4">
-                  <p className="text-[10px] font-mono font-bold uppercase tracking-[0.18em] text-text-muted">
+                <div className="rounded-xl border border-surface-highlight bg-surface px-3 py-3">
+                  <p className="text-[9px] font-mono font-bold uppercase tracking-[0.16em] text-text-muted">
                     Modelos
                   </p>
-                  <p className="mt-2 font-mono text-2xl font-bold text-foreground">{totalModels}</p>
-                  <p className="mt-1 text-xs text-text-muted">Modelos distintos cargados actualmente.</p>
+                  <p className="mt-1.5 font-mono text-xl font-bold text-foreground">{totalModels}</p>
+                  <p className="mt-0.5 text-[11px] text-text-muted">Modelos distintos cargados actualmente.</p>
                 </div>
-                <div className="rounded-2xl border border-surface-highlight bg-surface px-4 py-4">
-                  <p className="text-[10px] font-mono font-bold uppercase tracking-[0.18em] text-text-muted">
+                <div className="rounded-xl border border-surface-highlight bg-surface px-3 py-3">
+                  <p className="text-[9px] font-mono font-bold uppercase tracking-[0.16em] text-text-muted">
                     Mayor stock
                   </p>
-                  <p className="mt-2 truncate font-heading text-base font-bold text-foreground">
+                  <p className="mt-1.5 truncate font-heading text-[15px] font-bold text-foreground">
                     {topModelByUnits?.[0] ?? "Sin datos"}
                   </p>
-                  <p className="mt-1 text-xs text-text-muted">
+                  <p className="mt-0.5 text-[11px] text-text-muted">
                     {topModelByUnits ? `${topModelByUnits[1]} unidades acumuladas.` : "Sin inventario registrado."}
                   </p>
                 </div>
               </div>
             </div>
 
-            <div className="rounded-[1.6rem] border border-surface-highlight bg-background p-3">
+            <div className="rounded-[1.4rem] border border-surface-highlight bg-background p-2.5 sm:p-3">
               <ul className="divide-y divide-surface-highlight">
-                <li className="flex items-center justify-between gap-3 px-2 py-3">
-                  <div className="flex items-center gap-3">
-                    <CheckCircle size={18} className="text-primary" weight="fill" />
-                    <span className="text-sm font-semibold text-foreground">Disponibles</span>
+                <li className="flex items-center justify-between gap-2 px-2 py-2.5">
+                  <div className="flex items-center gap-2.5">
+                    <CheckCircle size={16} className="text-primary" weight="fill" />
+                    <span className="text-[13px] font-semibold text-foreground">Disponibles</span>
                   </div>
-                  <span className="font-mono text-lg font-bold text-foreground">{availableCount}</span>
+                  <span className="font-mono text-base font-bold text-foreground">{availableCount}</span>
                 </li>
-                <li className="flex items-center justify-between gap-3 px-2 py-3">
-                  <div className="flex items-center gap-3">
-                    <WarningCircle size={18} className="text-critical" weight="fill" />
-                    <span className="text-sm font-semibold text-foreground">No disponibles</span>
+                <li className="flex items-center justify-between gap-2 px-2 py-2.5">
+                  <div className="flex items-center gap-2.5">
+                    <WarningCircle size={16} className="text-critical" weight="fill" />
+                    <span className="text-[13px] font-semibold text-foreground">No disponibles</span>
                   </div>
-                  <span className="font-mono text-lg font-bold text-critical">{unavailableCount}</span>
+                  <span className="font-mono text-base font-bold text-critical">{unavailableCount}</span>
                 </li>
-                <li className="flex items-center justify-between gap-3 px-2 py-3">
-                  <div className="flex items-center gap-3">
-                    <CurrencyDollar size={18} className="text-text-muted" />
-                    <span className="text-sm font-semibold text-foreground">Valor inventario</span>
+                <li className="flex items-center justify-between gap-2 px-2 py-2.5">
+                  <div className="flex items-center gap-2.5">
+                    <CurrencyDollar size={16} className="text-text-muted" />
+                    <span className="text-[13px] font-semibold text-foreground">Valor inventario</span>
                   </div>
-                  <span className="font-mono text-lg font-bold text-foreground">
+                  <span className="font-mono text-base font-bold text-foreground">
                     ${inventoryValue.toLocaleString(undefined, {
                       minimumFractionDigits: 2,
                       maximumFractionDigits: 2,
@@ -539,22 +544,23 @@ export function InventoryManagementView({
           </div>
         </section>
 
-        <section className="rounded-[2rem] border border-surface-highlight bg-surface p-5 shadow-glass sm:p-6">
-          <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-            <div className="w-full max-w-xl">
+        <section className="rounded-[1.6rem] border border-surface-highlight bg-surface p-4 shadow-glass sm:p-5">
+          <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+            <div className="w-full max-w-lg">
               <Input
+                className="h-9 rounded-xl text-[13px]"
                 placeholder={searchPlaceholder}
-                icon={<MagnifyingGlass size={18} weight="bold" />}
+                icon={<MagnifyingGlass size={16} weight="bold" />}
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
 
-            <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap justify-center gap-1.5 lg:justify-end">
               {availabilityFilters.map((filter) => (
                 <button
                   key={filter.value}
-                  className={`rounded-full border px-4 py-2 text-xs font-mono font-bold uppercase tracking-[0.18em] transition-all ${
+                  className={`rounded-full border px-3 py-1.5 text-[10px] font-mono font-bold uppercase tracking-[0.16em] transition-all ${
                     availabilityFilter === filter.value
                       ? "border-primary bg-primary text-white shadow-neon"
                       : "border-surface-highlight bg-background text-text-muted hover:border-text-muted hover:text-foreground"
@@ -567,7 +573,7 @@ export function InventoryManagementView({
             </div>
           </div>
 
-          <div className="mt-6 flex flex-col gap-4">
+          <div className="mt-4 flex flex-col gap-2.5">
             {filteredProducts.length === 0 ? (
               <div className="rounded-[1.5rem] border border-dashed border-surface-highlight bg-background px-6 py-16 text-center text-text-muted">
                 {emptyMessage}
