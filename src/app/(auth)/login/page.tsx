@@ -1,9 +1,10 @@
 "use client"
 
 import React, { useEffect, useState } from "react"
+import Image from "next/image"
 import { useRouter } from "next/navigation"
 import { useStore } from "@/lib/StoreContext"
-import { Lightning, ArrowsClockwise, Eye, EyeSlash } from "@phosphor-icons/react"
+import { ArrowsClockwise, Eye, EyeSlash } from "@phosphor-icons/react"
 
 export default function LoginPage() {
     const [username, setUsername] = useState("")
@@ -42,7 +43,14 @@ export default function LoginPage() {
                 {/* Branding */}
                 <div className="relative z-10">
                     <div className="flex items-center gap-2">
-                        <Lightning weight="fill" className="text-black text-4xl" />
+                        <Image
+                            src="/logo-invictus.png"
+                            alt="Invictus Phone"
+                            width={44}
+                            height={44}
+                            className="object-contain"
+                            priority
+                        />
                         <div className="flex flex-col">
                             <span className="font-heading font-bold text-3xl tracking-tight leading-none text-black">INVICTUS PHONE</span>
                         </div>
@@ -83,7 +91,14 @@ export default function LoginPage() {
             <div className="w-full lg:w-1/2 flex flex-col justify-center items-center p-6 sm:p-12 lg:p-24 bg-[#000000] relative">
                 {/* Mobile Logo */}
                 <div className="lg:hidden flex items-center gap-2 mb-8 self-start">
-                    <Lightning weight="fill" className="text-white text-3xl" />
+                    <Image
+                        src="/logo-invictus.png"
+                        alt="Invictus Phone"
+                        width={34}
+                        height={34}
+                        className="object-contain"
+                        priority
+                    />
                     <span className="font-heading font-bold text-2xl tracking-tight text-white">INVICTUS PHONE</span>
                 </div>
 
