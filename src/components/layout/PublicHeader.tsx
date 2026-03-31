@@ -2,8 +2,9 @@
 
 import React from "react"
 import Link from "next/link"
+import Image from "next/image"
 import { useSearchParams } from "next/navigation"
-import { Lightning, UserCircle, ShoppingBag } from "@phosphor-icons/react"
+import { UserCircle, ShoppingBag } from "@phosphor-icons/react"
 import { useCart } from "@/lib/CartContext"
 
 export function PublicHeader() {
@@ -20,8 +21,15 @@ export function PublicHeader() {
 
                     {/* Logo */}
                     <Link href="/" className="flex items-center gap-2 sm:gap-3 group">
-                        <div className="flex h-8 w-8 items-center justify-center rounded bg-primary text-white shadow-neon transition-transform group-hover:scale-105">
-                            <Lightning weight="fill" size={20} />
+                        <div className="flex items-center justify-center transition-transform group-hover:scale-105">
+                            <Image
+                                src="/logo-invictus.png"
+                                alt="Invictus Phone"
+                                width={44}
+                                height={44}
+                                className="object-contain"
+                                priority
+                            />
                         </div>
                         <div className="flex flex-col leading-none">
                             <h1 className="font-heading font-bold text-lg sm:text-xl tracking-wide text-text-main">INVICTUS PHONE</h1>

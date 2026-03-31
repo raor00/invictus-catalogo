@@ -2,10 +2,11 @@
 
 import React from "react"
 import Link from "next/link"
+import Image from "next/image"
 import { usePathname, useRouter } from "next/navigation"
 import { useStore } from "@/lib/StoreContext"
 import { cn } from "@/components/ui/Button"
-import { Lightning, SquaresFour, DeviceMobile, Wrench, Package, ChartBar, GearSix, SignOut, X } from "@phosphor-icons/react"
+import { SquaresFour, DeviceMobile, Wrench, Package, ChartBar, GearSix, SignOut, X } from "@phosphor-icons/react"
 
 const navLinks = [
     { name: "Dashboard", href: "/dashboard", icon: SquaresFour },
@@ -48,7 +49,14 @@ export function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
                     {/* Brand & Close Button */}
                     <div className="flex justify-between items-center">
                         <div className="flex gap-3 items-center">
-                            <Lightning weight="fill" className="text-black text-4xl" />
+                            <Image
+                                src="/logo-invictus.png"
+                                alt="Invictus Phone"
+                                width={40}
+                                height={40}
+                                className="object-contain"
+                                priority
+                            />
                             <div className="flex flex-col">
                                 <span className="font-heading font-bold text-xl tracking-tight leading-none text-black">INVICTUS PHONE</span>
                             </div>
