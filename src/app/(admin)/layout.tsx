@@ -24,15 +24,15 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     }
 
     return (
-        <div className="flex h-[100dvh] w-full overflow-hidden bg-surface">
+        <div className="flex h-[100dvh] w-full overflow-hidden bg-[var(--surface)]">
             <AdminSidebar
                 isOpen={isSidebarOpen}
                 onClose={() => setIsSidebarOpen(false)}
             />
 
-            <main className="relative flex h-full min-w-0 flex-1 flex-col overflow-hidden bg-background">
+            <main className="relative flex h-full min-w-0 flex-1 flex-col overflow-hidden bg-[var(--background)]">
                 {/* Mobile Header */}
-                <header className="lg:hidden h-16 flex items-center justify-between px-6 bg-background border-b border-surface-highlight z-50 flex-shrink-0">
+                <header className="z-50 flex h-16 flex-shrink-0 items-center justify-between border-b border-[var(--surface-highlight)] bg-[var(--background)] px-6 lg:hidden">
                     <div className="flex gap-2 items-center">
                         <Image
                             src="/logo-invictus.png"
@@ -42,7 +42,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                             className="object-contain"
                             priority
                         />
-                        <span className="font-heading font-bold text-sm tracking-tight text-black">INVICTUS PHONE</span>
+                        <span className="font-heading text-sm font-bold tracking-tight text-[var(--foreground)]">INVICTUS PHONE</span>
                     </div>
                     <button
                         onClick={() => setIsSidebarOpen(true)}

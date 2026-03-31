@@ -131,7 +131,7 @@ export function ProductCard({ product }: { product: Product }) {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-50px" }}
         transition={{ type: "spring", stiffness: 100, damping: 20 }}
-        className="group relative flex h-full flex-col overflow-hidden rounded-xl bg-surface border border-surface-highlight hover:border-[#D2D2D7] transition-colors"
+        className="group relative flex h-full flex-col overflow-hidden rounded-xl border border-[var(--surface-highlight)] bg-[var(--surface)] transition-colors hover:border-[var(--text-muted)]"
       >
         {/* Spotlight hover refraction */}
         <motion.div
@@ -149,7 +149,7 @@ export function ProductCard({ product }: { product: Product }) {
 
         {/* Image Area — clickable to open 3D viewer */}
         <div
-          className="relative flex h-[110px] items-center justify-center bg-gradient-to-b from-[#F2F2F7] to-surface p-2 dark:from-[#1a1a1a] dark:to-[#161616] overflow-hidden cursor-pointer"
+          className="relative flex h-[110px] cursor-pointer items-center justify-center overflow-hidden bg-gradient-to-b from-[#F2F2F7] to-[var(--surface)] p-2 dark:from-[#1a1a1a] dark:to-[var(--surface)]"
           onClick={handleImageClick}
         >
           {/* Glow */}
@@ -174,14 +174,16 @@ export function ProductCard({ product }: { product: Product }) {
         </div>
 
         {/* Content */}
-        <div className="flex flex-grow flex-col p-2 z-10 bg-surface dark:bg-[#161616]">
+        <div className="z-10 flex flex-grow flex-col bg-[var(--surface)] p-2">
           <div className="flex items-center justify-between mb-1">
             <div className="flex items-center gap-1 flex-wrap">
               <span className={`text-[8px] font-mono font-bold uppercase tracking-wide ${metaTextClass}`}>
                 {conditionLabel[product.condition] ?? product.condition}
               </span>
               <span className="text-text-muted/30 dark:text-zinc-500">·</span>
-              <span className={`font-mono text-[8px] ${metaTextClass}`}>{product.storage}</span>
+              <span className="rounded-full border border-primary/25 bg-primary/10 px-1.5 py-0.5 font-mono text-[8px] font-bold text-primary dark:border-primary/35 dark:bg-primary/15">
+                {product.storage}
+              </span>
             </div>
             <div className="scale-90 origin-right">
               <Badge variant={variant} pulse={pulse}>
@@ -196,7 +198,7 @@ export function ProductCard({ product }: { product: Product }) {
           </h3>
 
           {/* Price */}
-          <div className="mt-auto pt-1.5 border-t border-surface-highlight">
+            <div className="mt-auto border-t border-[var(--surface-highlight)] pt-1.5">
             {product.price > 0 ? (
               <div className="flex items-baseline justify-between mb-1">
                 <span className="text-[8px] font-bold uppercase text-text-muted">c/u</span>
@@ -224,14 +226,14 @@ export function ProductCard({ product }: { product: Product }) {
                   <div className="flex items-center justify-end gap-1">
                     <button
                       onClick={handleQtyDecrease}
-                      className="flex h-6 w-6 items-center justify-center rounded-md border border-surface-highlight text-text-muted transition-colors hover:border-primary hover:text-primary"
+                      className="flex h-6 w-6 items-center justify-center rounded-md border border-[var(--surface-highlight)] text-text-muted transition-colors hover:border-primary hover:text-primary"
                     >
                       <Minus size={8} weight="bold" />
                     </button>
                     <span className="w-6 text-center font-mono text-[11px] font-bold text-foreground">{qty}</span>
                     <button
                       onClick={handleQtyIncrease}
-                      className="flex h-6 w-6 items-center justify-center rounded-md border border-surface-highlight text-text-muted transition-colors hover:border-primary hover:text-primary"
+                      className="flex h-6 w-6 items-center justify-center rounded-md border border-[var(--surface-highlight)] text-text-muted transition-colors hover:border-primary hover:text-primary"
                     >
                       <Plus size={8} weight="bold" />
                     </button>

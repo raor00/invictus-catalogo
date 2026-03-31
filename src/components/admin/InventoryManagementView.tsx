@@ -166,7 +166,7 @@ function ProductQuickCard({
     draft.isAvailable !== hasManualAvailability(product)
 
   return (
-    <article className="group w-full overflow-hidden rounded-[1.05rem] border border-surface-highlight bg-surface px-3 py-2 shadow-glass transition-all duration-300 hover:border-text-muted sm:px-3.5 sm:py-2.5">
+    <article className="group w-full overflow-hidden rounded-[1.05rem] border border-[var(--surface-highlight)] bg-[var(--surface)] px-3 py-2 shadow-glass transition-all duration-300 hover:border-text-muted sm:px-3.5 sm:py-2.5">
       <div className="grid gap-2 md:grid-cols-2 xl:grid-cols-[minmax(240px,1.65fr)_minmax(92px,0.62fr)_minmax(92px,0.62fr)_minmax(108px,0.72fr)_minmax(168px,0.95fr)_auto] xl:items-center">
         <div className="min-w-0 text-center md:col-span-2 xl:col-span-1 xl:text-left">
           <div className="mb-0.5 flex flex-wrap items-center justify-center gap-1.5 xl:justify-start">
@@ -196,7 +196,7 @@ function ProductQuickCard({
           )}
         </div>
 
-        <div className="flex min-h-[68px] flex-col justify-center rounded-lg border border-surface-highlight bg-background px-2.5 py-1.5 text-center xl:text-left">
+        <div className="flex min-h-[68px] flex-col justify-center rounded-lg border border-[var(--surface-highlight)] bg-[var(--background)] px-2.5 py-1.5 text-center xl:text-left">
           <label className="mb-0.5 block text-[8px] font-mono font-bold uppercase tracking-[0.14em] text-text-muted">
             Precio
           </label>
@@ -210,7 +210,7 @@ function ProductQuickCard({
           />
         </div>
 
-        <div className="flex min-h-[68px] flex-col justify-center rounded-lg border border-surface-highlight bg-background px-2.5 py-1.5 text-center xl:text-left">
+        <div className="flex min-h-[68px] flex-col justify-center rounded-lg border border-[var(--surface-highlight)] bg-[var(--background)] px-2.5 py-1.5 text-center xl:text-left">
           <label className="mb-0.5 block text-[8px] font-mono font-bold uppercase tracking-[0.14em] text-text-muted">
             Stock
           </label>
@@ -224,7 +224,7 @@ function ProductQuickCard({
           />
         </div>
 
-        <div className="flex min-h-[68px] flex-col justify-center rounded-lg border border-surface-highlight bg-background px-2.5 py-1.5 text-center xl:text-left">
+        <div className="flex min-h-[68px] flex-col justify-center rounded-lg border border-[var(--surface-highlight)] bg-[var(--background)] px-2.5 py-1.5 text-center xl:text-left">
           <p className="text-[8px] font-mono font-bold uppercase tracking-[0.14em] text-text-muted">
             Valor
           </p>
@@ -236,7 +236,7 @@ function ProductQuickCard({
           </p>
         </div>
 
-        <div className="grid min-h-[68px] grid-cols-[minmax(0,1fr)_44px] items-center gap-2 rounded-lg border border-surface-highlight bg-background px-2.5 py-1.5 text-center xl:text-left">
+        <div className="grid min-h-[68px] grid-cols-[minmax(0,1fr)_44px] items-center gap-2 rounded-lg border border-[var(--surface-highlight)] bg-[var(--background)] px-2.5 py-1.5 text-center xl:text-left">
           <div className="min-w-0">
             <p className="text-[8px] font-mono font-bold uppercase tracking-[0.14em] text-text-muted">
               Catalogo
@@ -461,7 +461,7 @@ export function InventoryManagementView({
   return (
     <div className="flex-1 overflow-y-auto overflow-x-hidden">
       <div className="mx-auto flex w-full max-w-[1520px] flex-col gap-6 px-4 py-6 sm:px-8 sm:py-8">
-        <section className="rounded-[2rem] border border-surface-highlight bg-surface p-6 shadow-glass sm:p-8">
+        <section className="rounded-[2rem] border border-[var(--surface-highlight)] bg-[var(--surface)] p-6 shadow-glass sm:p-8">
           <div className="flex flex-col gap-6 xl:flex-row xl:items-start xl:justify-between">
             <div className="max-w-2xl">
               <p className="mb-3 font-mono text-[11px] font-bold uppercase tracking-[0.24em] text-text-muted">
@@ -495,7 +495,7 @@ export function InventoryManagementView({
           </div>
 
           <div className="mt-6 grid gap-3 xl:grid-cols-[minmax(0,1fr)_340px]">
-            <div className="rounded-[1.4rem] border border-surface-highlight bg-background px-4 py-4 sm:px-5 sm:py-4">
+            <div className="rounded-[1.4rem] border border-[var(--surface-highlight)] bg-[var(--background)] px-4 py-4 sm:px-5 sm:py-4">
               <div className="mb-4 flex items-center gap-2.5">
                 <div className="rounded-xl bg-primary/15 p-2.5 text-primary">
                   <Package size={20} weight="fill" />
@@ -508,35 +508,35 @@ export function InventoryManagementView({
                 </div>
               </div>
               <div className="grid gap-2.5 sm:grid-cols-2 xl:grid-cols-5">
-                <div className="rounded-xl border border-surface-highlight bg-surface px-3 py-3">
+                <div className="rounded-xl border border-[var(--surface-highlight)] bg-[var(--surface)] px-3 py-3">
                   <p className="text-[9px] font-mono font-bold uppercase tracking-[0.16em] text-text-muted">
                     Variantes
                   </p>
                   <p className="mt-1.5 font-mono text-xl font-bold text-foreground">{totalVariants}</p>
                   <p className="mt-0.5 text-[11px] text-text-muted">SKUs visibles dentro del inventario.</p>
                 </div>
-                <div className="rounded-xl border border-surface-highlight bg-surface px-3 py-3">
+                <div className="rounded-xl border border-[var(--surface-highlight)] bg-[var(--surface)] px-3 py-3">
                   <p className="text-[9px] font-mono font-bold uppercase tracking-[0.16em] text-text-muted">
                     iPhones
                   </p>
                   <p className="mt-1.5 font-mono text-xl font-bold text-foreground">{iphoneVariants}</p>
                   <p className="mt-0.5 text-[11px] text-text-muted">Variantes de equipos visibles con el filtro actual.</p>
                 </div>
-                <div className="rounded-xl border border-surface-highlight bg-surface px-3 py-3">
+                <div className="rounded-xl border border-[var(--surface-highlight)] bg-[var(--surface)] px-3 py-3">
                   <p className="text-[9px] font-mono font-bold uppercase tracking-[0.16em] text-text-muted">
                     Repuestos
                   </p>
                   <p className="mt-1.5 font-mono text-xl font-bold text-foreground">{partsVariants}</p>
                   <p className="mt-0.5 text-[11px] text-text-muted">Variantes de repuestos visibles aunque el stock sea 0.</p>
                 </div>
-                <div className="rounded-xl border border-surface-highlight bg-surface px-3 py-3">
+                <div className="rounded-xl border border-[var(--surface-highlight)] bg-[var(--surface)] px-3 py-3">
                   <p className="text-[9px] font-mono font-bold uppercase tracking-[0.16em] text-text-muted">
                     Modelos
                   </p>
                   <p className="mt-1.5 font-mono text-xl font-bold text-foreground">{totalModels}</p>
                   <p className="mt-0.5 text-[11px] text-text-muted">Modelos distintos cargados actualmente.</p>
                 </div>
-                <div className="rounded-xl border border-surface-highlight bg-surface px-3 py-3">
+                <div className="rounded-xl border border-[var(--surface-highlight)] bg-[var(--surface)] px-3 py-3">
                   <p className="text-[9px] font-mono font-bold uppercase tracking-[0.16em] text-text-muted">
                     Mayor stock
                   </p>
@@ -550,7 +550,7 @@ export function InventoryManagementView({
               </div>
             </div>
 
-            <div className="rounded-[1.4rem] border border-surface-highlight bg-background p-2.5 sm:p-3">
+            <div className="rounded-[1.4rem] border border-[var(--surface-highlight)] bg-[var(--background)] p-2.5 sm:p-3">
               <ul className="divide-y divide-surface-highlight">
                 <li className="flex items-center justify-between gap-2 px-2 py-2.5">
                   <div className="flex items-center gap-2.5">
@@ -583,7 +583,7 @@ export function InventoryManagementView({
           </div>
         </section>
 
-        <section className="rounded-[1.6rem] border border-surface-highlight bg-surface p-4 shadow-glass sm:p-5">
+        <section className="rounded-[1.6rem] border border-[var(--surface-highlight)] bg-[var(--surface)] p-4 shadow-glass sm:p-5">
           <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
             <div className="w-full max-w-lg">
               <Input
@@ -608,7 +608,7 @@ export function InventoryManagementView({
                       className={`rounded-full border px-3 py-1.5 text-[10px] font-mono font-bold uppercase tracking-[0.16em] transition-all ${
                         categoryFilter === filter.value
                           ? "border-primary bg-primary text-white shadow-neon"
-                          : "border-surface-highlight bg-background text-text-muted hover:border-text-muted hover:text-foreground"
+                          : "border-[var(--surface-highlight)] bg-[var(--background)] text-text-muted hover:border-text-muted hover:text-foreground"
                       }`}
                       onClick={() => setCategoryFilter(filter.value)}
                     >
@@ -630,7 +630,7 @@ export function InventoryManagementView({
                   className={`rounded-full border px-3 py-1.5 text-[10px] font-mono font-bold uppercase tracking-[0.16em] transition-all ${
                     availabilityFilter === filter.value
                       ? "border-primary bg-primary text-white shadow-neon"
-                      : "border-surface-highlight bg-background text-text-muted hover:border-text-muted hover:text-foreground"
+                      : "border-[var(--surface-highlight)] bg-[var(--background)] text-text-muted hover:border-text-muted hover:text-foreground"
                   }`}
                   onClick={() => setAvailabilityFilter(filter.value)}
                 >
@@ -644,7 +644,7 @@ export function InventoryManagementView({
 
           <div className="mt-4 flex flex-col gap-2.5">
             {filteredProducts.length === 0 ? (
-              <div className="rounded-[1.5rem] border border-dashed border-surface-highlight bg-background px-6 py-16 text-center text-text-muted">
+              <div className="rounded-[1.5rem] border border-dashed border-[var(--surface-highlight)] bg-[var(--background)] px-6 py-16 text-center text-text-muted">
                 {emptyMessage}
               </div>
             ) : (

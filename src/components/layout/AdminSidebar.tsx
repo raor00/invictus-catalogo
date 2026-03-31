@@ -42,7 +42,7 @@ export function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
             )}
 
             <aside className={cn(
-                "fixed inset-y-0 left-0 z-[70] w-[280px] bg-background border-r border-surface-highlight flex flex-col justify-between transition-transform duration-300 lg:relative lg:translate-x-0",
+                "fixed inset-y-0 left-0 z-[70] flex w-[280px] flex-col justify-between border-r border-[var(--surface-highlight)] bg-[var(--background)] transition-transform duration-300 lg:relative lg:translate-x-0",
                 isOpen ? "translate-x-0" : "-translate-x-full"
             )}>
                 <div className="flex flex-col gap-6 p-6">
@@ -58,7 +58,7 @@ export function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
                                 priority
                             />
                             <div className="flex flex-col">
-                                <span className="font-heading font-bold text-xl tracking-tight leading-none text-black">INVICTUS PHONE</span>
+                                <span className="font-heading text-xl font-bold leading-none tracking-tight text-[var(--foreground)]">INVICTUS PHONE</span>
                             </div>
                         </div>
                         <button
@@ -126,7 +126,7 @@ export function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
                     </Link>
 
                     <div
-                        className="flex items-center gap-3 px-4 py-3 mt-2 rounded-lg bg-surface border border-surface-highlight hover:border-text-muted transition-colors cursor-pointer active:scale-95"
+                        className="mt-2 flex cursor-pointer items-center gap-3 rounded-lg border border-[var(--surface-highlight)] bg-[var(--surface)] px-4 py-3 transition-colors active:scale-95 hover:border-text-muted"
                         onClick={handleLogout}
                         title="Cerrar sesión"
                     >

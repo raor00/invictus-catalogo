@@ -1,10 +1,10 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary: #B08D57; /* Brand Gold */
-  --color-primary-strong: #8C6B33; /* Deep Gold */
-  --color-primary-dim: rgba(176, 141, 87, 0.16);
-  --color-secondary: #C7A46A; /* Soft Gold */
+  --color-primary: #D4AF37; /* Rich Gold */
+  --color-primary-strong: #A67C1B; /* Deep Gold */
+  --color-primary-dim: rgba(212, 175, 55, 0.18);
+  --color-secondary: #E7C96A; /* Soft Gold */
   --color-background-light: #F5F5F7; /* Light Grey/White */
   --color-background-dark: #050505; /* Void Black */
   --color-surface: #FFFFFF; /* Pure White */
@@ -20,10 +20,10 @@
   --font-body: var(--font-inter-tight), sans-serif;
   --font-mono: var(--font-jetbrains-mono), monospace;
 
-  --shadow-neon: 0 10px 28px 0 rgba(176, 141, 87, 0.28);
+  --shadow-neon: 0 10px 28px 0 rgba(212, 175, 55, 0.28);
   --shadow-glass: 0 4px 30px rgba(0, 0, 0, 0.05);
   --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.04);
-  --shadow-glow: 0 0 18px rgba(176, 141, 87, 0.24);
+  --shadow-glow: 0 0 18px rgba(212, 175, 55, 0.24);
 }
 
 :root {
@@ -51,7 +51,7 @@ body {
   --surface-highlight: var(--color-surface-highlight-dark);
   --text-muted: #6B6B70;
   --glass-bg: rgba(5, 5, 5, 0.88);
-  --glass-border: rgba(176, 141, 87, 0.14);
+  --glass-border: rgba(212, 175, 55, 0.16);
   --ticker-bg: rgba(30, 30, 30, 0.6);
 }
 
